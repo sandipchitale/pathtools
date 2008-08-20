@@ -37,11 +37,11 @@ public class Activator extends AbstractUIPlugin {
 			defaultFileEditCommand = "/usr/bin/open -a /Applications/TextEdit.app \""
 					+ Utilities.FILE_PATH + "\"";
 		} else if (Platform.OS_WIN32.equals(Platform.getOS())) {
-			defaultFolderExploreCommand = "cmd /C start explorer /select,/e \""
+			defaultFolderExploreCommand = "cmd /C start explorer /select,/e,\""
 					+ Utilities.FILE_PATH + "\"";
-			defaultFileExploreCommand = "cmd /C start explorer /select,/e \""
-					+ Utilities.FILE_PARENT_PATH + "\"";
-			defaultFolderEditCommand = "cmd /C start explorer /select,/e \""
+			defaultFileExploreCommand = "cmd /C start explorer /select,/e,\""
+					+ Utilities.FILE_PATH + "\"";
+			defaultFolderEditCommand = "cmd /C start explorer /select,/e,\""
 					+ Utilities.FILE_PATH + "\"";
 			defaultFileEditCommand = "cmd /C start notepad \""
 					+ Utilities.FILE_PATH + "\"";
