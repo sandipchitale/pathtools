@@ -26,15 +26,15 @@ public class CommandLauncher {
 			} else {
 				activator.getLog().log(
 						new Status(IStatus.ERROR, activator.getBundle()
-								.getSymbolicName(), "Process '"
+								.getSymbolicName(), 0, "Process '"
 								+ Arrays.asList(commandArray).toString()
-								+ "' exited with status: " + status));
+								+ "' exited with status: " + status, null));
 			}
 		} catch (InterruptedException ex) {
 			activator.getLog()
 					.log(
 							new Status(IStatus.ERROR, activator.getBundle()
-									.getSymbolicName(),
+									.getSymbolicName(), 0,
 									"Exception while executing '"
 											+ Arrays.asList(commandArray)
 													.toString() + "'", ex));
@@ -42,7 +42,7 @@ public class CommandLauncher {
 			activator.getLog()
 					.log(
 							new Status(IStatus.ERROR, activator.getBundle()
-									.getSymbolicName(),
+									.getSymbolicName(), 0,
 									"Exception while executing '"
 											+ Arrays.asList(commandArray)
 													.toString() + "'", ioe));
