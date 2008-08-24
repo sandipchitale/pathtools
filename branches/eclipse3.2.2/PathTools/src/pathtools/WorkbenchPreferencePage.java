@@ -44,7 +44,7 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 				+ Utilities.FILE_PATH_BACKSLASHES
 				+ "  - path of the selected object with \\ File separator.\n"
 				+ Utilities.FILE_PARENT_PATH_BACKSLASHES
-				+ "{parent-path-backslashes}  - path of the parent of selected object with \\ file separator.\n"
+				+ " - path of the parent of selected object with \\ file separator.\n"
 				+ "\n";
 	}
 
