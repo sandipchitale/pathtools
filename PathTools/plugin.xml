@@ -63,6 +63,61 @@
       </actionSet>
    </extension>
    <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="PathTools.objectContribution"
+            objectClass="org.eclipse.core.resources.IResource">
+         <action
+               class="pathtools.EditAction"
+               enablesFor="1"
+               icon="icons/editpath.gif"
+               id="PathTools.Edit"
+               label="Open in external editor..."
+               menubarPath="additions">
+            <enablement>
+	         <or>
+	            <objectClass 
+	               name="org.eclipse.core.resources.IResource"/>
+	            <objectClass 
+	               name="org.eclipse.core.runtime.IAdaptable"/>
+	         </or>
+      		</enablement>
+         </action>
+         <action
+               class="pathtools.ExploreAction"
+               enablesFor="1"
+               icon="icons/explore.gif"
+               id="PathTools.Explore"
+               label="Explore"
+               menubarPath="additions">
+            <enablement>
+	         <or>
+	            <objectClass 
+	               name="org.eclipse.core.resources.IResource"/>
+	            <objectClass 
+	               name="org.eclipse.core.runtime.IAdaptable"/>
+	         </or>
+      		</enablement>
+         </action>
+         <action
+               class="pathtools.CopyPathAction"
+               enablesFor="+"
+               icon="icons/copypaths.gif"
+               id="PathTools.CopyPath"
+               label="Copy Paths"
+               menubarPath="additions"/>
+			<enablement>
+	         <or>
+	            <objectClass 
+	               name="org.eclipse.core.resources.IResource"/>
+	            <objectClass 
+	               name="org.eclipse.core.runtime.IAdaptable"/>
+	         </or>
+      		</enablement>       
+      </objectContribution>
+   </extension>
+   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="pathtools.WorkbenchPreferencePage"

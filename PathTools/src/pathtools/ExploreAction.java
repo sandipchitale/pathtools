@@ -23,6 +23,7 @@ public class ExploreAction implements IWorkbenchWindowActionDelegate {
 	private File fileObject;
 
 	private static String fileExploreComand = null;
+
 	private static String folderExploreComand = null;
 
 	public void dispose() {
@@ -60,7 +61,10 @@ public class ExploreAction implements IWorkbenchWindowActionDelegate {
 							'/'),
 					fileObject.getAbsolutePath().replace('/', '\\'),
 					fileObject.getParentFile().getAbsolutePath().replace('/',
-							'\\'), });
+							'\\'),
+					fileObject.getName(),
+					fileObject.getParentFile().getName(),
+					});
 			// Launch the explore command
 			CommandLauncher.launch(command);
 		}

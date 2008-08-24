@@ -33,6 +33,10 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 				+ "  - path of the selected object with default file separator.\n"
 				+ Utilities.FILE_PARENT_PATH
 				+ "  - path of the parent of selected object with default file separator.\n"
+				+ Utilities.FILE_NAME
+				+ "  - name of the selected object.\n"
+				+ Utilities.FILE_PARENT_NAME
+				+ "  - name of the parent of selected object.\n"
 				+ Utilities.FILE_PATH_SLASHES
 				+ "  - path of the selected object with / file separator.\n"
 				+ Utilities.FILE_PARENT_PATH_SLASHES
