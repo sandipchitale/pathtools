@@ -11,20 +11,13 @@ import java.util.regex.Pattern;
  * 
  */
 public class Utilities {
-	static final String FILE_PATH = "{path}";
-	static final String FILE_PARENT_PATH = "{parent-path}";
-	static final String FILE_PATH_SLASHES = "{path-slashes}";
-	static final String FILE_PARENT_PATH_SLASHES = "{parent-path-slashes}";
-	static final String FILE_PATH_BACKSLASHES = "{path-backslashes}";
-	static final String FILE_PARENT_PATH_BACKSLASHES = "{parent-path-backslashes}";
-
 	static String convertParameters(String command) {
-		return command.replaceAll(Pattern.quote(FILE_PATH), "{0}").replaceAll(
-				Pattern.quote(FILE_PARENT_PATH), "{1}").replaceAll(
-				Pattern.quote(FILE_PATH_SLASHES), "{2}").replaceAll(
-				Pattern.quote(FILE_PARENT_PATH_SLASHES), "{3}").replaceAll(
-				Pattern.quote(FILE_PATH_BACKSLASHES), "{4}").replaceAll(
-				Pattern.quote(FILE_PARENT_PATH_BACKSLASHES), "{5}");
+		return command.replaceAll(Pattern.quote(Activator.FILE_PATH), "{0}").replaceAll(
+				Pattern.quote(Activator.FILE_PARENT_PATH), "{1}").replaceAll(
+				Pattern.quote(Activator.FILE_PATH_SLASHES), "{2}").replaceAll(
+				Pattern.quote(Activator.FILE_PARENT_PATH_SLASHES), "{3}").replaceAll(
+				Pattern.quote(Activator.FILE_PATH_BACKSLASHES), "{4}").replaceAll(
+				Pattern.quote(Activator.FILE_PARENT_PATH_BACKSLASHES), "{5}");
 	}
 
 	/**

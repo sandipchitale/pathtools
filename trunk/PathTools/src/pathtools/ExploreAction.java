@@ -60,7 +60,9 @@ public class ExploreAction implements IWorkbenchWindowActionDelegate {
 							'/'),
 					fileObject.getAbsolutePath().replace('/', '\\'),
 					fileObject.getParentFile().getAbsolutePath().replace('/',
-							'\\'), });
+							'\\'),
+					fileObject.getName(),
+					fileObject.getParentFile().getName()});
 			// Launch the explore command
 			CommandLauncher.launch(command);
 		}
