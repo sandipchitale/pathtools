@@ -29,18 +29,22 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 		return "Specify the commands for exploring folders and fies. You can\n"
 				+ "use \"\" (quotes) around command arguments with spaces in their value.\n"
 				+ "You can use the following parameters in the commands:\n\n"
-				+ Utilities.FILE_PATH
+				+ Activator.FILE_PATH
 				+ "  - path of the selected object with default file separator.\n"
-				+ Utilities.FILE_PARENT_PATH
+				+ Activator.FILE_PARENT_PATH
 				+ "  - path of the parent of selected object with default file separator.\n"
-				+ Utilities.FILE_PATH_SLASHES
+				+ Activator.FILE_NAME
+				+ "  - name of the selected object.\n"
+				+ Activator.FILE_PARENT_NAME
+				+ "  - name of the parent of selected object.\n"
+				+ Activator.FILE_PATH_SLASHES
 				+ "  - path of the selected object with / file separator.\n"
-				+ Utilities.FILE_PARENT_PATH_SLASHES
+				+ Activator.FILE_PARENT_PATH_SLASHES
 				+ "  - path of the parent of selected object with / file separator.\n"
-				+ Utilities.FILE_PATH_BACKSLASHES
+				+ Activator.FILE_PATH_BACKSLASHES
 				+ "  - path of the selected object with \\ File separator.\n"
-				+ Utilities.FILE_PARENT_PATH_BACKSLASHES
-				+ "{parent-path-backslashes}  - path of the parent of selected object with \\ file separator.\n"
+				+ Activator.FILE_PARENT_PATH_BACKSLASHES
+				+ " - path of the parent of selected object with \\ file separator.\n"
 				+ "\n";
 	}
 

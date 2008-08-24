@@ -29,67 +29,67 @@ public class Activator extends AbstractUIPlugin {
 	static {
 		if (Platform.OS_MACOSX.equals(Platform.getOS())) {
 			defaultFolderExploreCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app \""
-					+ Utilities.FILE_PATH + "\"";
+					+ Activator.FILE_PATH + "\"";
 			defaultFileExploreCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app \""
-					+ Utilities.FILE_PARENT_PATH + "\"";
+					+ Activator.FILE_PARENT_PATH + "\"";
 			defaultFolderEditCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app \""
-					+ Utilities.FILE_PATH + "\"";
+					+ Activator.FILE_PATH + "\"";
 			defaultFileEditCommand = "/usr/bin/open -a /Applications/TextEdit.app \""
-					+ Utilities.FILE_PATH + "\"";
+					+ Activator.FILE_PATH + "\"";
 		} else if (Platform.OS_WIN32.equals(Platform.getOS())) {
 			defaultFolderExploreCommand = "cmd /C start explorer /select,/e,\""
-					+ Utilities.FILE_PATH + "\"";
+					+ Activator.FILE_PATH + "\"";
 			defaultFileExploreCommand = "cmd /C start explorer /select,/e,\""
-					+ Utilities.FILE_PATH + "\"";
+					+ Activator.FILE_PATH + "\"";
 			defaultFolderEditCommand = "cmd /C start explorer /select,/e,\""
-					+ Utilities.FILE_PATH + "\"";
+					+ Activator.FILE_PATH + "\"";
 			defaultFileEditCommand = "cmd /C start notepad \""
-					+ Utilities.FILE_PATH + "\"";
+					+ Activator.FILE_PATH + "\"";
 		} else if (Platform.OS_LINUX.equals(Platform.getOS())) {
 			if (new File("/usr/bin/konqueror").exists()) {
 				defaultFolderExploreCommand = "/usr/bin/konqueror \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 				defaultFileExploreCommand = "/usr/bin/konqueror \""
-						+ Utilities.FILE_PARENT_PATH + "\"";
+						+ Activator.FILE_PARENT_PATH + "\"";
 				defaultFolderEditCommand = "/usr/bin/konqueror \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 			} else if (new File("/usr/bin/nautilus").exists()) {
 				defaultFolderExploreCommand = "/usr/bin/nautilus \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 				defaultFileExploreCommand = "/usr/bin/nautilus \""
-						+ Utilities.FILE_PARENT_PATH + "\"";
+						+ Activator.FILE_PARENT_PATH + "\"";
 				defaultFolderEditCommand = "/usr/bin/nautilus \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 			}
 			if (new File("/usr/bin/kedit").exists()) {
 				defaultFileEditCommand = "/usr/bin/kedit \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 			} else if (new File("/usr/bin/gedit").exists()) {
 				defaultFileEditCommand = "/usr/bin/gedit \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 			}
 		} else if (Platform.OS_SOLARIS.equals(Platform.getOS())) {
 			if (new File("/usr/bin/konqueror").exists()) {
 				defaultFolderExploreCommand = "/usr/bin/konqueror \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 				defaultFileExploreCommand = "/usr/bin/konqueror \""
-						+ Utilities.FILE_PARENT_PATH + "\"";
+						+ Activator.FILE_PARENT_PATH + "\"";
 				defaultFolderEditCommand = "/usr/bin/konqueror \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 			} else if (new File("/usr/bin/nautilus").exists()) {
 				defaultFolderExploreCommand = "/usr/bin/nautilus \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 				defaultFileExploreCommand = "/usr/bin/nautilus \""
-						+ Utilities.FILE_PARENT_PATH + "\"";
+						+ Activator.FILE_PARENT_PATH + "\"";
 				defaultFolderEditCommand = "/usr/bin/nautilus \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 			} else {
 				defaultFolderExploreCommand = "filemgr -c -d \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 				defaultFolderExploreCommand = "filemgr -c -d \""
-						+ Utilities.FILE_PATH + "\"";
+						+ Activator.FILE_PATH + "\"";
 				defaultFileEditCommand = "filemgr -c -d \""
-						+ Utilities.FILE_PARENT_PATH + "\"";
+						+ Activator.FILE_PARENT_PATH + "\"";
 			}
 		}
 	}
@@ -99,6 +99,14 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+	static final String FILE_PATH = "{path}";
+	static final String FILE_PARENT_PATH = "{parent-path}";
+	static final String FILE_NAME= "{name}";
+	static final String FILE_PARENT_NAME = "{parent-name}";
+	static final String FILE_PATH_SLASHES = "{path-slashes}";
+	static final String FILE_PARENT_PATH_SLASHES = "{parent-path-slashes}";
+	static final String FILE_PATH_BACKSLASHES = "{path-backslashes}";
+	static final String FILE_PARENT_PATH_BACKSLASHES = "{parent-path-backslashes}";
 
 	/**
 	 * The constructor
