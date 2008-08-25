@@ -14,7 +14,7 @@
                label="Open in external editor..."
                menubarPath="File/additions"
                style="push"
-               toolbarPath="PathTools/additions">
+               toolbarPath="Normal/PathTools">
             <enablement>
 	         <or>
 	            <objectClass 
@@ -32,7 +32,7 @@
                label="Explore"
                menubarPath="File/additions"
                style="push"
-               toolbarPath="PathTools/additions">
+               toolbarPath="Normal/PathTools">
             <enablement>
 	         <or>
 	            <objectClass 
@@ -50,7 +50,7 @@
                label="Copy Paths"
                menubarPath="Edit/additions"
                style="push"
-               toolbarPath="Edit/additions">
+               toolbarPath="Normal/PathTools">
 			<enablement>
 	         <or>
 	            <objectClass 
@@ -61,6 +61,17 @@
       		</enablement>
          </action>
       </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSetPartAssociations">
+      <actionSetPartAssociation targetID="PathTools.actionSet">
+         <part id="org.eclipse.jdt.ui.PackageExplorer"/>
+		 <part id="org.eclipse.jdt.ui.ProjectsView"/>
+		 <part id="org.eclipse.jdt.ui.PackagesView"/>
+		 <part id="org.eclipse.ui.views.ResourceNavigator"/>
+		 <part id="org.eclipse.jdt.ui.TypeHierarchy"/>
+		 <part id="org.eclipse.ui.views.ContentOutline"/>
+      </actionSetPartAssociation>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -125,5 +136,4 @@
             name="Path Tools">
       </page>
    </extension>
-
 </plugin>
