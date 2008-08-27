@@ -7,6 +7,26 @@
             id="PathTools.actionSet"
             label="Path Tools">
          <action
+               class="pathtools.CustomAction"
+               enablesFor="1"
+               icon="icons/command.gif"
+               id="PathTools.Custom"
+               label="Custom"
+               menubarPath="File/additions"
+               style="pulldown"
+               toolbarPath="Normal/PathTools">
+            <enablement>
+               <or>
+                  <objectClass
+                        name="org.eclipse.core.resources.IResource">
+                  </objectClass>
+                  <objectClass
+                        name="org.eclipse.core.runtime.IAdaptable">
+                  </objectClass>
+               </or>
+            </enablement>
+         </action>
+         <action
                class="pathtools.EditAction"
                enablesFor="1"
                icon="icons/editpath.gif"

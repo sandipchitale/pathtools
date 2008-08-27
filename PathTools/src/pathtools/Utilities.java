@@ -1,5 +1,7 @@
 package pathtools;
 
+import java.io.File;
+import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -11,6 +13,31 @@ import java.util.regex.Pattern;
  * 
  */
 public class Utilities {
+	
+	static void launch(String command, File fileObject) {
+		// Launch the explore command
+		CommandLauncher.launch(formatCommand(command, fileObject));
+	}
+	
+	static String formatCommand(String command, File fileObject) {
+		return MessageFormat.format(Utilities
+				.convertParameters(command), new Object[] {
+			fileObject.getAbsolutePath().replace('/',
+					File.separatorChar).replace('\\',
+					File.separatorChar),
+			fileObject.getParentFile().getAbsolutePath().replace('/',
+					File.separatorChar).replace('\\',
+					File.separatorChar),
+			fileObject.getAbsolutePath().replace('\\', '/'),
+			fileObject.getParentFile().getAbsolutePath().replace('\\',
+					'/'),
+			fileObject.getAbsolutePath().replace('/', '\\'),
+			fileObject.getParentFile().getAbsolutePath().replace('/',
+					'\\'),
+			fileObject.getName(),
+			fileObject.getParentFile().getName()});
+	}
+	
 	static String convertParameters(String command) {
 		return command.replaceAll(Pattern.quote(Activator.FILE_PATH), "{0}").replaceAll(
 				Pattern.quote(Activator.FILE_PARENT_PATH), "{1}").replaceAll(

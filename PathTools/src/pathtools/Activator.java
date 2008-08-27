@@ -26,6 +26,12 @@ public class Activator extends AbstractUIPlugin {
 	static String defaultFolderEditCommand = "";
 	static String defaultFileEditCommand = "";
 
+	static final String FOLDER_COMMANDS_KEY = "folderCommands";
+	static final String FILE_COMMANDS_KEY = "fileCommands";
+	
+	static String defaultFolderCommands = "";
+	static String defaultFileCommands = "";
+
 	static {
 		if (Platform.OS_MACOSX.equals(Platform.getOS())) {
 			defaultFolderExploreCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app \""
@@ -146,6 +152,8 @@ public class Activator extends AbstractUIPlugin {
 		store.setDefault(FILE_EXPLORE_COMMAND_KEY, defaultFileExploreCommand);
 		store.setDefault(FOLDER_EDIT_COMMAND_KEY, defaultFolderEditCommand);
 		store.setDefault(FILE_EDIT_COMMAND_KEY, defaultFileEditCommand);
+		store.setDefault(FOLDER_COMMANDS_KEY, defaultFolderCommands);
+		store.setDefault(FILE_COMMANDS_KEY, defaultFileCommands);
 		super.initializeDefaultPreferences(store);
 	}
 
