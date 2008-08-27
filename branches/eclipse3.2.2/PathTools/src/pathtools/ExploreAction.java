@@ -1,7 +1,6 @@
 package pathtools;
 
 import java.io.File;
-import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
@@ -47,26 +46,7 @@ public class ExploreAction implements IWorkbenchWindowActionDelegate {
 			String commandFormat = fileObject.isDirectory() ? folderExploreComand
 					: fileExploreComand;
 
-			// Substitute parameter values ad format the explore command
-			String command = MessageFormat.format(Utilities
-					.convertParameters(commandFormat), new Object[] {
-					fileObject.getAbsolutePath().replace('/',
-							File.separatorChar).replace('\\',
-							File.separatorChar),
-					fileObject.getParentFile().getAbsolutePath().replace('/',
-							File.separatorChar).replace('\\',
-							File.separatorChar),
-					fileObject.getAbsolutePath().replace('\\', '/'),
-					fileObject.getParentFile().getAbsolutePath().replace('\\',
-							'/'),
-					fileObject.getAbsolutePath().replace('/', '\\'),
-					fileObject.getParentFile().getAbsolutePath().replace('/',
-							'\\'),
-					fileObject.getName(),
-					fileObject.getParentFile().getName(),
-					});
-			// Launch the explore command
-			CommandLauncher.launch(command);
+			Utilities.launch(commandFormat, fileObject);
 		}
 	}
 

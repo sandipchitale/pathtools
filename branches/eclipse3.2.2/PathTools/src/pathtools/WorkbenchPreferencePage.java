@@ -1,9 +1,15 @@
 package pathtools;
 
+import java.util.regex.Pattern;
+
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * 
@@ -29,21 +35,21 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 		return "Specify the commands for exploring folders and fies. You can\n"
 				+ "use \"\" (quotes) around command arguments with spaces in their value.\n"
 				+ "You can use the following parameters in the commands:\n\n"
-				+ Utilities.FILE_PATH
+				+ Activator.FILE_PATH
 				+ "  - path of the selected object with default file separator.\n"
-				+ Utilities.FILE_PARENT_PATH
+				+ Activator.FILE_PARENT_PATH
 				+ "  - path of the parent of selected object with default file separator.\n"
-				+ Utilities.FILE_NAME
+				+ Activator.FILE_NAME
 				+ "  - name of the selected object.\n"
-				+ Utilities.FILE_PARENT_NAME
+				+ Activator.FILE_PARENT_NAME
 				+ "  - name of the parent of selected object.\n"
-				+ Utilities.FILE_PATH_SLASHES
+				+ Activator.FILE_PATH_SLASHES
 				+ "  - path of the selected object with / file separator.\n"
-				+ Utilities.FILE_PARENT_PATH_SLASHES
+				+ Activator.FILE_PARENT_PATH_SLASHES
 				+ "  - path of the parent of selected object with / file separator.\n"
-				+ Utilities.FILE_PATH_BACKSLASHES
+				+ Activator.FILE_PATH_BACKSLASHES
 				+ "  - path of the selected object with \\ File separator.\n"
-				+ Utilities.FILE_PARENT_PATH_BACKSLASHES
+				+ Activator.FILE_PARENT_PATH_BACKSLASHES
 				+ " - path of the parent of selected object with \\ file separator.\n"
 				+ "\n";
 	}
@@ -73,6 +79,49 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 				Activator.FILE_EDIT_COMMAND_KEY, "Edit File:",
 				getFieldEditorParent());
 		addField(fileEditCommad);
+		ListEditor folderCommandsListEditor = new CommandListEditor(
+				Activator.FOLDER_COMMANDS_KEY, "Folder", getFieldEditorParent());
+		addField(folderCommandsListEditor);
+		ListEditor fileCommandsListEditor = new CommandListEditor(
+				Activator.FILE_COMMANDS_KEY, "File", getFieldEditorParent());
+		addField(fileCommandsListEditor);
+	}
+
+	private static class CommandListEditor extends ListEditor {
+		private final String item;
+
+		CommandListEditor(String key, String item, Composite parent) {
+			super(key, "Custom " + item + " commands:", parent);
+			this.item = item;
+		}
+
+		@Override
+		protected String createList(String[] items) {
+			StringBuilder stringBuilder = new StringBuilder();
+			for (String item : items) {
+				if (stringBuilder.length() > 0) {
+					stringBuilder.append("|");
+				}
+				stringBuilder.append(item);
+			}
+			return stringBuilder.toString();
+		}
+
+		@Override
+		protected String[] parseString(String stringList) {
+			return stringList.split(Pattern.quote("|"));
+		}
+
+		@Override
+		protected String getNewInputObject() {
+			InputDialog commandDialog = new InputDialog(PlatformUI
+					.getWorkbench().getActiveWorkbenchWindow().getShell(),"Custom " + item
+					+ " Command", "Enter custom " + item + " command:", "", null);
+			if (commandDialog.open() == InputDialog.OK) {
+				return commandDialog.getValue();
+			}
+			return null;
+		}
 	}
 
 }
