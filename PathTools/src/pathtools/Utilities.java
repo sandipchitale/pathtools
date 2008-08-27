@@ -1,5 +1,7 @@
 package pathtools;
 
+import java.io.File;
+import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -11,31 +13,38 @@ import java.util.regex.Pattern;
  * 
  */
 public class Utilities {
-	static final String FILE_NAME = "{name}";
-
-	static final String FILE_PARENT_NAME = "{parent-name}";
-
-	static final String FILE_PATH = "{path}";
-
-	static final String FILE_PARENT_PATH = "{parent-path}";
-
-	static final String FILE_PATH_SLASHES = "{path-slashes}";
-
-	static final String FILE_PARENT_PATH_SLASHES = "{parent-path-slashes}";
-
-	static final String FILE_PATH_BACKSLASHES = "{path-backslashes}";
-
-	static final String FILE_PARENT_PATH_BACKSLASHES = "{parent-path-backslashes}";
-
+	
+	static void launch(String command, File fileObject) {
+		// Launch the explore command
+		CommandLauncher.launch(formatCommand(command, fileObject));
+	}
+	
+	static String formatCommand(String command, File fileObject) {
+		return MessageFormat.format(Utilities
+				.convertParameters(command), new Object[] {
+			fileObject.getAbsolutePath().replace('/',
+					File.separatorChar).replace('\\',
+					File.separatorChar),
+			fileObject.getParentFile().getAbsolutePath().replace('/',
+					File.separatorChar).replace('\\',
+					File.separatorChar),
+			fileObject.getAbsolutePath().replace('\\', '/'),
+			fileObject.getParentFile().getAbsolutePath().replace('\\',
+					'/'),
+			fileObject.getAbsolutePath().replace('/', '\\'),
+			fileObject.getParentFile().getAbsolutePath().replace('/',
+					'\\'),
+			fileObject.getName(),
+			fileObject.getParentFile().getName()});
+	}
+	
 	static String convertParameters(String command) {
-		return command.replaceAll(Pattern.quote(FILE_PATH), "{0}").replaceAll(
-				Pattern.quote(FILE_PARENT_PATH), "{1}").replaceAll(
-				Pattern.quote(FILE_PATH_SLASHES), "{2}").replaceAll(
-				Pattern.quote(FILE_PARENT_PATH_SLASHES), "{3}").replaceAll(
-				Pattern.quote(FILE_PATH_BACKSLASHES), "{4}").replaceAll(
-				Pattern.quote(FILE_PARENT_PATH_BACKSLASHES), "{5}").replaceAll(
-				Pattern.quote(FILE_NAME), "{6}").replaceAll(
-				Pattern.quote(FILE_PARENT_NAME), "{7}");
+		return command.replaceAll(Pattern.quote(Activator.FILE_PATH), "{0}").replaceAll(
+				Pattern.quote(Activator.FILE_PARENT_PATH), "{1}").replaceAll(
+				Pattern.quote(Activator.FILE_PATH_SLASHES), "{2}").replaceAll(
+				Pattern.quote(Activator.FILE_PARENT_PATH_SLASHES), "{3}").replaceAll(
+				Pattern.quote(Activator.FILE_PATH_BACKSLASHES), "{4}").replaceAll(
+				Pattern.quote(Activator.FILE_PARENT_PATH_BACKSLASHES), "{5}");
 	}
 
 	/**
@@ -51,7 +60,7 @@ public class Utilities {
 	 * processing. For example:
 	 * <p>
 	 * <code><pre>
-	 * &quot;c:\program files\jdk\bin\java&quot; -Dmessage=&quot;Hello /\\/\\ there!&quot; -Xmx128m
+	 * "c:\program files\jdk\bin\java" -Dmessage="Hello /\\/\\ there!" -Xmx128m
 	 * </pre></code>
 	 * <p>
 	 * This example would create the following executable name and arguments:
@@ -64,8 +73,8 @@ public class Utilities {
 	 * assumption that Windows users will not think to do this, meaningless
 	 * escapes are just left as backslashes plus following character.
 	 * </ul>
-	 * <em>Caveat</em>: even after parsing, Windows programs (such as the
-	 * Java launcher) may not fully honor certain characters, such as quotes, in
+	 * <em>Caveat</em>: even after parsing, Windows programs (such as the Java
+	 * launcher) may not fully honor certain characters, such as quotes, in
 	 * command names or arguments. This is because programs under Windows
 	 * frequently perform their own parsing and unescaping (since the shell
 	 * cannot be relied on to do this). On Unix, this problem should not occur.
