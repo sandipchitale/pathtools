@@ -6,7 +6,11 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
@@ -122,6 +126,21 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 				return commandDialog.getValue();
 			}
 			return null;
+		}
+		
+		@Override
+		protected void doFillIntoGrid(Composite parent, int numColumns) {
+			super.doFillIntoGrid(parent, numColumns);
+			List listControl = getListControl(parent);
+			Composite buttonBoxControl = getButtonBoxControl(parent);
+			Composite composite = new Composite(parent, SWT.NONE);
+			GridData gridData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+			gridData.horizontalSpan = 2;
+			gridData.widthHint = 550;
+			composite.setLayoutData(gridData);
+			composite.setLayout(new GridLayout(2, false));
+			listControl.setParent(composite);
+			buttonBoxControl.setParent(composite);
 		}
 	}
 
