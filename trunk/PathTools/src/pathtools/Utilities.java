@@ -44,7 +44,9 @@ public class Utilities {
 				Pattern.quote(Activator.FILE_PATH_SLASHES), "{2}").replaceAll(
 				Pattern.quote(Activator.FILE_PARENT_PATH_SLASHES), "{3}").replaceAll(
 				Pattern.quote(Activator.FILE_PATH_BACKSLASHES), "{4}").replaceAll(
-				Pattern.quote(Activator.FILE_PARENT_PATH_BACKSLASHES), "{5}");
+				Pattern.quote(Activator.FILE_PARENT_PATH_BACKSLASHES), "{5}").replaceAll(
+				Pattern.quote(Activator.FILE_NAME), "{6}").replaceAll(
+				Pattern.quote(Activator.FILE_PARENT_NAME), "{7}");
 	}
 
 	/**
