@@ -22,7 +22,6 @@ public class ExploreAction implements IWorkbenchWindowActionDelegate {
 	private File fileObject;
 
 	private static String fileExploreComand = null;
-
 	private static String folderExploreComand = null;
 
 	public void dispose() {

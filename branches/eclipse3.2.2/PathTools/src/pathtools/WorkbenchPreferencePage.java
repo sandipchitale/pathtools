@@ -1,7 +1,5 @@
 package pathtools;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.ListEditor;
@@ -82,6 +80,7 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 				Activator.FILE_EDIT_COMMAND_KEY, "Edit File:",
 				getFieldEditorParent());
 		addField(fileEditCommad);
+
 		ListEditor folderCommandsListEditor = new CommandListEditor(
 				Activator.FOLDER_COMMANDS_KEY, "Folder", getFieldEditorParent());
 		addField(folderCommandsListEditor);
@@ -100,19 +99,12 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 
 		@Override
 		protected String createList(String[] items) {
-			StringBuilder stringBuilder = new StringBuilder();
-			for (String item : items) {
-				if (stringBuilder.length() > 0) {
-					stringBuilder.append("|");
-				}
-				stringBuilder.append(item);
-			}
-			return stringBuilder.toString();
+			return Activator.createList(items); 
 		}
 
 		@Override
 		protected String[] parseString(String stringList) {
-			return stringList.split(Pattern.quote("|"));
+			return Activator.parseString(stringList);
 		}
 
 		@Override
