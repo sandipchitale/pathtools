@@ -137,7 +137,7 @@
                icon="icons/copypaths.gif"
                id="PathTools.CopyPath"
                label="Copy Paths"
-               menubarPath="additions"/>
+               menubarPath="additions">
 			<enablement>
 	         <or>
 	            <objectClass 
@@ -145,7 +145,16 @@
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
 	         </or>
-      		</enablement>       
+      		</enablement>
+     	</action>     
+		<visibility>
+         <or>
+            <objectClass 
+               name="org.eclipse.core.resources.IResource"/>
+            <objectClass 
+               name="org.eclipse.core.runtime.IAdaptable"/>
+         </or>
+  		</visibility>
       </objectContribution>
    </extension>
    <extension
