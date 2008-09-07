@@ -1,7 +1,6 @@
 package pathtools;
 
 import java.io.File;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
@@ -74,30 +73,27 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 		customActionsMenu = new Menu(parent);
 
 		if (fileObject != null) {
-			String commands = Activator
-					.getDefault()
-					.getPreferenceStore()
-					.getString(
-							fileObject.isDirectory() ? Activator.FOLDER_COMMANDS_KEY
-									: Activator.FILE_COMMANDS_KEY);
-			if (commands != null && commands.length() > 0) {
-				String[] commandsArray = commands.split(Pattern.quote("|"));
-				for (String command : commandsArray) {
-					MenuItem commandMenuItem = new MenuItem(customActionsMenu, SWT.PUSH);					
-					commandMenuItem.setText(Utilities.formatCommand(command,
-							fileObject));
-					commandMenuItem.setData(command);
-					final String finalCommand = command;
-					commandMenuItem.addSelectionListener(new SelectionAdapter() {
-						public void widgetSelected(SelectionEvent e) {
-							Object data = e.widget.getData();
-							if (data instanceof String) {
-								Utilities.launch(finalCommand,
-												fileObject);
-							}
+			String[] commandsArray = null;
+			if (fileObject.isDirectory()) {
+				commandsArray = Activator.getDefault().getFolderCustomActions();
+			} else {
+				commandsArray = Activator.getDefault().getFileCustomActions();
+			}
+			for (String command : commandsArray) {
+				MenuItem commandMenuItem = new MenuItem(customActionsMenu, SWT.PUSH);					
+				commandMenuItem.setText(Utilities.formatCommand(command,
+						fileObject));
+				commandMenuItem.setData(command);
+				final String finalCommand = command;
+				commandMenuItem.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+						Object data = e.widget.getData();
+						if (data instanceof String) {
+							Utilities.launch(finalCommand,
+											fileObject);
 						}
-					});
-				}
+					}
+				});
 			}
 		}
 		return customActionsMenu;
