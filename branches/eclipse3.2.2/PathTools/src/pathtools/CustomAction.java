@@ -6,6 +6,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -16,6 +17,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 	private Menu customActionsMenu;
@@ -26,7 +29,15 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 
 	public void init(IWorkbenchWindow window) {}
 
-	public void run(IAction action) {}
+	public void run(IAction action) {
+		String[] displayedIds = new String[] {"PathTools.page"};
+		PreferenceDialog pathToolsPreferenceDialog = PreferencesUtil.createPreferenceDialogOn(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				displayedIds[0],
+				displayedIds,
+				null);
+		pathToolsPreferenceDialog.open();
+	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
 		fileObject = null;
