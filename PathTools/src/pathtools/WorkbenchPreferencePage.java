@@ -1,16 +1,12 @@
 package pathtools;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbench;
@@ -93,79 +89,13 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 		addField(fileCommandsListEditor);
 	}
 
-	private static class CommandListEditor extends ListEditor {
+	private static class CommandListEditor extends EntryModifiableListEditor {
 		private final String item;
 
 		CommandListEditor(String key, String item, Composite parent) {
 			super(key, "Custom " + item + " commands:", parent);
 			this.item = item;
 		}
-		
-		private Button editButton;
-
-		@Override
-		public Composite getButtonBoxControl(Composite parent) {
-			Composite buttonBoxControl = super.getButtonBoxControl(parent);
-			if (editButton == null) {
-				editButton = createPushButton(buttonBoxControl, "Edit...");
-				editButton.setEnabled(false);
-				editButton.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						if (commandListControl.getSelectionCount() == 1) {
-							String selection = commandListControl.getSelection()[0];
-							InputDialog commandDialog = new InputDialog(PlatformUI
-									.getWorkbench().getActiveWorkbenchWindow().getShell(),"Edit Custom " + item
-									+ " Command", "Edit custom " + item + " command:", selection, null);
-							if (commandDialog.open() == InputDialog.OK) {
-								selection = commandDialog.getValue();
-								int selectedIndex = commandListControl.getSelectionIndex();
-								commandListControl.remove(selectedIndex);
-								commandListControl.add(selection, selectedIndex);
-							}
-						}
-					}
-				});
-			}
-			return buttonBoxControl;
-		}
-		
-	    /**
-	     * Helper method to create a push button.
-	     * 
-	     * @param parent the parent control
-	     * @param key the resource name used to supply the button's label text
-	     * @return Button
-	     */
-	    private Button createPushButton(Composite parent, String key) {
-	        Button button = new Button(parent, SWT.PUSH);
-	        button.setText(key);
-	        button.setFont(parent.getFont());
-	        GridData data = new GridData(GridData.FILL_HORIZONTAL);
-	        int widthHint = convertHorizontalDLUsToPixels(button,
-	                IDialogConstants.BUTTON_WIDTH);
-	        data.widthHint = Math.max(widthHint, button.computeSize(SWT.DEFAULT,
-	                SWT.DEFAULT, true).x);
-	        button.setLayoutData(data);
-	        return button;
-	    }
-	    
-	    private List commandListControl;
-	    
-	    @Override
-	    public List getListControl(Composite parent) {
-	    	List listControl = super.getListControl(parent);
-	    	if (commandListControl == null) {
-	    		commandListControl = listControl;
-	    		commandListControl.addSelectionListener(new SelectionAdapter() {
-	    			@Override
-	    			public void widgetSelected(SelectionEvent e) {
-	    				editButton.setEnabled(commandListControl.getSelectionCount() == 1);
-	    			}
-	    		});
-	    	}
-			return listControl;
-	    }
 		
 		@Override
 		protected String createList(String[] items) {
@@ -188,6 +118,17 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 			return null;
 		}
 		
+		@Override
+		protected String getModifiedEntry(String original) {
+			InputDialog commandDialog = new InputDialog(PlatformUI
+					.getWorkbench().getActiveWorkbenchWindow().getShell(),"Edit Custom " + item
+					+ " Command", "Edit custom " + item + " command:", original, null);
+			if (commandDialog.open() == InputDialog.OK) {
+				return commandDialog.getValue();
+			}
+			return null;
+		}
+
 		@Override
 		protected void doFillIntoGrid(Composite parent, int numColumns) {
 			super.doFillIntoGrid(parent, numColumns);
