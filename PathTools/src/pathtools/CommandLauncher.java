@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -32,7 +33,8 @@ import org.eclipse.ui.progress.UIJob;
 public class CommandLauncher {
 	
 	private static MessageConsole messageConsole;
-	
+	private static boolean firstTime = true;
+
 	public static void launch(final String command) {
 		// Launch command on a separate thread.
 		new Thread(new Runnable() {
@@ -40,9 +42,16 @@ public class CommandLauncher {
 				Activator activator = Activator.getDefault();
 				String[] commandArray = Utilities.parseParameters(command);
 				try {
-					Process process = Runtime.getRuntime().exec(commandArray);
+					final Process process = Runtime.getRuntime().exec(commandArray);
 					final MessageConsole messageConsole = getMessageConsole();
-					messageConsole.clearConsole();
+					MessageConsoleStream newMessageStream = messageConsole.newMessageStream();
+					if (firstTime) {
+						firstTime = false;
+					} else {
+						newMessageStream.println();
+						newMessageStream.println();
+						newMessageStream.println();
+					}
 					messageConsole.newMessageStream().println(command);
 					UIJob uiJob = new UIJob("") {
 						@Override
@@ -55,6 +64,9 @@ public class CommandLauncher {
 									try {
 										view = (IConsoleView) activePage.showView(IConsoleConstants.ID_CONSOLE_VIEW);
 										view.display(messageConsole);
+										new Thread(new MessageConsoleWriter(messageConsole, process.getInputStream())).start();
+										new Thread(new MessageConsoleWriter(messageConsole, process.getErrorStream(), 
+												Display.getCurrent().getSystemColor(SWT.COLOR_RED))).start();
 									} catch (PartInitException e) {
 										return Status.CANCEL_STATUS;
 									}
@@ -65,8 +77,6 @@ public class CommandLauncher {
 					};
 					uiJob.schedule();
 
-					new Thread(new MessageConsoleWriter(messageConsole, process.getInputStream())).start();
-					new Thread(new MessageConsoleWriter(messageConsole, process.getErrorStream(), true)).start();
 					
 					int status = process.waitFor();
 					if (status == 0) {
@@ -110,22 +120,22 @@ public class CommandLauncher {
 	private static class MessageConsoleWriter implements Runnable {		
 		private final MessageConsole messageConsole;
 		private final InputStream from;
-		private final boolean stderr;
+		private final Color color;
 		
 		private MessageConsoleWriter(MessageConsole messageConsole, InputStream from) {
-			this(messageConsole, from, false);
+			this(messageConsole, from, null);
 		}
 		
-		private MessageConsoleWriter(MessageConsole messageConsole, InputStream from, boolean stderr) {
+		private MessageConsoleWriter(MessageConsole messageConsole, InputStream from, Color color) {
 			this.messageConsole = messageConsole;
 			this.from = from;
-			this.stderr = stderr;
+			this.color = color;
 		}
 		
 		public void run() {
 			MessageConsoleStream messageConsoleStream = messageConsole.newMessageStream();
-			if (stderr) {
-				messageConsoleStream.setColor(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			if (color != null) {
+				messageConsoleStream.setColor(color);
 			}
 			BufferedReader reader = new BufferedReader(new InputStreamReader(from));
 			String output = null;
