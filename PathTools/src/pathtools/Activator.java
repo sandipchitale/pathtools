@@ -114,6 +114,10 @@ public class Activator extends AbstractUIPlugin {
 	static final String FILE_PARENT_PATH_SLASHES = "{parent-path-slashes}";
 	static final String FILE_PATH_BACKSLASHES = "{path-backslashes}";
 	static final String FILE_PARENT_PATH_BACKSLASHES = "{parent-path-backslashes}";
+	
+	static final String LAST_COPY_PATH_FORMAT = "lastCopyPathFormat";
+	static final String defaultLLastCopyPathFormat = FILE_PATH;
+	
 
 	/**
 	 * The constructor
@@ -155,6 +159,7 @@ public class Activator extends AbstractUIPlugin {
 		store.setDefault(FILE_EDIT_COMMAND_KEY, defaultFileEditCommand);
 		store.setDefault(FOLDER_COMMANDS_KEY, defaultFolderCommands);
 		store.setDefault(FILE_COMMANDS_KEY, defaultFileCommands);
+		store.setDefault(LAST_COPY_PATH_FORMAT, defaultLLastCopyPathFormat);
 		super.initializeDefaultPreferences(store);
 	}
 
