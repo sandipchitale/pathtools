@@ -86,15 +86,11 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 				MenuItem commandMenuItem = new MenuItem(customActionsMenu, SWT.PUSH);					
 				commandMenuItem.setText(Utilities.formatCommand(command,
 						fileObject));
-				commandMenuItem.setData(command);
 				final String finalCommand = command;
 				commandMenuItem.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
-						Object data = e.widget.getData();
-						if (data instanceof String) {
-							Utilities.launch(finalCommand,
-											fileObject);
-						}
+						Utilities.launch(finalCommand,
+										fileObject);
 					}
 				});
 			}

@@ -69,7 +69,7 @@
                id="PathTools.CopyPath"
                label="Copy Paths"
                menubarPath="Edit/additions"
-               style="push"
+               style="pulldown"
                toolbarPath="Normal/PathTools">
 			<enablement>
 	         <or>
