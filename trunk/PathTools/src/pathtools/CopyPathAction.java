@@ -42,12 +42,9 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 	}
 
 	public void run(IAction action) {
-		// Are there any paths selected ?
-		if (files.size() > 0) {
-			copyToClipboard(
-					Activator.getDefault().getPreferenceStore().getString(Activator.LAST_COPY_PATH_FORMAT),
-					files);
-		}
+		copyToClipboard(
+				Activator.getDefault().getPreferenceStore().getString(Activator.LAST_COPY_PATH_FORMAT),
+				files);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -107,12 +104,8 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 	};
 	
 	public Menu getMenu(Control parent) {
-		if (copyPathsMenu != null) {
-			copyPathsMenu.dispose();
-		}
-		copyPathsMenu = new Menu(parent);
-		
-		if (files.size() > 0) {
+		if (copyPathsMenu == null) {
+			copyPathsMenu = new Menu(parent);			
 			for (String pathFormat: pathFormats) {
 				MenuItem commandMenuItem = new MenuItem(copyPathsMenu, SWT.PUSH);					
 				commandMenuItem.setText("Copy " + pathFormat);
@@ -126,20 +119,28 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 				});
 			}
 		}
+		boolean enable = files.size() > 0;
+		for (MenuItem menuItem : copyPathsMenu.getItems()) {
+			menuItem.setEnabled(enable);
+		}
 		return copyPathsMenu;
 	}
 	
 	private static void copyToClipboard(String pathFormat, List<File> files) {
-		// Build a string with each path on separate line
-		StringBuilder stringBuilder = new StringBuilder();
-		for (File file : files) {
-			stringBuilder.append(Utilities.formatCommand(pathFormat, file) + (files.size() > 1 ? "\n" : ""));
+		// Are there any paths selected ?
+		if (files.size() > 0) {
+			// Build a string with each path on separate line
+			StringBuilder stringBuilder = new StringBuilder();
+			for (File file : files) {
+				stringBuilder.append(Utilities.formatCommand(pathFormat, file)
+						+ (files.size() > 1 ? "\n" : ""));
+			}
+			// Get Clipboard
+			Clipboard clipboard = new Clipboard(PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow().getShell().getDisplay());
+			// Put the paths string into the Clipboard
+			clipboard.setContents(new Object[] { stringBuilder.toString() },
+					new Transfer[] { TextTransfer.getInstance() });
 		}
-		// Get Clipboard
-		Clipboard clipboard = new Clipboard(PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getShell().getDisplay());
-		// Put the paths string into the Clipboard
-		clipboard.setContents(new Object[] { stringBuilder.toString() },
-				new Transfer[] { TextTransfer.getInstance() });
 	}
 }
