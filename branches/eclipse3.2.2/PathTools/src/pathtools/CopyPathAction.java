@@ -1,6 +1,8 @@
 package pathtools;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -78,6 +80,19 @@ public class CopyPathAction implements IWorkbenchWindowActionDelegate {
 					if (resource != null) {
 						// Get the location
 						location = resource.getLocation();
+					}
+				} else if (firstElement.getClass().getName().equals("com.aptana.ide.core.ui.io.file.LocalFile")) {
+					try {
+						Method getFile = firstElement.getClass().getDeclaredMethod("getFile");
+						Object object = getFile.invoke(firstElement);
+						if (object instanceof File){
+							paths.add(((File) object).getAbsolutePath());
+						}
+					} catch (SecurityException e) {
+					} catch (NoSuchMethodException e) {
+					} catch (IllegalArgumentException e) {
+					} catch (IllegalAccessException e) {
+					} catch (InvocationTargetException e) {
 					}
 				}
 				if (location != null) {
