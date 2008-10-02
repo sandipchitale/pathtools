@@ -1,6 +1,8 @@
 package pathtools;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
@@ -42,31 +44,48 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 	public void selectionChanged(IAction action, ISelection selection) {
 		fileObject = null;
 		action.setEnabled(false);
-		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			IPath location = null;
-			// Is only one item selected?
-			if (structuredSelection.size() == 1) {
-				Object firstElement = structuredSelection.getFirstElement();
-				if (firstElement instanceof IResource) {
-					// Is this an IResource ?
-					IResource resource = (IResource) firstElement;
-					location = resource.getLocation();
-				} else if (firstElement instanceof IAdaptable) {
-					IAdaptable adaptable = (IAdaptable) firstElement;
-					// Is this an IResource adaptable ?
-					IResource resource = (IResource) adaptable
-							.getAdapter(IResource.class);
-					if (resource != null) {
+		try {
+			if (selection instanceof IStructuredSelection) {
+				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+				IPath location = null;
+				// Is only one item selected?
+				if (structuredSelection.size() == 1) {
+					Object firstElement = structuredSelection.getFirstElement();
+					if (firstElement instanceof IResource) {
+						// Is this an IResource ?
+						IResource resource = (IResource) firstElement;
 						location = resource.getLocation();
+					} else if (firstElement instanceof IAdaptable) {
+						IAdaptable adaptable = (IAdaptable) firstElement;
+						// Is this an IResource adaptable ?
+						IResource resource = (IResource) adaptable
+								.getAdapter(IResource.class);
+						if (resource != null) {
+							location = resource.getLocation();
+						}
+					} else if (firstElement.getClass().getName().equals("com.aptana.ide.core.ui.io.file.LocalFile")) {
+						try {
+							Method getFile = firstElement.getClass().getDeclaredMethod("getFile");
+							Object object = getFile.invoke(firstElement);
+							if (object instanceof File){
+								fileObject = (File) object;
+								return;
+							}
+						} catch (SecurityException e) {
+						} catch (NoSuchMethodException e) {
+						} catch (IllegalArgumentException e) {
+						} catch (IllegalAccessException e) {
+						} catch (InvocationTargetException e) {
+						}
 					}
 				}
+				if (location != null) {
+					fileObject = location.toFile();
+				}
 			}
-			if (location != null) {
-				fileObject = location.toFile();
-			}
+		} finally {
+			action.setEnabled(fileObject != null);
 		}
-		action.setEnabled(fileObject != null);
 	}
 
 	public Menu getMenu(Control parent) {
