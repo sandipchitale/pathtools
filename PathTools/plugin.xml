@@ -23,6 +23,8 @@
                   <objectClass
                         name="org.eclipse.core.runtime.IAdaptable">
                   </objectClass>
+	              <objectClass
+	                    name="com.aptana.ide.core.ui.io.file.LocalFile"/>
                </or>
             </enablement>
          </action>
@@ -41,6 +43,8 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
+	            <objectClass
+	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
@@ -59,6 +63,8 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
+	            <objectClass
+	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
@@ -77,6 +83,8 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
+                <objectClass
+                   name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
@@ -112,6 +120,8 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
+	            <objectClass
+	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
@@ -128,6 +138,8 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
+	            <objectClass
+	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
@@ -144,6 +156,8 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
+                <objectClass
+                   name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
      	</action>     
@@ -153,6 +167,8 @@
                name="org.eclipse.core.resources.IResource"/>
             <objectClass 
                name="org.eclipse.core.runtime.IAdaptable"/>
+            <objectClass
+               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
          </or>
   		</visibility>
       </objectContribution>
