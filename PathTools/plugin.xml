@@ -55,7 +55,7 @@
                id="PathTools.Explore"
                label="Explore"
                menubarPath="File/additions"
-               style="push"
+               style="pulldown"
                toolbarPath="Normal/PathTools">
             <enablement>
 	         <or>
