@@ -1,20 +1,26 @@
 package pathtools;
 
 import java.io.File;
+import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -160,8 +166,74 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 					}
 				}
 			});
+			MenuItem gotoWorkspace = new MenuItem(exploreMenu, SWT.PUSH);
+			gotoWorkspace.setText("Go to Workspace Folder");
+			gotoWorkspace.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+					openFolder(workspaceLocation.toFile());
+				}
+			});
+			MenuItem gotoConfigurationFolder = new MenuItem(exploreMenu, SWT.PUSH);
+			gotoConfigurationFolder.setText("Go to Configuration Folder");
+			gotoConfigurationFolder.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					Location configurationLocation = Platform.getConfigurationLocation();
+					if (configurationLocation == null) {
+						return;
+					}
+					URL url = configurationLocation.getURL();
+					if (url == null) {
+						return;
+					}
+					
+					openFolder(new File(url.getFile()));
+				}
+			});
+			MenuItem gotoUserFolder = new MenuItem(exploreMenu, SWT.PUSH);
+			gotoUserFolder.setText("Go to User Data Folder");
+			gotoUserFolder.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					Location userDataLocation = Platform.getUserLocation();
+					if (userDataLocation == null) {
+						return;
+					}
+					URL url = userDataLocation.getURL();
+					if (url == null) {
+						return;
+					}
+					
+					openFolder(new File(url.getFile()));
+				}
+			});
+			MenuItem gotoInstallFolder = new MenuItem(exploreMenu, SWT.PUSH);
+			gotoInstallFolder.setText("Go to Install Folder");
+			gotoInstallFolder.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					Location installLocation = Platform.getInstallLocation();
+					if (installLocation == null) {
+						return;
+					}
+					URL url = installLocation.getURL();
+					if (url == null) {
+						return;
+					}
+					
+					openFolder(new File(url.getFile()));
+				}
+			});
 		}
 		return exploreMenu;
+	}
+	
+	private static void openFolder(File file) {
+		if (file != null && file.exists() && file.isDirectory()) {
+			Utilities.launch(Activator
+					.getDefault()
+					.getPreferenceStore()
+					.getString(
+							Activator.FOLDER_EXPLORE_COMMAND_KEY), file);
+		}
 	}
 
 }
