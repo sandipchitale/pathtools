@@ -2,10 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Path Tools Plug-in
 Bundle-SymbolicName: PathTools;singleton:=true
-Bundle-Version: 1.0.14
+Bundle-Version: 1.0.19
 Bundle-Activator: pathtools.Activator
 Bundle-Vendor: Sandip V. Chitale
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,

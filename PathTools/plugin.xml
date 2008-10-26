@@ -24,7 +24,7 @@
                   <objectClass
                         name="org.eclipse.core.runtime.IAdaptable">
                   </objectClass>
-                  <objectClass 
+	              <objectClass
 	                    name="com.aptana.ide.core.ui.io.file.LocalFile"/>
                </or>
             </enablement>
@@ -44,7 +44,7 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
-	            <objectClass 
+	            <objectClass
 	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
@@ -56,7 +56,7 @@
                id="PathTools.Explore"
                label="Explore"
                menubarPath="File/additions"
-               style="push"
+               style="pulldown"
                toolbarPath="Normal/PathTools">
             <enablement>
 	         <or>
@@ -64,7 +64,7 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
-                <objectClass 
+	            <objectClass
 	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
@@ -76,7 +76,7 @@
                id="PathTools.CopyPath"
                label="Copy Paths"
                menubarPath="Edit/additions"
-               style="push"
+               style="pulldown"
                toolbarPath="Normal/PathTools">
 			<enablement>
 	         <or>
@@ -84,12 +84,23 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
-                <objectClass 
+                <objectClass
                    name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
       </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSetPartAssociations">
+      <actionSetPartAssociation targetID="PathTools.actionSet">
+         <part id="org.eclipse.jdt.ui.PackageExplorer"/>
+		 <part id="org.eclipse.jdt.ui.ProjectsView"/>
+		 <part id="org.eclipse.jdt.ui.PackagesView"/>
+		 <part id="org.eclipse.ui.views.ResourceNavigator"/>
+		 <part id="org.eclipse.jdt.ui.TypeHierarchy"/>
+		 <part id="org.eclipse.ui.views.ContentOutline"/>
+      </actionSetPartAssociation>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -110,8 +121,8 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
-                <objectClass 
-                   name="com.aptana.ide.core.ui.io.file.LocalFile"/>
+	            <objectClass
+	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
@@ -128,8 +139,8 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
-                <objectClass 
-                   name="com.aptana.ide.core.ui.io.file.LocalFile"/>
+	            <objectClass
+	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
@@ -146,7 +157,7 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
-                <objectClass 
+                <objectClass
                    name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
@@ -157,7 +168,7 @@
                name="org.eclipse.core.resources.IResource"/>
             <objectClass 
                name="org.eclipse.core.runtime.IAdaptable"/>
-            <objectClass 
+            <objectClass
                name="com.aptana.ide.core.ui.io.file.LocalFile"/>
          </or>
   		</visibility>
@@ -171,16 +182,4 @@
             name="Path Tools">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.ui.actionSetPartAssociations">
-      <actionSetPartAssociation targetID="PathTools.actionSet">
-         <part id="org.eclipse.jdt.ui.PackageExplorer"/>
-		 <part id="org.eclipse.jdt.ui.ProjectsView"/>
-		 <part id="org.eclipse.jdt.ui.PackagesView"/>
-		 <part id="org.eclipse.ui.views.ResourceNavigator"/>
-		 <part id="org.eclipse.jdt.ui.TypeHierarchy"/>
-		 <part id="org.eclipse.ui.views.ContentOutline"/>
-      </actionSetPartAssociation>
-   </extension>
-
 </plugin>
