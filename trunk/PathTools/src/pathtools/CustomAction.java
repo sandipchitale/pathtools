@@ -32,13 +32,13 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 	public void init(IWorkbenchWindow window) {}
 
 	public void run(IAction action) {
-		String[] displayedIds = new String[]{"PathTools.page"};
-		PreferenceDialog pathToolsPreferencesDialog = PreferencesUtil.createPreferenceDialogOn(
+		String[] displayedIds = new String[] {"PathTools.page"};
+		PreferenceDialog pathToolsPreferenceDialog = PreferencesUtil.createPreferenceDialogOn(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				displayedIds[0],
-				displayedIds, 
+				displayedIds,
 				null);
-		pathToolsPreferencesDialog.open();
+		pathToolsPreferenceDialog.open();
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {

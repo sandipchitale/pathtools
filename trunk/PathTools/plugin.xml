@@ -5,7 +5,8 @@
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="PathTools.actionSet"
-            label="Path Tools">
+            label="Path Tools"
+            visible="true">
          <action
                class="pathtools.CustomAction"
                enablesFor="1"
