@@ -52,8 +52,8 @@ public class Utilities {
 	/**
 	 * Parses parameters from a given string in shell-like manner. Users of the
 	 * Bourne shell (e.g. on Unix) will already be familiar with the behavior.
-	 * For example, when using <code>java.lang.ProcessBuilder</code>
-	 * (Execution API) you should be able to:
+	 * For example, when using <code>java.lang.ProcessBuilder</code> (Execution
+	 * API) you should be able to:
 	 * <ul>
 	 * <li>Include command names with embedded spaces, such as
 	 * <code>c:\Program Files\jdk\bin\javac</code>.
