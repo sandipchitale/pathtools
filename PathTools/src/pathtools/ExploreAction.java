@@ -166,6 +166,7 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 					}
 				}
 			});
+			new MenuItem(exploreMenu, SWT.SEPARATOR);
 			MenuItem gotoWorkspace = new MenuItem(exploreMenu, SWT.PUSH);
 			gotoWorkspace.setText("Go to Workspace Folder");
 			gotoWorkspace.addSelectionListener(new SelectionAdapter() {
@@ -220,6 +221,55 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 					}
 					
 					openFolder(new File(url.getFile()));
+				}
+			});
+			new MenuItem(exploreMenu, SWT.SEPARATOR);
+			MenuItem userHomeFolder = new MenuItem(exploreMenu, SWT.PUSH);
+			userHomeFolder.setText("Go to user.home");
+			userHomeFolder.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					Location installLocation = Platform.getInstallLocation();
+					if (installLocation == null) {
+						return;
+					}
+					URL url = installLocation.getURL();
+					if (url == null) {
+						return;
+					}
+					
+					openFolder(new File(System.getProperty("user.home")));
+				}
+			});
+			MenuItem userDirFolder = new MenuItem(exploreMenu, SWT.PUSH);
+			userDirFolder.setText("Go to user.dir");
+			userDirFolder.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					Location installLocation = Platform.getInstallLocation();
+					if (installLocation == null) {
+						return;
+					}
+					URL url = installLocation.getURL();
+					if (url == null) {
+						return;
+					}
+					
+					openFolder(new File(System.getProperty("user.dir")));
+				}
+			});
+			MenuItem javaIoTmpFolder = new MenuItem(exploreMenu, SWT.PUSH);
+			javaIoTmpFolder.setText("Go to java.io.tmpdir");
+			javaIoTmpFolder.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					Location installLocation = Platform.getInstallLocation();
+					if (installLocation == null) {
+						return;
+					}
+					URL url = installLocation.getURL();
+					if (url == null) {
+						return;
+					}
+					
+					openFolder(new File(System.getProperty("java.io.tmpdir")));
 				}
 			});
 		}
