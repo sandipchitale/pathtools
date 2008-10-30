@@ -1,7 +1,6 @@
 package pathtools;
 
 import java.io.File;
-import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -13,25 +12,20 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
-import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * This launches the OS file explorer showing the selected folder or the folder
@@ -227,48 +221,21 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 			MenuItem userHomeFolder = new MenuItem(exploreMenu, SWT.PUSH);
 			userHomeFolder.setText("Go to user.home");
 			userHomeFolder.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					Location installLocation = Platform.getInstallLocation();
-					if (installLocation == null) {
-						return;
-					}
-					URL url = installLocation.getURL();
-					if (url == null) {
-						return;
-					}
-					
+				public void widgetSelected(SelectionEvent e) {				
 					openFolder(new File(System.getProperty("user.home")));
 				}
 			});
 			MenuItem userDirFolder = new MenuItem(exploreMenu, SWT.PUSH);
 			userDirFolder.setText("Go to user.dir");
 			userDirFolder.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					Location installLocation = Platform.getInstallLocation();
-					if (installLocation == null) {
-						return;
-					}
-					URL url = installLocation.getURL();
-					if (url == null) {
-						return;
-					}
-					
+				public void widgetSelected(SelectionEvent e) {				
 					openFolder(new File(System.getProperty("user.dir")));
 				}
 			});
 			MenuItem javaIoTmpFolder = new MenuItem(exploreMenu, SWT.PUSH);
 			javaIoTmpFolder.setText("Go to java.io.tmpdir");
 			javaIoTmpFolder.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					Location installLocation = Platform.getInstallLocation();
-					if (installLocation == null) {
-						return;
-					}
-					URL url = installLocation.getURL();
-					if (url == null) {
-						return;
-					}
-					
+				public void widgetSelected(SelectionEvent e) {				
 					openFolder(new File(System.getProperty("java.io.tmpdir")));
 				}
 			});
