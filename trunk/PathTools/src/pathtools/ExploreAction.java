@@ -160,80 +160,75 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 					}
 				}
 			});
+			
+			final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 			new MenuItem(exploreMenu, SWT.SEPARATOR);
 			MenuItem gotoWorkspace = new MenuItem(exploreMenu, SWT.PUSH);
-			gotoWorkspace.setText("Go to Workspace Folder");
+			gotoWorkspace.setText("Go to Workspace Folder: " + workspaceLocation.toFile().getAbsolutePath());
 			gotoWorkspace.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
-					IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 					openFolder(workspaceLocation.toFile());
 				}
 			});
-			MenuItem gotoConfigurationFolder = new MenuItem(exploreMenu, SWT.PUSH);
-			gotoConfigurationFolder.setText("Go to Configuration Folder");
-			gotoConfigurationFolder.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					Location configurationLocation = Platform.getConfigurationLocation();
-					if (configurationLocation == null) {
-						return;
-					}
-					URL url = configurationLocation.getURL();
-					if (url == null) {
-						return;
-					}
-					
-					openFolder(new File(url.getFile()));
+			
+			Location configurationLocation = Platform.getConfigurationLocation();
+			if (configurationLocation != null) {
+				final URL url = configurationLocation.getURL();
+				if (url != null) {
+					MenuItem gotoConfigurationFolder = new MenuItem(exploreMenu, SWT.PUSH);
+					gotoConfigurationFolder.setText("Go to Configuration Folder: " + url.getFile());
+					gotoConfigurationFolder.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							openFolder(new File(url.getFile()));
+						}
+					});
 				}
-			});
-			MenuItem gotoUserFolder = new MenuItem(exploreMenu, SWT.PUSH);
-			gotoUserFolder.setText("Go to User Data Folder");
-			gotoUserFolder.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					Location userDataLocation = Platform.getUserLocation();
-					if (userDataLocation == null) {
-						return;
-					}
-					URL url = userDataLocation.getURL();
-					if (url == null) {
-						return;
-					}
-					
-					openFolder(new File(url.getFile()));
+			}
+			
+			Location userDataLocation = Platform.getUserLocation();
+			if (userDataLocation != null) {
+				final URL url = userDataLocation.getURL();
+				if (url != null) {
+					MenuItem gotoUserFolder = new MenuItem(exploreMenu, SWT.PUSH);
+					gotoUserFolder.setText("Go to User Data Folder: " + url.getFile());
+					gotoUserFolder.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							
+							openFolder(new File(url.getFile()));
+						}
+					});
 				}
-			});
-			MenuItem gotoInstallFolder = new MenuItem(exploreMenu, SWT.PUSH);
-			gotoInstallFolder.setText("Go to Install Folder");
-			gotoInstallFolder.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					Location installLocation = Platform.getInstallLocation();
-					if (installLocation == null) {
-						return;
-					}
-					URL url = installLocation.getURL();
-					if (url == null) {
-						return;
-					}
-					
-					openFolder(new File(url.getFile()));
+			}
+			Location installLocation = Platform.getInstallLocation();
+			if (installLocation != null) {
+				final URL url = installLocation.getURL();
+				if (url != null) {
+					MenuItem gotoInstallFolder = new MenuItem(exploreMenu, SWT.PUSH);
+					gotoInstallFolder.setText("Go to Install Folder: " + url.getFile());
+					gotoInstallFolder.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							openFolder(new File(url.getFile()));
+						}
+					});
 				}
-			});
+			}
 			new MenuItem(exploreMenu, SWT.SEPARATOR);
 			MenuItem userHomeFolder = new MenuItem(exploreMenu, SWT.PUSH);
-			userHomeFolder.setText("Go to user.home");
+			userHomeFolder.setText("Go to user.home: " + System.getProperty("user.home"));
 			userHomeFolder.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {				
 					openFolder(new File(System.getProperty("user.home")));
 				}
 			});
 			MenuItem userDirFolder = new MenuItem(exploreMenu, SWT.PUSH);
-			userDirFolder.setText("Go to user.dir");
+			userDirFolder.setText("Go to user.dir: " + System.getProperty("user.dir"));
 			userDirFolder.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {				
 					openFolder(new File(System.getProperty("user.dir")));
 				}
 			});
 			MenuItem javaIoTmpFolder = new MenuItem(exploreMenu, SWT.PUSH);
-			javaIoTmpFolder.setText("Go to java.io.tmpdir");
+			javaIoTmpFolder.setText("Go to java.io.tmpdir: " + System.getProperty("java.io.tmpdir"));
 			javaIoTmpFolder.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {				
 					openFolder(new File(System.getProperty("java.io.tmpdir")));
