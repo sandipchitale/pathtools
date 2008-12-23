@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
@@ -24,8 +25,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 /**
  * This launches the OS file explorer showing the selected folder or the folder
@@ -71,9 +76,9 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 		fileObject = null;
 		action.setEnabled(false);
 		try {
+			IPath location = null;
 			if (selection instanceof IStructuredSelection) {
 				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-				IPath location = null;
 				// Is only one item selected?
 				if (structuredSelection.size() == 1) {
 					Object firstElement = structuredSelection.getFirstElement();
@@ -107,9 +112,23 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 						}
 					}
 				}
-				if (location != null) {
-					fileObject = location.toFile();
-				}
+			}
+			if (fileObject == null) {
+				IWorkbenchPart activeEditor = window.getActivePage().getActivePart();
+	            if (activeEditor instanceof AbstractTextEditor) {
+					AbstractTextEditor abstractTextEditor = (AbstractTextEditor) activeEditor;
+					IEditorInput editorInput = abstractTextEditor.getEditorInput();
+					if (editorInput instanceof IFileEditorInput) {
+						IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+						IFile iFile = fileEditorInput.getFile();
+						if (iFile != null) {
+							location = iFile.getLocation();
+						}
+					}
+	            }
+			}
+			if (location != null) {
+				fileObject = location.toFile();
 			}
 		} finally {
 			action.setEnabled(fileObject != null);

@@ -5,14 +5,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 /**
  * This launches the external text editor for selected folder or file.
@@ -26,11 +31,13 @@ public class EditAction implements IWorkbenchWindowActionDelegate {
 	private static String fileEditComand = null;
 	private static String folderEditComand = null;
 
+	private IWorkbenchWindow window;
+
 	public void dispose() {
 	}
 
 	public void init(IWorkbenchWindow window) {
-
+		this.window = window;
 	}
 
 	public void run(IAction action) {
@@ -71,9 +78,9 @@ public class EditAction implements IWorkbenchWindowActionDelegate {
 		fileObject = null;
 		action.setEnabled(false);
 		try {
+			IPath location = null;
 			if (selection instanceof IStructuredSelection) {
 				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-				IPath location = null;
 				// Is only one item selected?
 				if (structuredSelection.size() == 1) {
 					Object firstElement = structuredSelection.getFirstElement();
@@ -105,9 +112,24 @@ public class EditAction implements IWorkbenchWindowActionDelegate {
 						}
 					}
 				}
-				if (location != null) {
-					fileObject = location.toFile();
-				}
+				
+			}
+			if (fileObject == null) {
+				IWorkbenchPart activeEditor = window.getActivePage().getActivePart();
+	            if (activeEditor instanceof AbstractTextEditor) {
+					AbstractTextEditor abstractTextEditor = (AbstractTextEditor) activeEditor;
+					IEditorInput editorInput = abstractTextEditor.getEditorInput();
+					if (editorInput instanceof IFileEditorInput) {
+						IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+						IFile iFile = fileEditorInput.getFile();
+						if (iFile != null) {
+							location = iFile.getLocation();
+						}
+					}
+	            }
+			}
+			if (location != null) {
+				fileObject = location.toFile();
 			}
 		} finally {
 			action.setEnabled(fileObject != null);
