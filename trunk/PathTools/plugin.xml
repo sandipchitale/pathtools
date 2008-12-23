@@ -9,85 +9,39 @@
             visible="true">
          <action
                class="pathtools.CustomAction"
-               enablesFor="1"
                icon="icons/command.gif"
                id="PathTools.Custom"
                label="Custom"
                menubarPath="File/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
-            <enablement>
-               <or>
-                  <objectClass
-                        name="org.eclipse.core.resources.IResource">
-                  </objectClass>
-                  <objectClass
-                        name="org.eclipse.core.runtime.IAdaptable">
-                  </objectClass>
-	              <objectClass
-	                    name="com.aptana.ide.core.ui.io.file.LocalFile"/>
-               </or>
-            </enablement>
          </action>
          <action
                class="pathtools.EditAction"
-               enablesFor="1"
                icon="icons/editpath.gif"
                id="PathTools.Edit"
                label="Open in external editor..."
                menubarPath="File/additions"
                style="push"
                toolbarPath="Normal/PathTools">
-            <enablement>
-	         <or>
-	            <objectClass 
-	               name="org.eclipse.core.resources.IResource"/>
-	            <objectClass 
-	               name="org.eclipse.core.runtime.IAdaptable"/>
-	            <objectClass
-	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
-	         </or>
-      		</enablement>
          </action>
          <action
                class="pathtools.ExploreAction"
-               enablesFor="1"
                icon="icons/explore.gif"
                id="PathTools.Explore"
                label="Explore"
                menubarPath="File/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
-            <enablement>
-	         <or>
-	            <objectClass 
-	               name="org.eclipse.core.resources.IResource"/>
-	            <objectClass 
-	               name="org.eclipse.core.runtime.IAdaptable"/>
-	            <objectClass
-	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
-	         </or>
-      		</enablement>
          </action>
          <action
                class="pathtools.CopyPathAction"
-               enablesFor="+"
                icon="icons/copypaths.gif"
                id="PathTools.CopyPath"
                label="Copy Paths"
                menubarPath="Edit/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
-			<enablement>
-	         <or>
-	            <objectClass 
-	               name="org.eclipse.core.resources.IResource"/>
-	            <objectClass 
-	               name="org.eclipse.core.runtime.IAdaptable"/>
-                <objectClass
-                   name="com.aptana.ide.core.ui.io.file.LocalFile"/>
-	         </or>
-      		</enablement>
          </action>
       </actionSet>
    </extension>

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
@@ -26,9 +27,13 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 /**
  * This copies the absolute paths of selected folders and files (one per line)
@@ -40,12 +45,13 @@ import org.eclipse.ui.PlatformUI;
 public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 	private List<File> files = new LinkedList<File>();
 	private List<IPath> resourcePaths = new LinkedList<IPath>();
+	private IWorkbenchWindow window;
 
 	public void dispose() {
 	}
 
 	public void init(IWorkbenchWindow window) {
-
+		this.window = window;
 	}
 
 	public void run(IAction action) {
@@ -113,6 +119,24 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 					resourcePaths.add(fullPath);
 				}
 			}
+		}
+		if (files.size() == 0) {
+			IWorkbenchPart activeEditor = window.getActivePage().getActivePart();
+            if (activeEditor instanceof AbstractTextEditor) {
+				AbstractTextEditor abstractTextEditor = (AbstractTextEditor) activeEditor;
+				IEditorInput editorInput = abstractTextEditor.getEditorInput();
+				if (editorInput instanceof IFileEditorInput) {
+					IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+					IFile iFile = fileEditorInput.getFile();
+					if (iFile != null) {
+						File file = iFile.getLocation().toFile();
+						if (file != null) {
+							files.add(file);
+							resourcePaths.add(iFile.getFullPath());
+						}
+					}
+				}
+            }
 		}
 		action.setEnabled(files.size() > 0);
 	}
