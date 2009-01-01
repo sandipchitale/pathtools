@@ -30,7 +30,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
-import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * This launches the OS file explorer showing the selected folder or the folder
@@ -115,8 +115,8 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 			}
 			if (fileObject == null) {
 				IWorkbenchPart activeEditor = window.getActivePage().getActivePart();
-	            if (activeEditor instanceof AbstractTextEditor) {
-					AbstractTextEditor abstractTextEditor = (AbstractTextEditor) activeEditor;
+	            if (activeEditor instanceof ITextEditor) {
+	            	ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
 					IEditorInput editorInput = abstractTextEditor.getEditorInput();
 					if (editorInput instanceof IFileEditorInput) {
 						IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;

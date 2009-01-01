@@ -17,7 +17,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * This launches the external text editor for selected folder or file.
@@ -116,8 +116,8 @@ public class EditAction implements IWorkbenchWindowActionDelegate {
 			}
 			if (fileObject == null) {
 				IWorkbenchPart activeEditor = window.getActivePage().getActivePart();
-	            if (activeEditor instanceof AbstractTextEditor) {
-					AbstractTextEditor abstractTextEditor = (AbstractTextEditor) activeEditor;
+	            if (activeEditor instanceof ITextEditor) {
+	            	ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
 					IEditorInput editorInput = abstractTextEditor.getEditorInput();
 					if (editorInput instanceof IFileEditorInput) {
 						IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
