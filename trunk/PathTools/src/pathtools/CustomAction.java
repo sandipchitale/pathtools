@@ -25,7 +25,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
-import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 	private Menu customActionsMenu;
@@ -91,8 +91,8 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 			}
 			if (fileObject == null) {
 				IWorkbenchPart activeEditor = window.getActivePage().getActivePart();
-	            if (activeEditor instanceof AbstractTextEditor) {
-					AbstractTextEditor abstractTextEditor = (AbstractTextEditor) activeEditor;
+	            if (activeEditor instanceof ITextEditor) {
+	            	ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
 					IEditorInput editorInput = abstractTextEditor.getEditorInput();
 					if (editorInput instanceof IFileEditorInput) {
 						IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;

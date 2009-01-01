@@ -33,7 +33,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * This copies the absolute paths of selected folders and files (one per line)
@@ -122,8 +122,8 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 		}
 		if (files.size() == 0) {
 			IWorkbenchPart activeEditor = window.getActivePage().getActivePart();
-            if (activeEditor instanceof AbstractTextEditor) {
-				AbstractTextEditor abstractTextEditor = (AbstractTextEditor) activeEditor;
+            if (activeEditor instanceof ITextEditor) {
+            	ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
 				IEditorInput editorInput = abstractTextEditor.getEditorInput();
 				if (editorInput instanceof IFileEditorInput) {
 					IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
