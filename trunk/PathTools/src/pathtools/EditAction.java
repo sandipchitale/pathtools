@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
@@ -54,22 +55,10 @@ public class EditAction implements IWorkbenchWindowActionDelegate {
 			String commandFormat = fileObject.isDirectory() ? folderEditComand
 					: fileEditComand;
 
-			// Substitute parameter values ad format the explore command
-			String command = MessageFormat.format(Utilities
-					.convertParameters(commandFormat), new Object[] {
-					fileObject.getAbsolutePath().replace('/',
-							File.separatorChar).replace('\\',
-							File.separatorChar),
-					fileObject.getParentFile().getAbsolutePath().replace('/',
-							File.separatorChar).replace('\\',
-							File.separatorChar),
-					fileObject.getAbsolutePath().replace('\\', '/'),
-					fileObject.getParentFile().getAbsolutePath().replace('\\',
-							'/'),
-					fileObject.getAbsolutePath().replace('/', '\\'),
-					fileObject.getParentFile().getAbsolutePath().replace('/',
-							'\\'), });
-			// Launch the explore command
+			// Substitute parameter values and format the edit command
+			String command = Utilities.formatCommand(commandFormat, fileObject);
+			
+			// Launch the edit command
 			CommandLauncher.launch(command);
 		}
 	}
@@ -115,18 +104,23 @@ public class EditAction implements IWorkbenchWindowActionDelegate {
 				
 			}
 			if (fileObject == null) {
-				IWorkbenchPart activeEditor = window.getActivePage().getActivePart();
-	            if (activeEditor instanceof ITextEditor) {
-	            	ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
-					IEditorInput editorInput = abstractTextEditor.getEditorInput();
-					if (editorInput instanceof IFileEditorInput) {
-						IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
-						IFile iFile = fileEditorInput.getFile();
-						if (iFile != null) {
-							location = iFile.getLocation();
+				if (window != null) {
+					IWorkbenchPage activePage = window.getActivePage();
+					if (activePage != null) {
+						IWorkbenchPart activeEditor = activePage.getActivePart();
+						if (activeEditor instanceof ITextEditor) {
+							ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
+							IEditorInput editorInput = abstractTextEditor.getEditorInput();
+							if (editorInput instanceof IFileEditorInput) {
+								IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+								IFile iFile = fileEditorInput.getFile();
+								if (iFile != null) {
+									location = iFile.getLocation();
+								}
+							}
 						}
 					}
-	            }
+				}
 			}
 			if (location != null) {
 				fileObject = location.toFile();

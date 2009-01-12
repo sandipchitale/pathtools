@@ -65,8 +65,7 @@ public class CommandLauncher {
 										view = (IConsoleView) activePage.showView(IConsoleConstants.ID_CONSOLE_VIEW);
 										view.display(messageConsole);
 										new Thread(new MessageConsoleWriter(messageConsole, process.getInputStream())).start();
-										new Thread(new MessageConsoleWriter(messageConsole, process.getErrorStream(), 
-												Display.getCurrent().getSystemColor(SWT.COLOR_RED))).start();
+										new Thread(new MessageConsoleWriter(messageConsole, process.getErrorStream())).start();
 									} catch (PartInitException e) {
 										return Status.CANCEL_STATUS;
 									}
@@ -120,23 +119,14 @@ public class CommandLauncher {
 	private static class MessageConsoleWriter implements Runnable {		
 		private final MessageConsole messageConsole;
 		private final InputStream from;
-		private final Color color;
 		
 		private MessageConsoleWriter(MessageConsole messageConsole, InputStream from) {
-			this(messageConsole, from, null);
-		}
-		
-		private MessageConsoleWriter(MessageConsole messageConsole, InputStream from, Color color) {
 			this.messageConsole = messageConsole;
 			this.from = from;
-			this.color = color;
 		}
 		
 		public void run() {
-			MessageConsoleStream messageConsoleStream = messageConsole.newMessageStream();
-			if (color != null) {
-				messageConsoleStream.setColor(color);
-			}
+			final MessageConsoleStream messageConsoleStream = messageConsole.newMessageStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(from));
 			String output = null;
 			try {
