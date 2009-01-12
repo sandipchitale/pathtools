@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
@@ -114,18 +115,23 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 				}
 			}
 			if (fileObject == null) {
-				IWorkbenchPart activeEditor = window.getActivePage().getActivePart();
-	            if (activeEditor instanceof ITextEditor) {
-	            	ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
-					IEditorInput editorInput = abstractTextEditor.getEditorInput();
-					if (editorInput instanceof IFileEditorInput) {
-						IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
-						IFile iFile = fileEditorInput.getFile();
-						if (iFile != null) {
-							location = iFile.getLocation();
+				if (window != null) {
+					IWorkbenchPage activePage = window.getActivePage();
+					if (activePage != null) {
+						IWorkbenchPart activeEditor = activePage.getActivePart();
+						if (activeEditor instanceof ITextEditor) {
+							ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
+							IEditorInput editorInput = abstractTextEditor.getEditorInput();
+							if (editorInput instanceof IFileEditorInput) {
+								IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+								IFile iFile = fileEditorInput.getFile();
+								if (iFile != null) {
+									location = iFile.getLocation();
+								}
+							}
 						}
 					}
-	            }
+				}
 			}
 			if (location != null) {
 				fileObject = location.toFile();
@@ -140,6 +146,19 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 	public Menu getMenu(Control parent) {
 		if (exploreMenu == null) {
 			exploreMenu = new Menu(parent);
+			if (fileObject != null && fileObject.isDirectory()) {
+				final File parentFileObject = fileObject.getParentFile();
+				if (parentFileObject != null) {
+					MenuItem gotoParentAction = new MenuItem(exploreMenu, SWT.PUSH);
+					gotoParentAction.setText("Go to " + parentFileObject.getAbsolutePath());
+					gotoParentAction.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							openFolder(parentFileObject);
+						}
+					});
+				}
+			}
+			
 			MenuItem gotoAction = new MenuItem(exploreMenu, SWT.PUSH);
 			gotoAction.setText("Go to...");
 			gotoAction.addSelectionListener(new SelectionAdapter() {
