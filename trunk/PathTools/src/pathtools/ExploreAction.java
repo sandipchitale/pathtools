@@ -144,135 +144,139 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 	private Menu exploreMenu;
 
 	public Menu getMenu(Control parent) {
-		if (exploreMenu == null) {
-			exploreMenu = new Menu(parent);
-			if (fileObject != null && fileObject.isDirectory()) {
-				final File parentFileObject = fileObject.getParentFile();
-				if (parentFileObject != null) {
-					MenuItem gotoParentAction = new MenuItem(exploreMenu, SWT.PUSH);
-					gotoParentAction.setText("Go to " + parentFileObject.getAbsolutePath());
-					gotoParentAction.addSelectionListener(new SelectionAdapter() {
-						public void widgetSelected(SelectionEvent e) {
-							openFolder(parentFileObject);
-						}
-					});
-				}
-			}
-			
-			MenuItem gotoAction = new MenuItem(exploreMenu, SWT.PUSH);
-			gotoAction.setText("Go to...");
-			gotoAction.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					String defaultValue = "";
-					Clipboard clipboard = new Clipboard(window.getShell().getDisplay());
-					Object contents = clipboard.getContents(TextTransfer.getInstance());
-					if (contents instanceof String) {
-						defaultValue = (String) contents;
-						if (!new File(defaultValue).exists()) {
-							defaultValue = System.getProperty("user.home", ".");
-						}
-					}
-					InputDialog inputDialog = new InputDialog(
-							window.getShell(), "Go to Path", "Path:", defaultValue, null);
-					if (inputDialog.open() == Window.OK) {
-						String path = inputDialog.getValue();
-						File file = new File(path);
-						// Is this a physical file on the disk ?
-						if (file.exists()) {
-							// Get the configured explorer commands for folder
-							// and file
-							String commandFormat = file.isDirectory() ?
-									Activator
-									.getDefault()
-									.getPreferenceStore()
-									.getString(
-											Activator.FOLDER_EXPLORE_COMMAND_KEY)
-									: Activator
-											.getDefault()
-											.getPreferenceStore()
-											.getString(
-													Activator.FILE_EXPLORE_COMMAND_KEY);
-
-							Utilities.launch(commandFormat, file);
-						}
-					}
-				}
-			});
-			
-			final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-			new MenuItem(exploreMenu, SWT.SEPARATOR);
-			MenuItem gotoWorkspace = new MenuItem(exploreMenu, SWT.PUSH);
-			gotoWorkspace.setText("Go to Workspace Folder: " + workspaceLocation.toFile().getAbsolutePath());
-			gotoWorkspace.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					openFolder(workspaceLocation.toFile());
-				}
-			});
-			
-			Location configurationLocation = Platform.getConfigurationLocation();
-			if (configurationLocation != null) {
-				final URL url = configurationLocation.getURL();
-				if (url != null) {
-					MenuItem gotoConfigurationFolder = new MenuItem(exploreMenu, SWT.PUSH);
-					gotoConfigurationFolder.setText("Go to Configuration Folder: " + url.getFile());
-					gotoConfigurationFolder.addSelectionListener(new SelectionAdapter() {
-						public void widgetSelected(SelectionEvent e) {
-							openFolder(new File(url.getFile()));
-						}
-					});
-				}
-			}
-			
-			Location userDataLocation = Platform.getUserLocation();
-			if (userDataLocation != null) {
-				final URL url = userDataLocation.getURL();
-				if (url != null) {
-					MenuItem gotoUserFolder = new MenuItem(exploreMenu, SWT.PUSH);
-					gotoUserFolder.setText("Go to User Data Folder: " + url.getFile());
-					gotoUserFolder.addSelectionListener(new SelectionAdapter() {
-						public void widgetSelected(SelectionEvent e) {
-							
-							openFolder(new File(url.getFile()));
-						}
-					});
-				}
-			}
-			Location installLocation = Platform.getInstallLocation();
-			if (installLocation != null) {
-				final URL url = installLocation.getURL();
-				if (url != null) {
-					MenuItem gotoInstallFolder = new MenuItem(exploreMenu, SWT.PUSH);
-					gotoInstallFolder.setText("Go to Install Folder: " + url.getFile());
-					gotoInstallFolder.addSelectionListener(new SelectionAdapter() {
-						public void widgetSelected(SelectionEvent e) {
-							openFolder(new File(url.getFile()));
-						}
-					});
-				}
-			}
-			new MenuItem(exploreMenu, SWT.SEPARATOR);
-			MenuItem userHomeFolder = new MenuItem(exploreMenu, SWT.PUSH);
-			userHomeFolder.setText("Go to user.home: " + System.getProperty("user.home"));
-			userHomeFolder.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {				
-					openFolder(new File(System.getProperty("user.home")));
-				}
-			});
-			MenuItem userDirFolder = new MenuItem(exploreMenu, SWT.PUSH);
-			userDirFolder.setText("Go to user.dir: " + System.getProperty("user.dir"));
-			userDirFolder.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {				
-					openFolder(new File(System.getProperty("user.dir")));
-				}
-			});
-			MenuItem javaIoTmpFolder = new MenuItem(exploreMenu, SWT.PUSH);
-			javaIoTmpFolder.setText("Go to java.io.tmpdir: " + System.getProperty("java.io.tmpdir"));
-			javaIoTmpFolder.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {				
-					openFolder(new File(System.getProperty("java.io.tmpdir")));
-				}
-			});
+		if (exploreMenu != null) {
+			exploreMenu.dispose();
 		}
+		
+		exploreMenu = new Menu(parent);
+		if (fileObject != null && fileObject.isDirectory()) {
+			final File parentFileObject = fileObject.getParentFile();
+			if (parentFileObject != null) {
+				MenuItem gotoParentAction = new MenuItem(exploreMenu, SWT.PUSH);
+				gotoParentAction.setText("Go to " + parentFileObject.getAbsolutePath());
+				gotoParentAction.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+						openFolder(parentFileObject);
+					}
+				});
+				new MenuItem(exploreMenu, SWT.SEPARATOR);
+			}
+		}
+
+		MenuItem gotoAction = new MenuItem(exploreMenu, SWT.PUSH);
+		gotoAction.setText("Go to...");
+		gotoAction.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				String defaultValue = "";
+				Clipboard clipboard = new Clipboard(window.getShell().getDisplay());
+				Object contents = clipboard.getContents(TextTransfer.getInstance());
+				if (contents instanceof String) {
+					defaultValue = (String) contents;
+					if (!new File(defaultValue).exists()) {
+						defaultValue = System.getProperty("user.home", ".");
+					}
+				}
+				InputDialog inputDialog = new InputDialog(
+						window.getShell(), "Go to Path", "Path:", defaultValue, null);
+				if (inputDialog.open() == Window.OK) {
+					String path = inputDialog.getValue();
+					File file = new File(path);
+					// Is this a physical file on the disk ?
+					if (file.exists()) {
+						// Get the configured explorer commands for folder
+						// and file
+						String commandFormat = file.isDirectory() ?
+								Activator
+								.getDefault()
+								.getPreferenceStore()
+								.getString(
+										Activator.FOLDER_EXPLORE_COMMAND_KEY)
+										: Activator
+										.getDefault()
+										.getPreferenceStore()
+										.getString(
+												Activator.FILE_EXPLORE_COMMAND_KEY);
+
+										Utilities.launch(commandFormat, file);
+					}
+				}
+			}
+		});
+
+		new MenuItem(exploreMenu, SWT.SEPARATOR);
+
+		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+		MenuItem gotoWorkspace = new MenuItem(exploreMenu, SWT.PUSH);
+		gotoWorkspace.setText("Go to Workspace Folder: " + workspaceLocation.toFile().getAbsolutePath());
+		gotoWorkspace.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				openFolder(workspaceLocation.toFile());
+			}
+		});
+
+		Location configurationLocation = Platform.getConfigurationLocation();
+		if (configurationLocation != null) {
+			final URL url = configurationLocation.getURL();
+			if (url != null) {
+				MenuItem gotoConfigurationFolder = new MenuItem(exploreMenu, SWT.PUSH);
+				gotoConfigurationFolder.setText("Go to Configuration Folder: " + url.getFile());
+				gotoConfigurationFolder.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+						openFolder(new File(url.getFile()));
+					}
+				});
+			}
+		}
+
+		Location userDataLocation = Platform.getUserLocation();
+		if (userDataLocation != null) {
+			final URL url = userDataLocation.getURL();
+			if (url != null) {
+				MenuItem gotoUserFolder = new MenuItem(exploreMenu, SWT.PUSH);
+				gotoUserFolder.setText("Go to User Data Folder: " + url.getFile());
+				gotoUserFolder.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+
+						openFolder(new File(url.getFile()));
+					}
+				});
+			}
+		}
+		Location installLocation = Platform.getInstallLocation();
+		if (installLocation != null) {
+			final URL url = installLocation.getURL();
+			if (url != null) {
+				MenuItem gotoInstallFolder = new MenuItem(exploreMenu, SWT.PUSH);
+				gotoInstallFolder.setText("Go to Install Folder: " + url.getFile());
+				gotoInstallFolder.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+						openFolder(new File(url.getFile()));
+					}
+				});
+			}
+		}
+		new MenuItem(exploreMenu, SWT.SEPARATOR);
+		MenuItem userHomeFolder = new MenuItem(exploreMenu, SWT.PUSH);
+		userHomeFolder.setText("Go to user.home: " + System.getProperty("user.home"));
+		userHomeFolder.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {				
+				openFolder(new File(System.getProperty("user.home")));
+			}
+		});
+		MenuItem userDirFolder = new MenuItem(exploreMenu, SWT.PUSH);
+		userDirFolder.setText("Go to user.dir: " + System.getProperty("user.dir"));
+		userDirFolder.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {				
+				openFolder(new File(System.getProperty("user.dir")));
+			}
+		});
+		MenuItem javaIoTmpFolder = new MenuItem(exploreMenu, SWT.PUSH);
+		javaIoTmpFolder.setText("Go to java.io.tmpdir: " + System.getProperty("java.io.tmpdir"));
+		javaIoTmpFolder.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {				
+				openFolder(new File(System.getProperty("java.io.tmpdir")));
+			}
+		});
 		return exploreMenu;
 	}
 	
