@@ -7,17 +7,25 @@ import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
@@ -26,7 +34,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @author Sandip V. Chitale
  * 
  */
-public class EditAction implements IWorkbenchWindowActionDelegate {
+public class EditAction implements IWorkbenchWindowPulldownDelegate {
 	private File fileObject;
 
 	private static String fileEditComand = null;
@@ -128,6 +136,39 @@ public class EditAction implements IWorkbenchWindowActionDelegate {
 		} finally {
 			action.setEnabled(fileObject != null);
 		}
+	}
+	
+	private Menu editMenu;
+	
+	public Menu getMenu(Control parent) {
+		if (editMenu != null) {
+			editMenu.dispose();
+		}
+		
+		editMenu = new Menu(parent);
+		
+		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+		File workspaceFile = workspaceLocation.toFile();
+		if (workspaceFile.exists()) {
+			final File logFile = new File(workspaceFile, ".metadata/.log");
+			if (logFile.exists() && logFile.isFile()) {
+				MenuItem editWorkspaceLog = new MenuItem(editMenu, SWT.PUSH);
+				editWorkspaceLog.setText("Open in external editor " + logFile.getAbsolutePath());
+				editWorkspaceLog.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+						String commandFormat =Activator.getDefault().getPreferenceStore().getString(
+								Activator.FILE_EDIT_COMMAND_KEY);
+
+						// Substitute parameter values and format the edit command
+						String command = Utilities.formatCommand(commandFormat, logFile);
+						
+						// Launch the edit command
+						CommandLauncher.launch(command);
+					}
+				});
+			}
+		}
+		return editMenu;
 	}
 
 }
