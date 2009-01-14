@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?metadataRepository class='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'?>
-<repository name='file:/home/schitale/professional/eclipse/workspace3.4.1/PathToolsUpdateSite/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1'>
+<repository name='file:/home/schitale/professional/workspaces/eclipse3.4.1/PathToolsUpdateSite/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1231742386599'/>
+    <property name='p2.timestamp' value='1231899602299'/>
   </properties>
   <references size='4'>
-    <repository url='http://code.google.com/p/pathtools/' type='0' options='0'/>
     <repository url='http://sandipchitale.blogspot.com/' type='1' options='0'/>
+    <repository url='http://code.google.com/p/pathtools/' type='0' options='0'/>
     <repository url='http://sandipchitale.blogspot.com/' type='0' options='0'/>
     <repository url='http://code.google.com/p/pathtools/' type='1' options='0'/>
   </references>
@@ -25,7 +25,7 @@
         <provided namespace='org.eclipse.equinox.p2.iu' name='PathToolsFeature.feature.group' version='1.0.0'/>
       </provides>
       <requires size='2'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='PathTools' range='[1.0.30,1.0.30]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='PathTools' range='[1.0.31,1.0.31]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='PathToolsFeature.feature.jar' range='[1.0.0,1.0.0]'>
           <filter>
             (org.eclipse.update.install.features=true)
@@ -98,6 +98,38 @@
         </instructions>
       </touchpointData>
     </unit>
+    <unit id='PathTools' version='1.0.31'>
+      <update id='PathTools' range='[0.0.0,1.0.31)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Path Tools Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Sandip V. Chitale'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='PathTools' version='1.0.31'/>
+        <provided namespace='osgi.bundle' name='PathTools' version='1.0.31'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='7'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.editors' range='3.4.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='PathTools' version='1.0.31'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.jface.text,org.eclipse.ui.console,org.eclipse.ui.ide,org.eclipse.ui.editors;bundle-version=&quot;3.4.0&quot;&#xA;Bundle-Activator: pathtools.Activator&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 1.0.31&#xA;Bundle-SymbolicName: PathTools;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Path Tools Plug-in&#xA;Bundle-Vendor: Sandip V. Chitale&#xA;
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
     <unit id='tooling.osgi.bundle.default' version='1.0.0' singleton='false'>
       <hostRequirements size='1'>
         <required namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' range='0.0.0' multiple='true' greedy='false'/>
@@ -155,38 +187,6 @@
           </instruction>
           <instruction key='uninstall'>
             uninstallFeature(feature:${artifact},featureId:default,featureVersion:default)
-          </instruction>
-        </instructions>
-      </touchpointData>
-    </unit>
-    <unit id='PathTools' version='1.0.30'>
-      <update id='PathTools' range='[0.0.0,1.0.30)' severity='0'/>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='Path Tools Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Sandip V. Chitale'/>
-      </properties>
-      <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='PathTools' version='1.0.30'/>
-        <provided namespace='osgi.bundle' name='PathTools' version='1.0.30'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
-      </provides>
-      <requires size='7'>
-        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.ui.editors' range='3.4.0'/>
-      </requires>
-      <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='PathTools' version='1.0.30'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='1'>
-          <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.jface.text,org.eclipse.ui.console,org.eclipse.ui.ide,org.eclipse.ui.editors;bundle-version=&quot;3.4.0&quot;&#xA;Bundle-Activator: pathtools.Activator&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 1.0.30&#xA;Bundle-SymbolicName: PathTools;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Path Tools Plug-in&#xA;Bundle-Vendor: Sandip V. Chitale&#xA;
           </instruction>
         </instructions>
       </touchpointData>

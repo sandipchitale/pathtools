@@ -22,7 +22,7 @@
                id="PathTools.Edit"
                label="Open in external editor..."
                menubarPath="File/additions"
-               style="push"
+               style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
          <action
