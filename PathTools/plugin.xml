@@ -4,22 +4,21 @@
    <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
-            id="PathTools.actionSet"
+            id="PathTools.actionSet.toolbar"
             label="Path Tools"
             visible="true">
          <action
                class="pathtools.CustomAction"
                icon="icons/command.gif"
-               id="PathTools.Custom"
+               id="PathTools.Custom.toolbar"
                label="Custom"
-               menubarPath="File/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
          <action
                class="pathtools.EditAction"
                icon="icons/editpath.gif"
-               id="PathTools.Edit"
+               id="PathTools.Edit.toolbar"
                label="Open in external editor..."
                menubarPath="File/additions"
                style="pulldown"
@@ -28,7 +27,7 @@
          <action
                class="pathtools.ExploreAction"
                icon="icons/explore.gif"
-               id="PathTools.Explore"
+               id="PathTools.Explore.toolbar"
                label="Explore"
                menubarPath="File/additions"
                style="pulldown"
@@ -37,24 +36,13 @@
          <action
                class="pathtools.CopyPathAction"
                icon="icons/copypaths.gif"
-               id="PathTools.CopyPath"
+               id="PathTools.CopyPath.toolbar"
                label="Copy Paths"
                menubarPath="Edit/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
       </actionSet>
-   </extension>
-   <extension
-         point="org.eclipse.ui.actionSetPartAssociations">
-      <actionSetPartAssociation targetID="PathTools.actionSet">
-         <part id="org.eclipse.jdt.ui.PackageExplorer"/>
-		 <part id="org.eclipse.jdt.ui.ProjectsView"/>
-		 <part id="org.eclipse.jdt.ui.PackagesView"/>
-		 <part id="org.eclipse.ui.views.ResourceNavigator"/>
-		 <part id="org.eclipse.jdt.ui.TypeHierarchy"/>
-		 <part id="org.eclipse.ui.views.ContentOutline"/>
-      </actionSetPartAssociation>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -75,8 +63,6 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
-	            <objectClass
-	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
@@ -93,8 +79,6 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
-	            <objectClass
-	               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
          </action>
@@ -111,8 +95,6 @@
 	               name="org.eclipse.core.resources.IResource"/>
 	            <objectClass 
 	               name="org.eclipse.core.runtime.IAdaptable"/>
-                <objectClass
-                   name="com.aptana.ide.core.ui.io.file.LocalFile"/>
 	         </or>
       		</enablement>
      	</action>     
@@ -122,10 +104,36 @@
                name="org.eclipse.core.resources.IResource"/>
             <objectClass 
                name="org.eclipse.core.runtime.IAdaptable"/>
-            <objectClass
-               name="com.aptana.ide.core.ui.io.file.LocalFile"/>
          </or>
   		</visibility>
+      </objectContribution>
+      <objectContribution
+            id="PathTools.objectContribution.aptana"
+            objectClass="com.aptana.ide.core.ui.io.file.LocalFile">
+         <action
+               class="pathtools.EditAction"
+               enablesFor="1"
+               icon="icons/editpath.gif"
+               id="PathTools.Edit.aptana"
+               label="Open in external editor..."
+               menubarPath="additions">
+         </action>
+         <action
+               class="pathtools.ExploreAction"
+               enablesFor="1"
+               icon="icons/explore.gif"
+               id="PathTools.Explore.aptana"
+               label="Explore"
+               menubarPath="additions">
+         </action>
+         <action
+               class="pathtools.CopyPathAction"
+               enablesFor="+"
+               icon="icons/copypaths.gif"
+               id="PathTools.CopyPath.aptana"
+               label="Copy Paths"
+               menubarPath="additions">
+     	</action>     
       </objectContribution>
    </extension>
    <extension

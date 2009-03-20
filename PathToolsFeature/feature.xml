@@ -2,7 +2,7 @@
 <feature
       id="PathToolsFeature"
       label="Path Tools Feature"
-      version="1.0.0"
+      version="1.0.31"
       provider-name="Sandip V. Chitale">
 
    <description url="http://code.google.com/p/pathtools/">
