@@ -20,6 +20,8 @@ import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
@@ -30,7 +32,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
+import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
@@ -40,15 +42,18 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @author Sandip V. Chitale
  * 
  */
-public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
+public class ExploreAction implements IWorkbenchWindowPulldownDelegate2 {
 	private File fileObject;
-
-	private static String fileExploreComand = null;
-	private static String folderExploreComand = null;
 
 	private IWorkbenchWindow window;
 
 	public void dispose() {
+		if (exploreMenuInFileMenu != null) {
+			exploreMenuInFileMenu.dispose();
+		}
+		if (exploreMenu != null) {
+			exploreMenu.dispose();
+		}
 	}
 
 	public void init(IWorkbenchWindow window) {
@@ -56,20 +61,9 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 	}
 
 	public void run(IAction action) {
-		// Get the configured explorer commands for folder and file
-		folderExploreComand = Activator.getDefault().getPreferenceStore()
-				.getString(Activator.FOLDER_EXPLORE_COMMAND_KEY);
-		fileExploreComand = Activator.getDefault().getPreferenceStore()
-				.getString(Activator.FILE_EXPLORE_COMMAND_KEY);
-		if (fileExploreComand == null || folderExploreComand == null) {
-			return;
-		}
 		// Is this a physical file on the disk ?
 		if (fileObject != null) {
-			String commandFormat = fileObject.isDirectory() ? folderExploreComand
-					: fileExploreComand;
-
-			Utilities.launch(commandFormat, fileObject);
+			explore(fileObject);
 		}
 	}
 
@@ -141,29 +135,59 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 		}
 	}
 
-	private Menu exploreMenu;
 
+	private Menu exploreMenuInFileMenu;
+	public Menu getMenu(Menu parent) {
+		exploreMenuInFileMenu = new Menu(parent);
+		exploreMenuInFileMenu.addMenuListener(new MenuListener() {
+			public void menuHidden(MenuEvent e) {}
+			public void menuShown(MenuEvent e) {
+				MenuItem[] items = exploreMenuInFileMenu.getItems();
+				for (MenuItem menuItem : items) {
+					menuItem.dispose();
+				}
+				fillMenu(exploreMenuInFileMenu);
+			}			
+		});
+		return exploreMenuInFileMenu;
+	}
+	
+	private Menu exploreMenu;
 	public Menu getMenu(Control parent) {
 		if (exploreMenu != null) {
 			exploreMenu.dispose();
 		}
-		
 		exploreMenu = new Menu(parent);
-		if (fileObject != null && fileObject.isDirectory()) {
-			final File parentFileObject = fileObject.getParentFile();
-			if (parentFileObject != null) {
-				MenuItem gotoParentAction = new MenuItem(exploreMenu, SWT.PUSH);
-				gotoParentAction.setText("Go to " + parentFileObject.getAbsolutePath());
-				gotoParentAction.addSelectionListener(new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent e) {
-						openFolder(parentFileObject);
-					}
-				});
-				new MenuItem(exploreMenu, SWT.SEPARATOR);
+		fillMenu(exploreMenu);
+		return exploreMenu;
+		
+	}
+
+	private void fillMenu(Menu menu) {
+		if (fileObject != null) {
+			MenuItem runAction = new MenuItem(menu, SWT.PUSH);
+			runAction.setText("Go to " + fileObject.getAbsolutePath());
+			runAction.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					explore(fileObject);
+				}
+			});
+			if (fileObject.isDirectory()) {
+				final File parentFileObject = fileObject.getParentFile();
+				if (parentFileObject != null) {
+					MenuItem gotoParentAction = new MenuItem(menu, SWT.PUSH);
+					gotoParentAction.setText("Go to " + parentFileObject.getAbsolutePath());
+					gotoParentAction.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							explore(parentFileObject);
+						}
+					});
+				}
 			}
+			new MenuItem(menu, SWT.SEPARATOR);
 		}
 
-		MenuItem gotoAction = new MenuItem(exploreMenu, SWT.PUSH);
+		MenuItem gotoAction = new MenuItem(menu, SWT.PUSH);
 		gotoAction.setText("Go to...");
 		gotoAction.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -185,32 +209,20 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 					if (file.exists()) {
 						// Get the configured explorer commands for folder
 						// and file
-						String commandFormat = file.isDirectory() ?
-								Activator
-								.getDefault()
-								.getPreferenceStore()
-								.getString(
-										Activator.FOLDER_EXPLORE_COMMAND_KEY)
-										: Activator
-										.getDefault()
-										.getPreferenceStore()
-										.getString(
-												Activator.FILE_EXPLORE_COMMAND_KEY);
-
-										Utilities.launch(commandFormat, file);
+						explore(file);
 					}
 				}
 			}
 		});
 
-		new MenuItem(exploreMenu, SWT.SEPARATOR);
+		new MenuItem(menu, SWT.SEPARATOR);
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-		MenuItem gotoWorkspace = new MenuItem(exploreMenu, SWT.PUSH);
+		MenuItem gotoWorkspace = new MenuItem(menu, SWT.PUSH);
 		gotoWorkspace.setText("Go to Workspace Folder: " + workspaceLocation.toFile().getAbsolutePath());
 		gotoWorkspace.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				openFolder(workspaceLocation.toFile());
+				explore(workspaceLocation.toFile());
 			}
 		});
 
@@ -218,11 +230,11 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 		if (configurationLocation != null) {
 			final URL url = configurationLocation.getURL();
 			if (url != null) {
-				MenuItem gotoConfigurationFolder = new MenuItem(exploreMenu, SWT.PUSH);
+				MenuItem gotoConfigurationFolder = new MenuItem(menu, SWT.PUSH);
 				gotoConfigurationFolder.setText("Go to Configuration Folder: " + url.getFile());
 				gotoConfigurationFolder.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
-						openFolder(new File(url.getFile()));
+						explore(new File(url.getFile()));
 					}
 				});
 			}
@@ -232,12 +244,12 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 		if (userDataLocation != null) {
 			final URL url = userDataLocation.getURL();
 			if (url != null) {
-				MenuItem gotoUserFolder = new MenuItem(exploreMenu, SWT.PUSH);
+				MenuItem gotoUserFolder = new MenuItem(menu, SWT.PUSH);
 				gotoUserFolder.setText("Go to User Data Folder: " + url.getFile());
 				gotoUserFolder.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
 
-						openFolder(new File(url.getFile()));
+						explore(new File(url.getFile()));
 					}
 				});
 			}
@@ -246,47 +258,53 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate {
 		if (installLocation != null) {
 			final URL url = installLocation.getURL();
 			if (url != null) {
-				MenuItem gotoInstallFolder = new MenuItem(exploreMenu, SWT.PUSH);
+				MenuItem gotoInstallFolder = new MenuItem(menu, SWT.PUSH);
 				gotoInstallFolder.setText("Go to Install Folder: " + url.getFile());
 				gotoInstallFolder.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
-						openFolder(new File(url.getFile()));
+						explore(new File(url.getFile()));
 					}
 				});
 			}
 		}
-		new MenuItem(exploreMenu, SWT.SEPARATOR);
-		MenuItem userHomeFolder = new MenuItem(exploreMenu, SWT.PUSH);
+		new MenuItem(menu, SWT.SEPARATOR);
+		MenuItem userHomeFolder = new MenuItem(menu, SWT.PUSH);
 		userHomeFolder.setText("Go to user.home: " + System.getProperty("user.home"));
 		userHomeFolder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {				
-				openFolder(new File(System.getProperty("user.home")));
+				explore(new File(System.getProperty("user.home")));
 			}
 		});
-		MenuItem userDirFolder = new MenuItem(exploreMenu, SWT.PUSH);
+		MenuItem userDirFolder = new MenuItem(menu, SWT.PUSH);
 		userDirFolder.setText("Go to user.dir: " + System.getProperty("user.dir"));
 		userDirFolder.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {				
-				openFolder(new File(System.getProperty("user.dir")));
+			public void widgetSelected(SelectionEvent e) {
+				explore(new File(System.getProperty("user.dir")));
 			}
 		});
-		MenuItem javaIoTmpFolder = new MenuItem(exploreMenu, SWT.PUSH);
+		MenuItem javaIoTmpFolder = new MenuItem(menu, SWT.PUSH);
 		javaIoTmpFolder.setText("Go to java.io.tmpdir: " + System.getProperty("java.io.tmpdir"));
 		javaIoTmpFolder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {				
-				openFolder(new File(System.getProperty("java.io.tmpdir")));
+				explore(new File(System.getProperty("java.io.tmpdir")));
 			}
 		});
-		return exploreMenu;
 	}
 	
-	private static void openFolder(File file) {
-		if (file != null && file.exists() && file.isDirectory()) {
-			Utilities.launch(Activator
-					.getDefault()
-					.getPreferenceStore()
-					.getString(
-							Activator.FOLDER_EXPLORE_COMMAND_KEY), file);
+	private static void explore(File file) {
+		// Get the configured explorer commands for folder and file
+		if (file != null && file.exists()) {
+			String folderExploreComand = Activator.getDefault().getPreferenceStore().getString(Activator.FOLDER_EXPLORE_COMMAND_KEY);
+			String fileExploreComand = Activator.getDefault().getPreferenceStore().getString(Activator.FILE_EXPLORE_COMMAND_KEY);
+			String exploreCommand;
+			if (file.isDirectory()) {
+				exploreCommand = folderExploreComand;
+			} else {
+				exploreCommand = fileExploreComand;				
+			}
+			if (exploreCommand != null) {
+				Utilities.launch(exploreCommand, file);
+			}
 		}
 	}
 

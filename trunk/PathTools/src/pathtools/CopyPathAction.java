@@ -32,7 +32,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
+import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -43,12 +43,18 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @author Sandip V. Chitale
  * 
  */
-public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
+public class CopyPathAction implements IWorkbenchWindowPulldownDelegate2 {
 	private List<File> files = new LinkedList<File>();
 	private List<IPath> resourcePaths = new LinkedList<IPath>();
 	private IWorkbenchWindow window;
 
 	public void dispose() {
+		if (copyPathsMenuInEditMenu != null) {
+			copyPathsMenuInEditMenu.dispose(); 
+		}
+		if (copyPathsMenu != null) {
+			copyPathsMenu.dispose(); 
+		}
 	}
 
 	public void init(IWorkbenchWindow window) {
@@ -146,9 +152,7 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 		}
 		action.setEnabled(files.size() > 0);
 	}
-
-	private Menu copyPathsMenu;
-	
+    	
 	private static String[] pathFormats = new String[] {
 		Activator.FILE_PATH,
 		Activator.FILE_PARENT_PATH,
@@ -159,14 +163,29 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 		Activator.FILE_PATH_BACKSLASHES,
 		Activator.FILE_PARENT_PATH_BACKSLASHES,
 	};
-	
-	public Menu getMenu(Control parent) {
-		if (copyPathsMenu != null) {
-			copyPathsMenu.dispose();
+
+	private Menu copyPathsMenuInEditMenu;
+	public Menu getMenu(Menu parent) {
+		if (copyPathsMenuInEditMenu == null) {
+			copyPathsMenuInEditMenu = new Menu(parent);
+			fillMenu(copyPathsMenuInEditMenu);
 		}
-		copyPathsMenu = new Menu(parent);			
+		return copyPathsMenuInEditMenu;
+	}
+	
+	private Menu copyPathsMenu;
+	public Menu getMenu(Control parent) {
+		if (copyPathsMenu == null) {
+			copyPathsMenu = new Menu(parent);
+			fillMenu(copyPathsMenu);
+		}
+		return copyPathsMenu;
+	}
+	
+	private void fillMenu(Menu menu)
+	{
 		for (String pathFormat: pathFormats) {
-			MenuItem commandMenuItem = new MenuItem(copyPathsMenu, SWT.PUSH);					
+			MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);					
 			commandMenuItem.setText("Copy " + pathFormat);
 			final String finalPathFormat = pathFormat;
 			commandMenuItem.addSelectionListener(new SelectionAdapter() {
@@ -178,13 +197,13 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 			});
 		}
 		boolean enable = files.size() > 0;
-		for (MenuItem menuItem : copyPathsMenu.getItems()) {
+		for (MenuItem menuItem : menu.getItems()) {
 			menuItem.setEnabled(enable);
 		}
 		
-		new MenuItem(copyPathsMenu, SWT.SEPARATOR);
+		new MenuItem(menu, SWT.SEPARATOR);
 		
-		MenuItem resourcePathsMenuItem = new MenuItem(copyPathsMenu, SWT.PUSH);
+		MenuItem resourcePathsMenuItem = new MenuItem(menu, SWT.PUSH);
 		resourcePathsMenuItem.setText("Copy resource paths");
 		resourcePathsMenuItem.setEnabled(resourcePaths.size() > 0);
 		resourcePathsMenuItem.addSelectionListener(new SelectionAdapter() {
@@ -199,11 +218,11 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 			}
 		});
 		
-		new MenuItem(copyPathsMenu, SWT.SEPARATOR);
+		new MenuItem(menu, SWT.SEPARATOR);
 		
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		if (workspaceLocation != null) {
-			MenuItem copyWorkspacePath = new MenuItem(copyPathsMenu, SWT.PUSH);
+			MenuItem copyWorkspacePath = new MenuItem(menu, SWT.PUSH);
 			copyWorkspacePath.setText("Copy Workspace Folder location : " + workspaceLocation.toFile().getAbsolutePath());
 			copyWorkspacePath.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
@@ -216,7 +235,7 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 		if (configurationLocation != null) {
 			final URL url = configurationLocation.getURL();
 			if (url != null) {
-				MenuItem copyConfigurationFolderLocation = new MenuItem(copyPathsMenu, SWT.PUSH);
+				MenuItem copyConfigurationFolderLocation = new MenuItem(menu, SWT.PUSH);
 				copyConfigurationFolderLocation.setText("Copy Configuration Folder location: " + url.getFile());
 				copyConfigurationFolderLocation.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
@@ -230,7 +249,7 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 		if (userDataLocation != null) {
 			final URL url = userDataLocation.getURL();
 			if (url != null) {
-				MenuItem copyUserFolderLocation = new MenuItem(copyPathsMenu, SWT.PUSH);
+				MenuItem copyUserFolderLocation = new MenuItem(menu, SWT.PUSH);
 				copyUserFolderLocation.setText("Copy User Data Folder location: " + url.getFile());
 				copyUserFolderLocation.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
@@ -244,7 +263,7 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 		if (installLocation != null) {
 			final URL url = installLocation.getURL();
 			if (url != null) {
-				MenuItem copyInstallFolderLocation = new MenuItem(copyPathsMenu, SWT.PUSH);
+				MenuItem copyInstallFolderLocation = new MenuItem(menu, SWT.PUSH);
 				copyInstallFolderLocation.setText("Copy Install Folder location: " + url.getFile());
 				copyInstallFolderLocation.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
@@ -254,31 +273,29 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate {
 			}
 		}
 		
-		new MenuItem(copyPathsMenu, SWT.SEPARATOR);
+		new MenuItem(menu, SWT.SEPARATOR);
 		
-		MenuItem userHomeFolder = new MenuItem(copyPathsMenu, SWT.PUSH);
+		MenuItem userHomeFolder = new MenuItem(menu, SWT.PUSH);
 		userHomeFolder.setText("Copy user.home: " + System.getProperty("user.home"));
 		userHomeFolder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {				
 				copyToClipboard(System.getProperty("user.home"));
 			}
 		});
-		MenuItem userDirFolder = new MenuItem(copyPathsMenu, SWT.PUSH);
+		MenuItem userDirFolder = new MenuItem(menu, SWT.PUSH);
 		userDirFolder.setText("Copy user.dir: " + System.getProperty("user.dir"));
 		userDirFolder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {				
 				copyToClipboard(System.getProperty("user.dir"));
 			}
 		});
-		MenuItem javaIoTmpFolder = new MenuItem(copyPathsMenu, SWT.PUSH);
+		MenuItem javaIoTmpFolder = new MenuItem(menu, SWT.PUSH);
 		javaIoTmpFolder.setText("Copy java.io.tmpdir: " + System.getProperty("java.io.tmpdir"));
 		javaIoTmpFolder.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {				
 				copyToClipboard(System.getProperty("java.io.tmpdir"));
 			}
-		});
-		
-		return copyPathsMenu;
+		});		
 	}
 	
 	private static void copyToClipboard(String pathFormat, List<File> files) {

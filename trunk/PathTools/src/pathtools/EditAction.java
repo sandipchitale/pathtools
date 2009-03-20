@@ -3,7 +3,6 @@ package pathtools;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -14,6 +13,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
@@ -24,8 +25,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
+import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
@@ -34,15 +34,18 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @author Sandip V. Chitale
  * 
  */
-public class EditAction implements IWorkbenchWindowPulldownDelegate {
+public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 	private File fileObject;
-
-	private static String fileEditComand = null;
-	private static String folderEditComand = null;
 
 	private IWorkbenchWindow window;
 
 	public void dispose() {
+		if (editMenuInFileMenu != null) {
+			editMenuInFileMenu.dispose();
+		}
+		if (editMenu != null) {
+			editMenu.dispose();
+		}
 	}
 
 	public void init(IWorkbenchWindow window) {
@@ -50,24 +53,9 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate {
 	}
 
 	public void run(IAction action) {
-		// Get the configured explorer commands for folder and file
-		folderEditComand = Activator.getDefault().getPreferenceStore()
-				.getString(Activator.FOLDER_EDIT_COMMAND_KEY);
-		fileEditComand = Activator.getDefault().getPreferenceStore().getString(
-				Activator.FILE_EDIT_COMMAND_KEY);
-		if (fileEditComand == null || folderEditComand == null) {
-			return;
-		}
 		// Is this a physical file on the disk ?
 		if (fileObject != null) {
-			String commandFormat = fileObject.isDirectory() ? folderEditComand
-					: fileEditComand;
-
-			// Substitute parameter values and format the edit command
-			String command = Utilities.formatCommand(commandFormat, fileObject);
-			
-			// Launch the edit command
-			CommandLauncher.launch(command);
+			edit(fileObject);
 		}
 	}
 
@@ -138,37 +126,72 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate {
 		}
 	}
 	
-	private Menu editMenu;
+	private Menu editMenuInFileMenu;
+	public Menu getMenu(Menu parent) {
+		editMenuInFileMenu = new Menu(parent);
+		editMenuInFileMenu.addMenuListener(new MenuListener() {
+			public void menuHidden(MenuEvent e) {}
+			public void menuShown(MenuEvent e) {
+				MenuItem[] items = editMenuInFileMenu.getItems();
+				for (MenuItem menuItem : items) {
+					menuItem.dispose();
+				}
+				fillMenu(editMenuInFileMenu);
+			}			
+		});
+		return editMenuInFileMenu;
+	}
 	
+	private Menu editMenu;
 	public Menu getMenu(Control parent) {
 		if (editMenu != null) {
 			editMenu.dispose();
 		}
-		
 		editMenu = new Menu(parent);
-		
+		fillMenu(editMenu);
+		return editMenu;
+	}
+	
+	private void fillMenu(Menu menu) {
+		if (fileObject != null) {
+			MenuItem runAction = new MenuItem(menu, SWT.PUSH);
+			runAction.setText("Open in external editor " + fileObject.getAbsolutePath());
+			runAction.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					edit(fileObject);
+				}
+			});
+		}
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		File workspaceFile = workspaceLocation.toFile();
 		if (workspaceFile.exists()) {
 			final File logFile = new File(workspaceFile, ".metadata/.log");
 			if (logFile.exists() && logFile.isFile()) {
-				MenuItem editWorkspaceLog = new MenuItem(editMenu, SWT.PUSH);
+				MenuItem editWorkspaceLog = new MenuItem(menu, SWT.PUSH);
 				editWorkspaceLog.setText("Open in external editor " + logFile.getAbsolutePath());
 				editWorkspaceLog.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
-						String commandFormat =Activator.getDefault().getPreferenceStore().getString(
-								Activator.FILE_EDIT_COMMAND_KEY);
-
-						// Substitute parameter values and format the edit command
-						String command = Utilities.formatCommand(commandFormat, logFile);
-						
-						// Launch the edit command
-						CommandLauncher.launch(command);
+						edit(logFile);
 					}
 				});
 			}
 		}
-		return editMenu;
 	}
 
+	private static void edit(File file) {
+		// Get the configured explorer commands for folder and file
+		if (file != null && file.exists()) {
+			String folderEditComand = Activator.getDefault().getPreferenceStore().getString(Activator.FOLDER_EDIT_COMMAND_KEY);
+			String fileEditComand = Activator.getDefault().getPreferenceStore().getString(Activator.FILE_EDIT_COMMAND_KEY);
+			String editCommand;
+			if (file.isDirectory()) {
+				editCommand = folderEditComand;
+			} else {
+				editCommand = fileEditComand;				
+			}
+			if (editCommand != null) {
+				Utilities.launch(editCommand, file);
+			}
+		}
+	}
 }
