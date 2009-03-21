@@ -165,24 +165,17 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate2 {
 
 	private void fillMenu(Menu menu) {
 		if (fileObject != null) {
-			MenuItem runAction = new MenuItem(menu, SWT.PUSH);
-			runAction.setText("Go to " + fileObject.getAbsolutePath());
-			runAction.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					explore(fileObject);
-				}
-			});
-			if (fileObject.isDirectory()) {
-				final File parentFileObject = fileObject.getParentFile();
-				if (parentFileObject != null) {
-					MenuItem gotoParentAction = new MenuItem(menu, SWT.PUSH);
-					gotoParentAction.setText("Go to " + parentFileObject.getAbsolutePath());
-					gotoParentAction.addSelectionListener(new SelectionAdapter() {
-						public void widgetSelected(SelectionEvent e) {
-							explore(parentFileObject);
-						}
-					});
-				}
+			File gotoFile = fileObject;
+			while (gotoFile != null) {
+				final File finalGotoFile = gotoFile;
+				MenuItem gotoParentAction = new MenuItem(menu, SWT.PUSH);
+				gotoParentAction.setText("Go to " + gotoFile.getAbsolutePath());
+				gotoParentAction.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+						explore(finalGotoFile);
+					}
+				});
+				gotoFile = gotoFile.getParentFile();
 			}
 			new MenuItem(menu, SWT.SEPARATOR);
 		}
