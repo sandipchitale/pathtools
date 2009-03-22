@@ -25,6 +25,15 @@
                toolbarPath="Normal/PathTools">
          </action>
          <action
+               class="pathtools.ShellAction"
+               icon="icons/shell.gif"
+               id="PathTools.Shell.toolbar"
+               label="Command Line Shell"
+               menubarPath="File/additions"
+               style="push"
+               toolbarPath="Normal/PathTools">
+         </action>
+         <action
                class="pathtools.ExploreAction"
                icon="icons/explore.gif"
                id="PathTools.Explore.toolbar"

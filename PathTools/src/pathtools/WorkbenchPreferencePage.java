@@ -69,6 +69,18 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 				getFieldEditorParent());
 		addField(fileExploreCommad);
 
+		// Folder shell command field
+		StringFieldEditor folderShellCommad = new StringFieldEditor(
+				Activator.FOLDER_SHELL_COMMAND_KEY, "Shell at Folder:",
+				getFieldEditorParent());
+		addField(folderShellCommad);
+		
+		// File shell command field
+		StringFieldEditor fileShellCommad = new StringFieldEditor(
+				Activator.FILE_SHELL_COMMAND_KEY, "Shell at File:",
+				getFieldEditorParent());
+		addField(fileShellCommad);
+
 		// Folder editor command field
 		StringFieldEditor folderEditCommad = new StringFieldEditor(
 				Activator.FOLDER_EDIT_COMMAND_KEY, "Edit Folder:",
