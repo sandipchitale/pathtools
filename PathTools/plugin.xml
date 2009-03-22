@@ -76,6 +76,22 @@
       		</enablement>
          </action>
          <action
+               class="pathtools.ShellAction"
+               enablesFor="1"
+               icon="icons/shell.gif"
+               id="PathTools.Shell"
+               label="Command Line Shell"
+               menubarPath="additions">
+            <enablement>
+	         <or>
+	            <objectClass 
+	               name="org.eclipse.core.resources.IResource"/>
+	            <objectClass 
+	               name="org.eclipse.core.runtime.IAdaptable"/>
+	         </or>
+      		</enablement>
+         </action>
+         <action
                class="pathtools.ExploreAction"
                enablesFor="1"
                icon="icons/explore.gif"
@@ -125,6 +141,14 @@
                icon="icons/editpath.gif"
                id="PathTools.Edit.aptana"
                label="Open in external editor..."
+               menubarPath="additions">
+         </action>
+         <action
+               class="pathtools.ShellAction"
+               enablesFor="1"
+               icon="icons/shell.gif"
+               id="PathTools.Shell.aptana"
+               label="Command Line Shell"
                menubarPath="additions">
          </action>
          <action
