@@ -3,41 +3,46 @@
 <repository name='file:/home/schitale/professional/eclipse/workspace3.4.1/PathToolsUpdateSite/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1237673476307'/>
+    <property name='p2.timestamp' value='1237705527983'/>
   </properties>
   <references size='4'>
     <repository url='http://code.google.com/p/pathtools/' type='1' options='0'/>
-    <repository url='http://sandipchitale.blogspot.com/' type='1' options='0'/>
     <repository url='http://code.google.com/p/pathtools/' type='0' options='0'/>
+    <repository url='http://sandipchitale.blogspot.com/' type='1' options='0'/>
     <repository url='http://sandipchitale.blogspot.com/' type='0' options='0'/>
   </references>
   <units size='8'>
-    <unit id='PathToolsFeature.feature.group' version='1.0.32' singleton='false'>
-      <update id='PathToolsFeature.feature.group' range='[0.0.0,1.0.32)' severity='0'/>
-      <properties size='5'>
-        <property name='org.eclipse.equinox.p2.name' value='Path Tools Feature'/>
-        <property name='org.eclipse.equinox.p2.description' value='Path Tools Eclipse Plug-in adds the following actions to Eclipse.&#xA;&#xA;    * Copy Paths - this action copies the fully qualified path of selected folders and files into the Clipboard. Copy Paths action is now a drop down and allows you to copy paths in all different formats. The last used format is remembered and used.&#xA;    * Explore - this action opens the selected folder or the folder containing the selected file in the OS file explorer. The user can configure the exact command that is used to launch the file explorer.&#xA;    * Open in external editor... - this action opens the selected folder or file using the selected external editor. The user can configure the exact command that is used to launch the external editor.&#xA;    * Custom actions pull down menu. These custom actions can be defined in Path Tools preferences page. Clicking on the Custom actions buttons shows the Path Tools preferences page.'/>
-        <property name='org.eclipse.equinox.p2.description.url' value='http://code.google.com/p/pathtools/'/>
+    <unit id='PathTools' version='1.0.33'>
+      <update id='PathTools' range='[0.0.0,1.0.33)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Path Tools Plug-in'/>
         <property name='org.eclipse.equinox.p2.provider' value='Sandip V. Chitale'/>
-        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
       </properties>
-      <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='PathToolsFeature.feature.group' version='1.0.32'/>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='PathTools' version='1.0.33'/>
+        <provided namespace='osgi.bundle' name='PathTools' version='1.0.33'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
-      <requires size='2'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='PathTools' range='[1.0.32,1.0.32]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='PathToolsFeature.feature.jar' range='[1.0.32,1.0.32]'>
-          <filter>
-            (org.eclipse.update.install.features=true)
-          </filter>
-        </required>
+      <requires size='7'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.editors' range='3.4.0'/>
       </requires>
-      <touchpoint id='null' version='0.0.0'/>
-      <licenses size='1'>
-        <license url='http://www.example.com/license'>
-          [Enter License Description here.]
-        </license>
-      </licenses>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='PathTools' version='1.0.33'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.jface.text,org.eclipse.ui.console,org.eclipse.ui.ide,org.eclipse.ui.editors;bundle-version=&quot;3.4.0&quot;&#xA;Bundle-Activator: pathtools.Activator&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 1.0.33&#xA;Bundle-SymbolicName: PathTools;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Path Tools Plug-in&#xA;Bundle-Vendor: Sandip V. Chitale&#xA;
+          </instruction>
+        </instructions>
+      </touchpointData>
     </unit>
     <unit id='tooling.source.default' version='1.0.0' singleton='false'>
       <hostRequirements size='1'>
@@ -65,37 +70,32 @@
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='PathTools' version='1.0.32'>
-      <update id='PathTools' range='[0.0.0,1.0.32)' severity='0'/>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='Path Tools Plug-in'/>
+    <unit id='PathToolsFeature.feature.group' version='1.0.33' singleton='false'>
+      <update id='PathToolsFeature.feature.group' range='[0.0.0,1.0.33)' severity='0'/>
+      <properties size='5'>
+        <property name='org.eclipse.equinox.p2.name' value='Path Tools Feature'/>
+        <property name='org.eclipse.equinox.p2.description' value='Path Tools Eclipse Plug-in adds the following actions to Eclipse.&#xA;&#xA;    * Copy Paths - this action copies the fully qualified path of selected folders and files into the Clipboard. Copy Paths action is now a drop down and allows you to copy paths in all different formats. The last used format is remembered and used.&#xA;    * Explore - this action opens the selected folder or the folder containing the selected file in the OS file explorer. The user can configure the exact command that is used to launch the file explorer.&#xA;    * Open in external editor... - this action opens the selected folder or file using the selected external editor. The user can configure the exact command that is used to launch the external editor.&#xA;    * Custom actions pull down menu. These custom actions can be defined in Path Tools preferences page. Clicking on the Custom actions buttons shows the Path Tools preferences page.'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://code.google.com/p/pathtools/'/>
         <property name='org.eclipse.equinox.p2.provider' value='Sandip V. Chitale'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
       </properties>
-      <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='PathTools' version='1.0.32'/>
-        <provided namespace='osgi.bundle' name='PathTools' version='1.0.32'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='PathToolsFeature.feature.group' version='1.0.33'/>
       </provides>
-      <requires size='7'>
-        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
-        <required namespace='osgi.bundle' name='org.eclipse.ui.editors' range='3.4.0'/>
+      <requires size='2'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='PathTools' range='[1.0.33,1.0.33]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='PathToolsFeature.feature.jar' range='[1.0.33,1.0.33]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
       </requires>
-      <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='PathTools' version='1.0.32'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='1'>
-          <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.jface.text,org.eclipse.ui.console,org.eclipse.ui.ide,org.eclipse.ui.editors;bundle-version=&quot;3.4.0&quot;&#xA;Bundle-Activator: pathtools.Activator&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 1.0.32&#xA;Bundle-SymbolicName: PathTools;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Path Tools Plug-in&#xA;Bundle-Vendor: Sandip V. Chitale&#xA;
-          </instruction>
-        </instructions>
-      </touchpointData>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
     </unit>
     <unit id='tooling.osgi.bundle.default' version='1.0.0' singleton='false'>
       <hostRequirements size='1'>
@@ -179,39 +179,6 @@
           </instruction>
         </instructions>
       </touchpointData>
-    </unit>
-    <unit id='PathToolsFeature.feature.jar' version='1.0.32'>
-      <update id='PathToolsFeature.feature.jar' range='[0.0.0,1.0.32)' severity='0'/>
-      <properties size='4'>
-        <property name='org.eclipse.equinox.p2.name' value='Path Tools Feature'/>
-        <property name='org.eclipse.equinox.p2.description' value='Path Tools Eclipse Plug-in adds the following actions to Eclipse.&#xA;&#xA;    * Copy Paths - this action copies the fully qualified path of selected folders and files into the Clipboard. Copy Paths action is now a drop down and allows you to copy paths in all different formats. The last used format is remembered and used.&#xA;    * Explore - this action opens the selected folder or the folder containing the selected file in the OS file explorer. The user can configure the exact command that is used to launch the file explorer.&#xA;    * Open in external editor... - this action opens the selected folder or file using the selected external editor. The user can configure the exact command that is used to launch the external editor.&#xA;    * Custom actions pull down menu. These custom actions can be defined in Path Tools preferences page. Clicking on the Custom actions buttons shows the Path Tools preferences page.'/>
-        <property name='org.eclipse.equinox.p2.description.url' value='http://code.google.com/p/pathtools/'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Sandip V. Chitale'/>
-      </properties>
-      <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='PathToolsFeature.feature.jar' version='1.0.32'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
-        <provided namespace='org.eclipse.update.feature' name='PathToolsFeature' version='1.0.32'/>
-      </provides>
-      <filter>
-        (org.eclipse.update.install.features=true)
-      </filter>
-      <artifacts size='1'>
-        <artifact classifier='org.eclipse.update.feature' id='PathToolsFeature' version='1.0.32'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='1'>
-          <instruction key='zipped'>
-            true
-          </instruction>
-        </instructions>
-      </touchpointData>
-      <licenses size='1'>
-        <license url='http://www.example.com/license'>
-          [Enter License Description here.]
-        </license>
-      </licenses>
     </unit>
     <unit id='a.jre' version='1.6.0' singleton='false'>
       <provides size='117'>
@@ -334,6 +301,39 @@
         <provided namespace='java.package' name='org.xml.sax.helpers' version='0.0.0'/>
       </provides>
       <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+    </unit>
+    <unit id='PathToolsFeature.feature.jar' version='1.0.33'>
+      <update id='PathToolsFeature.feature.jar' range='[0.0.0,1.0.33)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Path Tools Feature'/>
+        <property name='org.eclipse.equinox.p2.description' value='Path Tools Eclipse Plug-in adds the following actions to Eclipse.&#xA;&#xA;    * Copy Paths - this action copies the fully qualified path of selected folders and files into the Clipboard. Copy Paths action is now a drop down and allows you to copy paths in all different formats. The last used format is remembered and used.&#xA;    * Explore - this action opens the selected folder or the folder containing the selected file in the OS file explorer. The user can configure the exact command that is used to launch the file explorer.&#xA;    * Open in external editor... - this action opens the selected folder or file using the selected external editor. The user can configure the exact command that is used to launch the external editor.&#xA;    * Custom actions pull down menu. These custom actions can be defined in Path Tools preferences page. Clicking on the Custom actions buttons shows the Path Tools preferences page.'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://code.google.com/p/pathtools/'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Sandip V. Chitale'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='PathToolsFeature.feature.jar' version='1.0.33'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='PathToolsFeature' version='1.0.33'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='PathToolsFeature' version='1.0.33'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
     </unit>
   </units>
 </repository>

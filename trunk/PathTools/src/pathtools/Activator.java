@@ -20,13 +20,19 @@ public class Activator extends AbstractUIPlugin {
 
 	static String defaultFolderExploreCommand = "";
 	static String defaultFileExploreCommand = "";
+	
+	static final String FOLDER_SHELL_COMMAND_KEY = "folderShellCommand";
+	static final String FILE_SHELL_COMMAND_KEY = "fileShellCommand";
+	
+	static String defaultFolderShellCommand = "";
+	static String defaultFileShellCommand = "";
 
 	static final String FOLDER_EDIT_COMMAND_KEY = "folderEditCommand";
 	static final String FILE_EDIT_COMMAND_KEY = "fileEditCommand";
 
 	static String defaultFolderEditCommand = "";
 	static String defaultFileEditCommand = "";
-
+	
 	static final String FOLDER_COMMANDS_KEY = "folderCommands";
 	static final String FILE_COMMANDS_KEY = "fileCommands";
 	
@@ -43,12 +49,18 @@ public class Activator extends AbstractUIPlugin {
 					+ Activator.FILE_PATH + "\"";
 			defaultFileEditCommand = "/usr/bin/open -a /Applications/TextEdit.app \""
 					+ Activator.FILE_PATH + "\"";
+			defaultFolderShellCommand = "open -a /Applications/Terminal.app";
+			defaultFileShellCommand = "open -a /Applications/Terminal.app";
 		} else if (Platform.OS_WIN32.equals(Platform.getOS())) {
-			defaultFolderExploreCommand = "cmd /C start explorer /select,/e,\""
+			defaultFolderExploreCommand = "cmd /C start explorer /select,/e, \""
 					+ Activator.FILE_PATH + "\"";
-			defaultFileExploreCommand = "cmd /C start explorer /select,/e,\""
+			defaultFileExploreCommand = "cmd /C start explorer /select,/e, \""
 					+ Activator.FILE_PATH + "\"";
-			defaultFolderEditCommand = "cmd /C start explorer /select,/e,\""
+			defaultFolderShellCommand = "cmd /K start cd \""
+				+ Activator.FILE_PATH + "\"";
+			defaultFileShellCommand = "cmd /K start cd \""
+				+ Activator.FILE_PARENT_PATH + "\"";
+			defaultFolderEditCommand = "cmd /C start explorer /select,/e, \""
 					+ Activator.FILE_PATH + "\"";
 			defaultFileEditCommand = "cmd /C start notepad \""
 					+ Activator.FILE_PATH + "\"";
@@ -67,6 +79,15 @@ public class Activator extends AbstractUIPlugin {
 						+ Activator.FILE_PARENT_PATH + "\"";
 				defaultFolderEditCommand = "/usr/bin/nautilus \""
 						+ Activator.FILE_PATH + "\"";
+			}
+			if (new File("/usr/bin/gnome-terminal").exists()) {
+				defaultFolderShellCommand = "gnome-terminal --working-directory=\""
+					+ Activator.FILE_PATH + "\"";
+				defaultFileShellCommand = "gnome-terminal --working-directory=\""
+					+ Activator.FILE_PARENT_PATH + "\"";
+			} else {
+				defaultFolderShellCommand = "xterm -e \"cd \\\"" + Activator.FILE_PATH + "\\\" && /bin/bash\"";
+				defaultFileShellCommand = "xterm -e \"cd \\\"" + Activator.FILE_PARENT_PATH + "\\\" && /bin/bash\"";
 			}
 			if (new File("/usr/bin/kedit").exists()) {
 				defaultFileEditCommand = "/usr/bin/kedit \""
@@ -152,9 +173,10 @@ public class Activator extends AbstractUIPlugin {
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
-		store.setDefault(FOLDER_EXPLORE_COMMAND_KEY,
-				defaultFolderExploreCommand);
+		store.setDefault(FOLDER_EXPLORE_COMMAND_KEY, defaultFolderExploreCommand);
 		store.setDefault(FILE_EXPLORE_COMMAND_KEY, defaultFileExploreCommand);
+		store.setDefault(FOLDER_SHELL_COMMAND_KEY, defaultFolderShellCommand);
+		store.setDefault(FILE_SHELL_COMMAND_KEY, defaultFileShellCommand);
 		store.setDefault(FOLDER_EDIT_COMMAND_KEY, defaultFolderEditCommand);
 		store.setDefault(FILE_EDIT_COMMAND_KEY, defaultFileEditCommand);
 		store.setDefault(FOLDER_COMMANDS_KEY, defaultFolderCommands);
