@@ -34,8 +34,7 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 
 	@Override
 	public String getDescription() {
-		return "Specify the commands for exploring folders and fies. You can\n"
-				+ "use \"\" (quotes) around command arguments with spaces in their value.\n"
+		return "You can use \"\" (quotes) around command arguments with spaces in their value.\n"
 				+ "You can use the following parameters in the commands:\n\n"
 				+ Activator.FILE_PATH
 				+ "  - path of the selected object with default file separator.\n"
@@ -50,7 +49,7 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 				+ Activator.FILE_PARENT_PATH_SLASHES
 				+ "  - path of the parent of selected object with / file separator.\n"
 				+ Activator.FILE_PATH_BACKSLASHES
-				+ "  - path of the selected object with \\ File separator.\n"
+				+ "  - path of the selected object with \\ file separator.\n"
 				+ Activator.FILE_PARENT_PATH_BACKSLASHES
 				+ " - path of the parent of selected object with \\ file separator.\n";
 	}
