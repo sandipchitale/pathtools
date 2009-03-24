@@ -1,8 +1,11 @@
 package pathtools;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -138,6 +141,7 @@ public class Activator extends AbstractUIPlugin {
 	
 	static final String LAST_COPY_PATH_FORMAT = "lastCopyPathFormat";
 	static final String defaultLLastCopyPathFormat = FILE_PATH;
+	private Object terminalDotScpt;
 	
 
 	/**
@@ -156,6 +160,19 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		if (Platform.getOS().equals(Platform.OS_MACOSX)) {
+			try {
+				URL entry = context.getBundle().getEntry("/scripts/cdterminal.scpt");
+				if (entry != null) {
+					terminalDotScpt = FileLocator.toFileURL(entry).getFile();
+					if (terminalDotScpt != null) {
+						defaultFolderShellCommand = "/usr/bin/osascript \"" + terminalDotScpt + "\" \"" + Activator.FILE_PATH + "\"";
+						defaultFileShellCommand = "/usr/bin/osascript \"" + terminalDotScpt + "\" \"" + Activator.FILE_PARENT_PATH + "\"";
+					}
+				} 
+			}catch (IOException el) {
+			}
+		}
 	}
 
 	/*
