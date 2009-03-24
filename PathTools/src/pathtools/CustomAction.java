@@ -42,13 +42,7 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 	}
 
 	public void run(IAction action) {
-		String[] displayedIds = new String[] {"PathTools.page"};
-		PreferenceDialog pathToolsPreferenceDialog = PreferencesUtil.createPreferenceDialogOn(
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				displayedIds[0],
-				displayedIds,
-				null);
-		pathToolsPreferenceDialog.open();
+		showPathToolsPreferences();
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
@@ -130,19 +124,40 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 			} else {
 				commandsArray = Activator.getDefault().getFileCustomActions();
 			}
-			for (String command : commandsArray) {
-				MenuItem commandMenuItem = new MenuItem(customActionsMenu, SWT.PUSH);					
-				commandMenuItem.setText(Utilities.formatCommand(command,
-						fileObject));
-				final String finalCommand = command;
-				commandMenuItem.addSelectionListener(new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent e) {
-						Utilities.launch(finalCommand,
-										fileObject);
-					}
-				});
+			if (commandsArray.length > 0) {
+				for (String command : commandsArray) {
+					MenuItem commandMenuItem = new MenuItem(customActionsMenu, SWT.PUSH);					
+					commandMenuItem.setText(Utilities.formatCommand(command,
+							fileObject));
+					final String finalCommand = command;
+					commandMenuItem.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							Utilities.launch(finalCommand,
+									fileObject);
+						}
+					});
+				}
+				new MenuItem(customActionsMenu, SWT.SEPARATOR);
 			}
+			MenuItem preferecesMenuItem = new MenuItem(customActionsMenu, SWT.PUSH);
+			preferecesMenuItem.setText("Custom commands...");
+			preferecesMenuItem.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					showPathToolsPreferences();
+				}
+			});
+			
 		}
 		return customActionsMenu;
+	}
+
+	private void showPathToolsPreferences() {
+		String[] displayedIds = new String[] {"PathTools.page"};
+		PreferenceDialog pathToolsPreferenceDialog = PreferencesUtil.createPreferenceDialogOn(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				displayedIds[0],
+				displayedIds,
+				null);
+		pathToolsPreferenceDialog.open();
 	}
 }

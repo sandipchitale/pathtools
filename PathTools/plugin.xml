@@ -11,7 +11,7 @@
                class="pathtools.CustomAction"
                icon="icons/command.gif"
                id="PathTools.Custom.toolbar"
-               label="Custom"
+               label="Custom commands..."
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
