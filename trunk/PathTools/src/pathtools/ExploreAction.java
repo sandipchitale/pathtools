@@ -222,7 +222,7 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate2 {
 		Location configurationLocation = Platform.getConfigurationLocation();
 		if (configurationLocation != null) {
 			final URL url = configurationLocation.getURL();
-			if (url != null) {
+			if (url != null && new File(url.getFile()).exists()) {
 				MenuItem gotoConfigurationFolder = new MenuItem(menu, SWT.PUSH);
 				gotoConfigurationFolder.setText("Go to Configuration Folder: " + url.getFile());
 				gotoConfigurationFolder.addSelectionListener(new SelectionAdapter() {
@@ -236,12 +236,11 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate2 {
 		Location userDataLocation = Platform.getUserLocation();
 		if (userDataLocation != null) {
 			final URL url = userDataLocation.getURL();
-			if (url != null) {
+			if (url != null && (new File(url.getFile()).exists())) {
 				MenuItem gotoUserFolder = new MenuItem(menu, SWT.PUSH);
 				gotoUserFolder.setText("Go to User Data Folder: " + url.getFile());
 				gotoUserFolder.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
-
 						explore(new File(url.getFile()));
 					}
 				});
