@@ -2,20 +2,33 @@
 <feature
       id="PathToolsFeature"
       label="Path Tools Feature"
-      version="1.0.37"
+      version="1.0.38"
       provider-name="Sandip V. Chitale">
 
    <description url="http://code.google.com/p/pathtools/">
       Path Tools Eclipse Plug-in adds the following actions to Eclipse.
-
-    * Copy Paths - this action copies the fully qualified path of selected folders and files into the Clipboard. Copy Paths action is now a drop down and allows you to copy paths in all different formats. The last used format is remembered and used.
-    * Explore - this action opens the selected folder or the folder containing the selected file in the OS file explorer. The user can configure the exact command that is used to launch the file explorer.
-    * Open in external editor... - this action opens the selected folder or file using the selected external editor. The user can configure the exact command that is used to launch the external editor.
-    * Custom actions pull down menu. These custom actions can be defined in Path Tools preferences page. Clicking on the Custom actions buttons shows the Path Tools preferences page.
+* Copy Paths - this action copies the fully qualified path of
+selected folders and files into the Clipboard. Copy Paths action
+is now a drop down and allows you to copy paths in all different
+formats. The last used format is remembered and used.
+* Explore - this action opens the selected folder or the folder
+containing the selected file in the OS file explorer. The user
+can configure the exact command that is used to launch the file
+explorer.
+* Open Command Line Shell - this action opens a command line
+shell window at the selected folder or the folder containing
+the selected file
+* Open in external editor... - this action opens the selected
+folder or file using the selected external editor. The user can
+configure the exact command that is used to launch the external
+editor.
+* Custom actions pull down menu. These custom actions can be
+defined in Path Tools preferences page. Clicking on the Custom
+actions buttons shows the Path Tools preferences page.
    </description>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="http://www.opensource.org/licenses/bsd-license.php">
+      BSD
    </license>
 
    <url>
