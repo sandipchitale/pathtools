@@ -59,9 +59,9 @@ public class Activator extends AbstractUIPlugin {
 					+ Activator.FILE_PATH + "\"";
 			defaultFileExploreCommand = "cmd /C start explorer /select,/e, \""
 					+ Activator.FILE_PATH + "\"";
-			defaultFolderShellCommand = "cmd /K start cd \""
+			defaultFolderShellCommand = "cmd /K start cd /D \""
 				+ Activator.FILE_PATH + "\"";
-			defaultFileShellCommand = "cmd /K start cd \""
+			defaultFileShellCommand = "cmd /K start cd /D \""
 				+ Activator.FILE_PARENT_PATH + "\"";
 			defaultFolderEditCommand = "cmd /C start explorer /select,/e, \""
 					+ Activator.FILE_PATH + "\"";
