@@ -1,8 +1,6 @@
 package pathtools;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -59,22 +57,6 @@ public class ShellAction implements IWorkbenchWindowActionDelegate {
 								.getAdapter(IResource.class);
 						if (resource != null) {
 							location = resource.getLocation();
-						}
-					} else if (firstElement.getClass().getName().equals(
-							"com.aptana.ide.core.ui.io.file.LocalFile")) {
-						try {
-							Method getFile = firstElement.getClass()
-									.getDeclaredMethod("getFile");
-							Object object = getFile.invoke(firstElement);
-							if (object instanceof File) {
-								fileObject = (File) object;
-								return;
-							}
-						} catch (SecurityException e) {
-						} catch (NoSuchMethodException e) {
-						} catch (IllegalArgumentException e) {
-						} catch (IllegalAccessException e) {
-						} catch (InvocationTargetException e) {
 						}
 					}
 				}

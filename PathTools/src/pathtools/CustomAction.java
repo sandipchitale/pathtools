@@ -1,18 +1,19 @@
 package pathtools;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuAdapter;
+import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
@@ -20,32 +21,41 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-public class CustomAction implements IWorkbenchWindowPulldownDelegate {
+public class CustomAction implements IObjectActionDelegate, IMenuCreator {
 	private Menu customActionsMenu;
+	private Menu customActionsSubMenu;
 
 	private File fileObject;
 
-	private IWorkbenchWindow window;
+	protected IWorkbenchWindow window;
 
-	public void dispose() {}
-
-	public void init(IWorkbenchWindow window) {
-		this.window = window;
+	public void dispose() {
+		if (customActionsMenu != null) {
+			customActionsMenu.dispose();
+		}
+		if (customActionsSubMenu != null) {
+			customActionsSubMenu.dispose();
+		}
 	}
 
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+		this.window = targetPart.getSite().getWorkbenchWindow();
+	}
+	
 	public void run(IAction action) {
 		showPathToolsPreferences();
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
+		action.setMenuCreator(this);
 		fileObject = null;
 		action.setEnabled(false);
 		try {
@@ -66,20 +76,6 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 								.getAdapter(IResource.class);
 						if (resource != null) {
 							location = resource.getLocation();
-						}
-					} else if (firstElement.getClass().getName().equals("com.aptana.ide.core.ui.io.file.LocalFile")) {
-						try {
-							Method getFile = firstElement.getClass().getDeclaredMethod("getFile");
-							Object object = getFile.invoke(firstElement);
-							if (object instanceof File){
-								fileObject = (File) object;
-								return;
-							}
-						} catch (SecurityException e) {
-						} catch (NoSuchMethodException e) {
-						} catch (IllegalArgumentException e) {
-						} catch (IllegalAccessException e) {
-						} catch (InvocationTargetException e) {
 						}
 					}
 				}
@@ -111,12 +107,35 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 		}
 	}
 
+	public Menu getMenu(Menu parent) {
+		if (customActionsSubMenu != null) {
+			customActionsSubMenu.dispose();
+		}
+		customActionsSubMenu = new Menu(parent);
+		customActionsSubMenu.addMenuListener(new MenuAdapter() {
+			public void menuShown(MenuEvent e) {
+				// re-populates the menu dynamically
+				Menu menu = customActionsSubMenu;
+				MenuItem[] items = menu.getItems();
+				for (MenuItem item : items) {
+					item.dispose();
+				}
+				fillMenu(customActionsSubMenu);
+			}
+		});
+		return customActionsSubMenu;
+	}
+
 	public Menu getMenu(Control parent) {
 		if (customActionsMenu != null) {
 			customActionsMenu.dispose();
 		}
 		customActionsMenu = new Menu(parent);
-
+		fillMenu(customActionsMenu);
+		return customActionsMenu;
+	}
+	
+	private void fillMenu(Menu menu) {
 		if (fileObject != null) {
 			String[] commandsArray = null;
 			if (fileObject.isDirectory()) {
@@ -126,7 +145,7 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 			}
 			if (commandsArray.length > 0) {
 				for (String command : commandsArray) {
-					MenuItem commandMenuItem = new MenuItem(customActionsMenu, SWT.PUSH);					
+					MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);					
 					commandMenuItem.setText(Utilities.formatCommand(command,
 							fileObject));
 					final String finalCommand = command;
@@ -137,10 +156,10 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 						}
 					});
 				}
-				new MenuItem(customActionsMenu, SWT.SEPARATOR);
+				new MenuItem(menu, SWT.SEPARATOR);
 			}
-			MenuItem preferecesMenuItem = new MenuItem(customActionsMenu, SWT.PUSH);
-			preferecesMenuItem.setText("Custom commands...");
+			MenuItem preferecesMenuItem = new MenuItem(menu, SWT.PUSH);
+			preferecesMenuItem.setText("Edit Custom commands...");
 			preferecesMenuItem.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					showPathToolsPreferences();
@@ -148,7 +167,6 @@ public class CustomAction implements IWorkbenchWindowPulldownDelegate {
 			});
 			
 		}
-		return customActionsMenu;
 	}
 
 	private void showPathToolsPreferences() {

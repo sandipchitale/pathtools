@@ -7,11 +7,20 @@
             id="PathTools.actionSet.toolbar"
             label="Path Tools"
             visible="true">
+         <menu
+               id="pathtools"
+               label="Path Tools"
+               path="File/additions">
+            <groupMarker
+                  name="additions">
+            </groupMarker>
+         </menu>
          <action
-               class="pathtools.CustomAction"
+               class="pathtools.CustomWindowPulldownAction"
                icon="icons/command.gif"
                id="PathTools.Custom.toolbar"
                label="Custom commands..."
+               menubarPath="File/pathtools/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
@@ -20,7 +29,7 @@
                icon="icons/editpath.gif"
                id="PathTools.Edit.toolbar"
                label="Open in external editor..."
-               menubarPath="File/additions"
+               menubarPath="File/pathtools/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
@@ -29,7 +38,7 @@
                icon="icons/shell.gif"
                id="PathTools.Shell.toolbar"
                label="Command Line Shell"
-               menubarPath="File/additions"
+               menubarPath="File/pathtools/additions"
                style="push"
                toolbarPath="Normal/PathTools">
          </action>
@@ -38,7 +47,7 @@
                icon="icons/explore.gif"
                id="PathTools.Explore.toolbar"
                label="Explore"
-               menubarPath="File/additions"
+               menubarPath="File/pathtools/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
@@ -59,13 +68,38 @@
             adaptable="true"
             id="PathTools.objectContribution"
             objectClass="org.eclipse.core.resources.IResource">
+  <menu
+        id="pathtools"
+        label="Path Tools"
+        path="additions">
+     <groupMarker
+           name="additions">
+     </groupMarker>
+  </menu>
+         <action
+               class="pathtools.CustomAction"
+               enablesFor="1"
+               icon="icons/command.gif"
+               id="PathTools.Custom"
+               label="Custom"
+               menubarPath="pathtools/additions"
+               style="pulldown">
+            <enablement>
+	         <or>
+	            <objectClass 
+	               name="org.eclipse.core.resources.IResource"/>
+	            <objectClass 
+	               name="org.eclipse.core.runtime.IAdaptable"/>
+	         </or>
+      		</enablement>
+         </action>
          <action
                class="pathtools.EditAction"
                enablesFor="1"
                icon="icons/editpath.gif"
                id="PathTools.Edit"
                label="Open in external editor..."
-               menubarPath="additions">
+               menubarPath="pathtools/additions">
             <enablement>
 	         <or>
 	            <objectClass 
@@ -81,7 +115,7 @@
                icon="icons/shell.gif"
                id="PathTools.Shell"
                label="Command Line Shell"
-               menubarPath="additions">
+               menubarPath="pathtools/additions">
             <enablement>
 	         <or>
 	            <objectClass 
@@ -97,7 +131,7 @@
                icon="icons/explore.gif"
                id="PathTools.Explore"
                label="Explore"
-               menubarPath="additions">
+               menubarPath="pathtools/additions">
             <enablement>
 	         <or>
 	            <objectClass 
@@ -113,7 +147,7 @@
                icon="icons/copypaths.gif"
                id="PathTools.CopyPath"
                label="Copy Paths"
-               menubarPath="additions">
+               menubarPath="pathtools/additions">
 			<enablement>
 	         <or>
 	            <objectClass 
@@ -122,7 +156,7 @@
 	               name="org.eclipse.core.runtime.IAdaptable"/>
 	         </or>
       		</enablement>
-     	</action>     
+     	</action>   
 		<visibility>
          <or>
             <objectClass 
@@ -131,42 +165,6 @@
                name="org.eclipse.core.runtime.IAdaptable"/>
          </or>
   		</visibility>
-      </objectContribution>
-      <objectContribution
-            id="PathTools.objectContribution.aptana"
-            objectClass="com.aptana.ide.core.ui.io.file.LocalFile">
-         <action
-               class="pathtools.EditAction"
-               enablesFor="1"
-               icon="icons/editpath.gif"
-               id="PathTools.Edit.aptana"
-               label="Open in external editor..."
-               menubarPath="additions">
-         </action>
-         <action
-               class="pathtools.ShellAction"
-               enablesFor="1"
-               icon="icons/shell.gif"
-               id="PathTools.Shell.aptana"
-               label="Command Line Shell"
-               menubarPath="additions">
-         </action>
-         <action
-               class="pathtools.ExploreAction"
-               enablesFor="1"
-               icon="icons/explore.gif"
-               id="PathTools.Explore.aptana"
-               label="Explore"
-               menubarPath="additions">
-         </action>
-         <action
-               class="pathtools.CopyPathAction"
-               enablesFor="+"
-               icon="icons/copypaths.gif"
-               id="PathTools.CopyPath.aptana"
-               label="Copy Paths"
-               menubarPath="additions">
-     	</action>     
       </objectContribution>
    </extension>
    <extension
