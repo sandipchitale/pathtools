@@ -1,7 +1,10 @@
 package pathtools;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,6 +47,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public class CopyPathAction implements IWorkbenchWindowPulldownDelegate2 {
 	private List<File> files = new LinkedList<File>();
 	private List<IPath> resourcePaths = new LinkedList<IPath>();
+	private List<String> javaQualifiedNames = new LinkedList<String>();
 	private IWorkbenchWindow window;
 
 	public void dispose() {
@@ -72,6 +76,7 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate2 {
 		// Start with a clear list
 		files.clear();
 		resourcePaths.clear();
+		javaQualifiedNames.clear();
 		if (selection instanceof IStructuredSelection) {
 			// Get structured selection
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
@@ -109,6 +114,29 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate2 {
 				}
 				if (fullPath != null) {
 					resourcePaths.add(fullPath);
+				}
+				System.out.println(firstElement);
+				Class<? extends Object> aClass  = firstElement.getClass();
+				Class[] interfaces = aClass.getInterfaces();
+				for (Class anInterface : interfaces) {
+					if ("org.eclipse.jdt.core.ICompilationUnit".equals(anInterface.getName())) {
+						try {
+							Method method = aClass.getMethod("findPrimaryType");
+							Object primaryType = method.invoke(firstElement);
+							if (primaryType != null) {
+								method = primaryType.getClass().getMethod("getFullyQualifiedName");
+								Object primaryTypeFQN = method.invoke(primaryType);
+								if (primaryTypeFQN != null) {
+									javaQualifiedNames.add(primaryTypeFQN.toString());
+								}
+							}
+						} catch (SecurityException e) {
+						} catch (NoSuchMethodException e) {
+						} catch (IllegalArgumentException e) {
+						} catch (IllegalAccessException e) {
+						} catch (InvocationTargetException e) {
+						}
+					}
 				}
 			}
 		}
@@ -151,19 +179,21 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate2 {
 
 	private Menu copyPathsMenuInEditMenu;
 	public Menu getMenu(Menu parent) {
-		if (copyPathsMenuInEditMenu == null) {
-			copyPathsMenuInEditMenu = new Menu(parent);
-			fillMenu(copyPathsMenuInEditMenu);
+		if (copyPathsMenuInEditMenu != null) {
+			copyPathsMenuInEditMenu.dispose();
 		}
+		copyPathsMenuInEditMenu = new Menu(parent);
+		fillMenu(copyPathsMenuInEditMenu);
 		return copyPathsMenuInEditMenu;
 	}
 	
 	private Menu copyPathsMenu;
 	public Menu getMenu(Control parent) {
-		if (copyPathsMenu == null) {
-			copyPathsMenu = new Menu(parent);
-			fillMenu(copyPathsMenu);
+		if (copyPathsMenu != null) {
+			copyPathsMenu.dispose();
 		}
+		copyPathsMenu = new Menu(parent);
+		fillMenu(copyPathsMenu);
 		return copyPathsMenu;
 	}
 	
@@ -188,20 +218,41 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate2 {
 		
 		new MenuItem(menu, SWT.SEPARATOR);
 		
-		MenuItem resourcePathsMenuItem = new MenuItem(menu, SWT.PUSH);
-		resourcePathsMenuItem.setText("Copy resource paths");
-		resourcePathsMenuItem.setEnabled(resourcePaths.size() > 0);
-		resourcePathsMenuItem.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				if (resourcePaths.size() > 0) {
+		if (resourcePaths.size() > 0) {
+			MenuItem resourcePathsMenuItem = new MenuItem(menu, SWT.PUSH);
+			resourcePathsMenuItem.setText("Copy resource paths");
+			resourcePathsMenuItem.setEnabled(resourcePaths.size() > 0);
+			resourcePathsMenuItem.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
 					StringBuilder stringBuilder = new StringBuilder();
 					for (IPath path : resourcePaths) {
-						stringBuilder.append(path.toString() + "\n");
+						stringBuilder.append(path.toString());
+						if (resourcePaths.size() > 0) {
+							stringBuilder.append(System.getProperty("line.separator", "\n"));
+						}
 					}
 					copyToClipboard(stringBuilder.toString());
 				}
-			}
-		});
+			});
+		}
+		
+		if (javaQualifiedNames.size() > 0) {
+			MenuItem fqnMenuItem = new MenuItem(menu, SWT.PUSH);
+			fqnMenuItem.setText("Copy FQN (Java)");
+			fqnMenuItem.setEnabled(resourcePaths.size() > 0);
+			fqnMenuItem.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					StringBuilder stringBuilder = new StringBuilder();
+					for (String javaQualifiedName : javaQualifiedNames) {
+						stringBuilder.append(javaQualifiedName);
+						if (javaQualifiedNames.size() > 0) {
+							stringBuilder.append(System.getProperty("line.separator", "\n"));
+						}
+					}
+					copyToClipboard(stringBuilder.toString());
+				}
+			});
+		}
 		
 		new MenuItem(menu, SWT.SEPARATOR);
 		
