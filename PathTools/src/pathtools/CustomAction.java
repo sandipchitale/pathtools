@@ -48,6 +48,7 @@ public class CustomAction implements IObjectActionDelegate, IMenuCreator {
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.window = targetPart.getSite().getWorkbenchWindow();
+		action.setMenuCreator(this);
 	}
 	
 	public void run(IAction action) {
@@ -55,7 +56,6 @@ public class CustomAction implements IObjectActionDelegate, IMenuCreator {
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
-		action.setMenuCreator(this);
 		fileObject = null;
 		action.setEnabled(false);
 		try {
