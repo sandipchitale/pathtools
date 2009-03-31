@@ -10,10 +10,8 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -23,6 +21,7 @@ import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorInput;
@@ -175,11 +174,14 @@ public class ExploreAction implements IWorkbenchWindowPulldownDelegate2 {
 						defaultValue = System.getProperty("user.home", ".");
 					}
 				}
-				InputDialog inputDialog = new InputDialog(
-						window.getShell(), "Go to Path", "Path:", defaultValue, null);
-				if (inputDialog.open() == Window.OK) {
-					String path = inputDialog.getValue();
-					File file = new File(path);
+				DirectoryDialog directoryDialog = new DirectoryDialog(window.getShell());
+				File defaultDirectory = new File(defaultValue);
+				if (defaultDirectory.exists() && defaultDirectory.isDirectory()) {
+					directoryDialog.setFilterPath(defaultDirectory.getAbsolutePath());
+				}
+				String directory = directoryDialog.open();
+				if (directory != null) {
+					File file = new File(directory);
 					// Is this a physical file on the disk ?
 					if (file.exists()) {
 						// Get the configured explorer commands for folder
