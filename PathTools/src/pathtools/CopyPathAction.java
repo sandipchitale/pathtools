@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -29,10 +30,10 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -43,11 +44,12 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @author Sandip V. Chitale
  * 
  */
-public class CopyPathAction implements IWorkbenchWindowPulldownDelegate2 {
+public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 	private List<File> files = new LinkedList<File>();
 	private List<IPath> resourcePaths = new LinkedList<IPath>();
 	private List<String> javaQualifiedNames = new LinkedList<String>();
-	private IWorkbenchWindow window;
+	
+	protected IWorkbenchWindow window;
 
 	public void dispose() {
 		if (copyPathsMenuInEditMenu != null) {
@@ -57,9 +59,10 @@ public class CopyPathAction implements IWorkbenchWindowPulldownDelegate2 {
 			copyPathsMenu.dispose(); 
 		}
 	}
-
-	public void init(IWorkbenchWindow window) {
-		this.window = window;
+	
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+		this.window = targetPart.getSite().getWorkbenchWindow();
+		action.setMenuCreator(this);
 	}
 
 	public void run(IAction action) {
