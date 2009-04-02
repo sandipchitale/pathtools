@@ -43,7 +43,7 @@
                toolbarPath="Normal/PathTools">
          </action>
          <action
-               class="pathtools.ExploreAction"
+               class="pathtools.ExploreWindowPulldownAction"
                icon="icons/explore.gif"
                id="PathTools.Explore.toolbar"
                label="Explore"
@@ -52,7 +52,7 @@
                toolbarPath="Normal/PathTools">
          </action>
          <action
-               class="pathtools.CopyPathAction"
+               class="pathtools.CopyPathWindowPulldownAction"
                icon="icons/copypaths.gif"
                id="PathTools.CopyPath.toolbar"
                label="Copy Paths"
@@ -131,7 +131,8 @@
                icon="icons/explore.gif"
                id="PathTools.Explore"
                label="Explore"
-               menubarPath="pathtools/additions">
+               menubarPath="pathtools/additions"
+               style="pulldown">
             <enablement>
 	         <or>
 	            <objectClass 
@@ -147,7 +148,8 @@
                icon="icons/copypaths.gif"
                id="PathTools.CopyPath"
                label="Copy Paths"
-               menubarPath="pathtools/additions">
+               menubarPath="pathtools/additions"
+               style="pulldown">
 			<enablement>
 	         <or>
 	            <objectClass 
