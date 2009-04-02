@@ -14,13 +14,71 @@
             <groupMarker
                   name="additions">
             </groupMarker>
+            <separator
+                  name="separator">
+            </separator>
          </menu>
+         <action
+               class="pathtools.CustomWindowPulldownAction"
+               icon="icons/command.gif"
+               id="PathTools.Custom.submenu"
+               label="Custom commands..."
+               menubarPath="File/pathtools/separator"
+               style="pulldown">
+         </action>
+         <action
+               class="pathtools.ExploreWindowPulldownAction"
+               icon="icons/explore.gif"
+               id="PathTools.Explore.submenu"
+               label="Explore"
+               menubarPath="File/pathtools/separator"
+               style="pulldown">
+         </action>
+         <action
+               class="pathtools.CustomWindowPulldownAction"
+               icon="icons/command.gif"
+               id="PathTools.Custom.menu"
+               label="Custom commands"
+               menubarPath="File/pathtools/additions"
+               style="push">
+         </action>
+         <action
+               class="pathtools.EditAction"
+               icon="icons/editpath.gif"
+               id="PathTools.Edit.menu"
+               label="Open in external editor..."
+               menubarPath="File/pathtools/additions"
+               style="push">
+         </action>
+         <action
+               class="pathtools.ShellAction"
+               icon="icons/shell.gif"
+               id="PathTools.Shell.menu"
+               label="Command Line Shell"
+               menubarPath="File/pathtools/additions"
+               style="push">
+         </action>
+         <action
+               class="pathtools.ExploreWindowPulldownAction"
+               icon="icons/explore.gif"
+               id="PathTools.Explore.menu"
+               label="Explore"
+               menubarPath="File/pathtools/additions"
+               style="push">
+         </action>
+         <action
+               class="pathtools.CopyPathWindowPulldownAction"
+               icon="icons/copypaths.gif"
+               id="PathTools.CopyPath.menu"
+               label="Copy Paths"
+               menubarPath="Edit/additions"
+               style="pulldown">
+         </action>
          <action
                class="pathtools.CustomWindowPulldownAction"
                icon="icons/command.gif"
                id="PathTools.Custom.toolbar"
                label="Custom commands..."
-               menubarPath="File/pathtools/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
@@ -29,7 +87,6 @@
                icon="icons/editpath.gif"
                id="PathTools.Edit.toolbar"
                label="Open in external editor..."
-               menubarPath="File/pathtools/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
@@ -38,7 +95,6 @@
                icon="icons/shell.gif"
                id="PathTools.Shell.toolbar"
                label="Command Line Shell"
-               menubarPath="File/pathtools/additions"
                style="push"
                toolbarPath="Normal/PathTools">
          </action>
@@ -47,7 +103,6 @@
                icon="icons/explore.gif"
                id="PathTools.Explore.toolbar"
                label="Explore"
-               menubarPath="File/pathtools/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
@@ -56,7 +111,6 @@
                icon="icons/copypaths.gif"
                id="PathTools.CopyPath.toolbar"
                label="Copy Paths"
-               menubarPath="Edit/additions"
                style="pulldown"
                toolbarPath="Normal/PathTools">
          </action>
@@ -75,15 +129,69 @@
      <groupMarker
            name="additions">
      </groupMarker>
+     <separator
+           name="separator">
+     </separator>
   </menu>
+           <action
+               class="pathtools.CustomAction"
+               enablesFor="1"
+               icon="icons/command.gif"
+               id="PathTools.Custom.submenu"
+               label="Custom"
+               menubarPath="pathtools/separator"
+               style="pulldown">
+            <enablement>
+	         <or>
+	            <objectClass 
+	               name="org.eclipse.core.resources.IResource"/>
+	            <objectClass 
+	               name="org.eclipse.core.runtime.IAdaptable"/>
+	         </or>
+      		</enablement>
+         </action>
+         <action
+               class="pathtools.ExploreAction"
+               enablesFor="1"
+               icon="icons/explore.gif"
+               id="PathTools.Explore.submenu"
+               label="Explore"
+               menubarPath="pathtools/separator"
+               style="pulldown">
+            <enablement>
+	         <or>
+	            <objectClass 
+	               name="org.eclipse.core.resources.IResource"/>
+	            <objectClass 
+	               name="org.eclipse.core.runtime.IAdaptable"/>
+	         </or>
+      		</enablement>
+         </action>
+         <action
+               class="pathtools.CopyPathAction"
+               enablesFor="+"
+               icon="icons/copypaths.gif"
+               id="PathTools.CopyPath.submenu"
+               label="Copy Paths"
+               menubarPath="pathtools/separator"
+               style="pulldown">
+			<enablement>
+	         <or>
+	            <objectClass 
+	               name="org.eclipse.core.resources.IResource"/>
+	            <objectClass 
+	               name="org.eclipse.core.runtime.IAdaptable"/>
+	         </or>
+      		</enablement>
+     	</action>  
          <action
                class="pathtools.CustomAction"
                enablesFor="1"
                icon="icons/command.gif"
                id="PathTools.Custom"
-               label="Custom"
+               label="Custom..."
                menubarPath="pathtools/additions"
-               style="pulldown">
+               style="push">
             <enablement>
 	         <or>
 	            <objectClass 
@@ -132,7 +240,7 @@
                id="PathTools.Explore"
                label="Explore"
                menubarPath="pathtools/additions"
-               style="pulldown">
+               style="push">
             <enablement>
 	         <or>
 	            <objectClass 
@@ -149,7 +257,7 @@
                id="PathTools.CopyPath"
                label="Copy Paths"
                menubarPath="pathtools/additions"
-               style="pulldown">
+               style="push">
 			<enablement>
 	         <or>
 	            <objectClass 
