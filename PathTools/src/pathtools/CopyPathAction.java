@@ -117,7 +117,6 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 				if (fullPath != null) {
 					resourcePaths.add(fullPath);
 				}
-				System.out.println(firstElement);
 				Class<? extends Object> aClass  = firstElement.getClass();
 				Class[] interfaces = aClass.getInterfaces();
 				for (Class anInterface : interfaces) {

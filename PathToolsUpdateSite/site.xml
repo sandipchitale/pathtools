@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/PathToolsFeature_1.0.44.jar" id="PathToolsFeature" version="1.0.44">
+   <feature url="features/PathToolsFeature_1.0.45.jar" id="PathToolsFeature" version="1.0.45">
       <category name="Desktop"/>
    </feature>
    <category-def name="Desktop" label="Desktop Integration"/>
