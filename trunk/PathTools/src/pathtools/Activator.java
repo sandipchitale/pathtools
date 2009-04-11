@@ -59,31 +59,11 @@ public class Activator extends AbstractUIPlugin {
 	}
 	
 	String[] getFolderCustomActions() {
-		return parseString(getPreferenceStore().getString(PathToolsPreferences.FOLDER_COMMANDS_KEY));
+		return PathToolsPreferences.parseString(getPreferenceStore().getString(PathToolsPreferences.FOLDER_COMMANDS_KEY));
 	}
 	
 	String[] getFileCustomActions() {
-		return parseString(getPreferenceStore().getString(PathToolsPreferences.FILE_COMMANDS_KEY));
-	}
-	
-	private static String SEPARATOR = "@@@@";
-	
-	static String createList(String[] items) {
-		StringBuilder stringBuilder = new StringBuilder();
-		for (String item : items) {
-			if (stringBuilder.length() > 0) {
-				stringBuilder.append(SEPARATOR);
-			}
-			stringBuilder.append(item);
-		}
-		return stringBuilder.toString();
-	}
-	
-	static String[] parseString(String stringList) {
-		if (stringList != null && stringList.length() > 0) {
-			return stringList.split(Pattern.quote(SEPARATOR));
-		}
-		return new String[0];
+		return PathToolsPreferences.parseString(getPreferenceStore().getString(PathToolsPreferences.FILE_COMMANDS_KEY));
 	}
 
 }

@@ -110,12 +110,12 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 		
 		@Override
 		protected String createList(String[] items) {
-			return Activator.createList(items); 
+			return PathToolsPreferences.createList(items); 
 		}
 
 		@Override
 		protected String[] parseString(String stringList) {
-			return Activator.parseString(stringList);
+			return PathToolsPreferences.parseString(stringList);
 		}
 
 		@Override
