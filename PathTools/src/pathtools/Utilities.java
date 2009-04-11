@@ -46,14 +46,14 @@ public class Utilities {
 	}
 
 	static String convertParameters(String command) {
-		return command.replaceAll(Pattern.quote(Activator.FILE_PATH), "{0}").replaceAll(
-				Pattern.quote(Activator.FILE_PARENT_PATH), "{1}").replaceAll(
-				Pattern.quote(Activator.FILE_PATH_SLASHES), "{2}").replaceAll(
-				Pattern.quote(Activator.FILE_PARENT_PATH_SLASHES), "{3}").replaceAll(
-				Pattern.quote(Activator.FILE_PATH_BACKSLASHES), "{4}").replaceAll(
-				Pattern.quote(Activator.FILE_PARENT_PATH_BACKSLASHES), "{5}").replaceAll(
-				Pattern.quote(Activator.FILE_NAME), "{6}").replaceAll(
-				Pattern.quote(Activator.FILE_PARENT_NAME), "{7}");
+		return command.replaceAll(Pattern.quote(PathToolsPreferences.FILE_PATH), "{0}").replaceAll(
+				Pattern.quote(PathToolsPreferences.FILE_PARENT_PATH), "{1}").replaceAll(
+				Pattern.quote(PathToolsPreferences.FILE_PATH_SLASHES), "{2}").replaceAll(
+				Pattern.quote(PathToolsPreferences.FILE_PARENT_PATH_SLASHES), "{3}").replaceAll(
+				Pattern.quote(PathToolsPreferences.FILE_PATH_BACKSLASHES), "{4}").replaceAll(
+				Pattern.quote(PathToolsPreferences.FILE_PARENT_PATH_BACKSLASHES), "{5}").replaceAll(
+				Pattern.quote(PathToolsPreferences.FILE_NAME), "{6}").replaceAll(
+				Pattern.quote(PathToolsPreferences.FILE_PARENT_NAME), "{7}");
 	}
 
 	/**

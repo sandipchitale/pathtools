@@ -36,21 +36,21 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 	public String getDescription() {
 		return "You can use \"\" (quotes) around command arguments with spaces in their value.\n"
 				+ "You can use the following parameters in the commands:\n\n"
-				+ Activator.FILE_PATH
+				+ PathToolsPreferences.FILE_PATH
 				+ "  - path of the selected object with default file separator.\n"
-				+ Activator.FILE_PARENT_PATH
+				+ PathToolsPreferences.FILE_PARENT_PATH
 				+ "  - path of the parent of selected object with default file separator.\n"
-				+ Activator.FILE_NAME
+				+ PathToolsPreferences.FILE_NAME
 				+ "  - name of the selected object.\n"
-				+ Activator.FILE_PARENT_NAME
+				+ PathToolsPreferences.FILE_PARENT_NAME
 				+ "  - name of the parent of selected object.\n"
-				+ Activator.FILE_PATH_SLASHES
+				+ PathToolsPreferences.FILE_PATH_SLASHES
 				+ "  - path of the selected object with / file separator.\n"
-				+ Activator.FILE_PARENT_PATH_SLASHES
+				+ PathToolsPreferences.FILE_PARENT_PATH_SLASHES
 				+ "  - path of the parent of selected object with / file separator.\n"
-				+ Activator.FILE_PATH_BACKSLASHES
+				+ PathToolsPreferences.FILE_PATH_BACKSLASHES
 				+ "  - path of the selected object with \\ file separator.\n"
-				+ Activator.FILE_PARENT_PATH_BACKSLASHES
+				+ PathToolsPreferences.FILE_PARENT_PATH_BACKSLASHES
 				+ " - path of the parent of selected object with \\ file separator.\n";
 	}
 
@@ -58,45 +58,45 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 	protected void createFieldEditors() {
 		// Folder explore command field
 		StringFieldEditor folderExploreCommad = new StringFieldEditor(
-				Activator.FOLDER_EXPLORE_COMMAND_KEY, "Explore Folder:",
+				PathToolsPreferences.FOLDER_EXPLORE_COMMAND_KEY, "Explore Folder:",
 				getFieldEditorParent());
 		addField(folderExploreCommad);
 
 		// File explore command field
 		StringFieldEditor fileExploreCommad = new StringFieldEditor(
-				Activator.FILE_EXPLORE_COMMAND_KEY, "Explore File:",
+				PathToolsPreferences.FILE_EXPLORE_COMMAND_KEY, "Explore File:",
 				getFieldEditorParent());
 		addField(fileExploreCommad);
 
 		// Folder shell command field
 		StringFieldEditor folderShellCommad = new StringFieldEditor(
-				Activator.FOLDER_SHELL_COMMAND_KEY, "Shell at Folder:",
+				PathToolsPreferences.FOLDER_SHELL_COMMAND_KEY, "Shell at Folder:",
 				getFieldEditorParent());
 		addField(folderShellCommad);
 		
 		// File shell command field
 		StringFieldEditor fileShellCommad = new StringFieldEditor(
-				Activator.FILE_SHELL_COMMAND_KEY, "Shell at File:",
+				PathToolsPreferences.FILE_SHELL_COMMAND_KEY, "Shell at File:",
 				getFieldEditorParent());
 		addField(fileShellCommad);
 
 		// Folder editor command field
 		StringFieldEditor folderEditCommad = new StringFieldEditor(
-				Activator.FOLDER_EDIT_COMMAND_KEY, "Edit Folder:",
+				PathToolsPreferences.FOLDER_EDIT_COMMAND_KEY, "Edit Folder:",
 				getFieldEditorParent());
 		addField(folderEditCommad);
 
 		// File editor command field
 		StringFieldEditor fileEditCommad = new StringFieldEditor(
-				Activator.FILE_EDIT_COMMAND_KEY, "Edit File:",
+				PathToolsPreferences.FILE_EDIT_COMMAND_KEY, "Edit File:",
 				getFieldEditorParent());
 		addField(fileEditCommad);
 
 		ListEditor folderCommandsListEditor = new CommandListEditor(
-				Activator.FOLDER_COMMANDS_KEY, "Folder", getFieldEditorParent());
+				PathToolsPreferences.FOLDER_COMMANDS_KEY, "Folder", getFieldEditorParent());
 		addField(folderCommandsListEditor);
 		ListEditor fileCommandsListEditor = new CommandListEditor(
-				Activator.FILE_COMMANDS_KEY, "File", getFieldEditorParent());
+				PathToolsPreferences.FILE_COMMANDS_KEY, "File", getFieldEditorParent());
 		addField(fileCommandsListEditor);
 	}
 

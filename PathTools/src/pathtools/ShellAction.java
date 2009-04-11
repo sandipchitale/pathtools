@@ -91,8 +91,8 @@ public class ShellAction implements IWorkbenchWindowActionDelegate {
 	private static void shell(File file) {
 		// Get the configured explorer commands for folder and file
 		if (file != null && file.exists()) {
-			String folderShellComand = Activator.getDefault().getPreferenceStore().getString(Activator.FOLDER_SHELL_COMMAND_KEY);
-			String filShellComand = Activator.getDefault().getPreferenceStore().getString(Activator.FILE_SHELL_COMMAND_KEY);
+			String folderShellComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FOLDER_SHELL_COMMAND_KEY);
+			String filShellComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FILE_SHELL_COMMAND_KEY);
 			String shellCommand;
 			if (file.isDirectory()) {
 				shellCommand = folderShellComand;

@@ -285,4 +285,10 @@
             name="Path Tools">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="pathtools.PathToolsPreferences">
+      </initializer>
+   </extension>
 </plugin>
