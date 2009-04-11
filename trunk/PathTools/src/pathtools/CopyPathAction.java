@@ -67,14 +67,14 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 
 	public void run(IAction action) {
 		copyToClipboard(
-				Activator.getDefault().getPreferenceStore().getString(Activator.LAST_COPY_PATH_FORMAT),
+				Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.LAST_COPY_PATH_FORMAT),
 				files);
 	}
 
 	@SuppressWarnings("unchecked")
 	public void selectionChanged(IAction action, ISelection selection) {
 		action.setText("Copy " + 
-				Activator.getDefault().getPreferenceStore().getString(Activator.LAST_COPY_PATH_FORMAT));
+				Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.LAST_COPY_PATH_FORMAT));
 		// Start with a clear list
 		files.clear();
 		resourcePaths.clear();
@@ -168,14 +168,14 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 	}
     	
 	private static String[] pathFormats = new String[] {
-		Activator.FILE_PATH,
-		Activator.FILE_PARENT_PATH,
-		Activator.FILE_NAME,
-		Activator.FILE_PARENT_NAME,
-		Activator.FILE_PATH_SLASHES,
-		Activator.FILE_PARENT_PATH_SLASHES,
-		Activator.FILE_PATH_BACKSLASHES,
-		Activator.FILE_PARENT_PATH_BACKSLASHES,
+		PathToolsPreferences.FILE_PATH,
+		PathToolsPreferences.FILE_PARENT_PATH,
+		PathToolsPreferences.FILE_NAME,
+		PathToolsPreferences.FILE_PARENT_NAME,
+		PathToolsPreferences.FILE_PATH_SLASHES,
+		PathToolsPreferences.FILE_PARENT_PATH_SLASHES,
+		PathToolsPreferences.FILE_PATH_BACKSLASHES,
+		PathToolsPreferences.FILE_PARENT_PATH_BACKSLASHES,
 	};
 
 	private Menu copyPathsMenuInEditMenu;
@@ -208,7 +208,7 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 				public void widgetSelected(SelectionEvent e) {
 					copyToClipboard(finalPathFormat, files);
 					Activator.getDefault().getPreferenceStore().setValue(
-							Activator.LAST_COPY_PATH_FORMAT, finalPathFormat);
+							PathToolsPreferences.LAST_COPY_PATH_FORMAT, finalPathFormat);
 				}
 			});
 		}

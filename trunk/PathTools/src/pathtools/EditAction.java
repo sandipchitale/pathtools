@@ -166,8 +166,8 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 	private static void edit(File file) {
 		// Get the configured explorer commands for folder and file
 		if (file != null && file.exists()) {
-			String folderEditComand = Activator.getDefault().getPreferenceStore().getString(Activator.FOLDER_EDIT_COMMAND_KEY);
-			String fileEditComand = Activator.getDefault().getPreferenceStore().getString(Activator.FILE_EDIT_COMMAND_KEY);
+			String folderEditComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FOLDER_EDIT_COMMAND_KEY);
+			String fileEditComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FILE_EDIT_COMMAND_KEY);
 			String editCommand;
 			if (file.isDirectory()) {
 				editCommand = folderEditComand;
