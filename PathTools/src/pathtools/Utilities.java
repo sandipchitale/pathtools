@@ -34,7 +34,7 @@ public class Utilities {
 			fileObject.getName(),
 			fileObject.getParentFile().getName()
 		};
-		return MessageFormat.format(Utilities.convertParameters(command), (escapeBackslash? escapeBackslash(paths) : paths));
+		return MessageFormat.format(Utilities.convertParameters(command), (Object[]) (escapeBackslash? escapeBackslash(paths) : paths));
 	}
 	
 	private static String[] escapeBackslash(String[] paths) {
