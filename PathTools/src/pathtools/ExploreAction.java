@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
@@ -42,6 +43,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 	private File fileObject;
+	private File projectFileObject;
 
 	protected IWorkbenchWindow window;
 
@@ -71,6 +73,7 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 		action.setEnabled(false);
 		try {
 			IPath location = null;
+			IPath projectLocation = null;
 			if (selection instanceof IStructuredSelection) {
 				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 				// Is only one item selected?
@@ -80,6 +83,10 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 						// Is this an IResource ?
 						IResource resource = (IResource) firstElement;
 						location = resource.getLocation();
+						if (!(resource instanceof IProject)) {
+							IProject project = resource.getProject();
+							projectLocation = project.getLocation();
+						}
 					} else if (firstElement instanceof IAdaptable) {
 						IAdaptable adaptable = (IAdaptable) firstElement;
 						// Is this an IResource adaptable ?
@@ -87,6 +94,10 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 								.getAdapter(IResource.class);
 						if (resource != null) {
 							location = resource.getLocation();
+							if (!(resource instanceof IProject)) {
+								IProject project = resource.getProject();
+								projectLocation = project.getLocation();
+							}
 						}
 					}
 				}
@@ -112,6 +123,9 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 			}
 			if (location != null) {
 				fileObject = location.toFile();
+			}
+			if (projectLocation != null) {
+				projectFileObject = projectLocation.toFile();
 			}
 		} finally {
 			action.setEnabled(fileObject != null);
@@ -195,6 +209,18 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 		});
 
 		new MenuItem(menu, SWT.SEPARATOR);
+
+		if (projectFileObject != null) {
+			final File finalGotoFile = projectFileObject;
+			MenuItem gotoParentAction = new MenuItem(menu, SWT.PUSH);
+			gotoParentAction.setText("Go to Project Folder");
+			gotoParentAction.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					explore(finalGotoFile);
+				}
+			});
+			new MenuItem(menu, SWT.SEPARATOR);
+		}
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		MenuItem gotoWorkspace = new MenuItem(menu, SWT.PUSH);
