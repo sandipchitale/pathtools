@@ -4,8 +4,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 
 /**
- * This launches the OS file explorer showing the selected folder or the folder
- * containing the selected file.
+ * This launches the Command Line Shell with the selected folder or the folder
+ * containing the selected file as the pwd.
  * 
  * @author Sandip V. Chitale
  * 

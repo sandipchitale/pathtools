@@ -154,8 +154,12 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 
 	private void fillMenu(Menu menu) {
 		if (fileObject != null) {
+			if (fileObject.isFile()) {
+				fileObject = fileObject.getParentFile();
+			}
+			int times = 2;
 			File gotoFile = fileObject;
-			while (gotoFile != null) {
+			for (int i = 0; gotoFile != null && i < times; i++) {
 				final File finalGotoFile = gotoFile;
 				MenuItem gotoParentAction = new MenuItem(menu, SWT.PUSH);
 				gotoParentAction.setText("Command Line Shell at " + gotoFile.getAbsolutePath());
@@ -169,6 +173,18 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 			new MenuItem(menu, SWT.SEPARATOR);
 		}
 
+		if (projectFileObject != null) {
+			final File finalGotoFile = projectFileObject;
+			MenuItem gotoParentAction = new MenuItem(menu, SWT.PUSH);
+			gotoParentAction.setText("Command Line Shell at Project Folder: " + finalGotoFile.getAbsolutePath());
+			gotoParentAction.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					shell(finalGotoFile);
+				}
+			});
+			new MenuItem(menu, SWT.SEPARATOR);
+		}
+		
 		MenuItem gotoAction = new MenuItem(menu, SWT.PUSH);
 		gotoAction.setText("Command Line Shell at...");
 		gotoAction.addSelectionListener(new SelectionAdapter() {
@@ -201,18 +217,6 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 		});
 
 		new MenuItem(menu, SWT.SEPARATOR);
-
-		if (projectFileObject != null) {
-			final File finalGotoFile = projectFileObject;
-			MenuItem gotoParentAction = new MenuItem(menu, SWT.PUSH);
-			gotoParentAction.setText("Command Line Shell at Project Folder");
-			gotoParentAction.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					shell(finalGotoFile);
-				}
-			});
-			new MenuItem(menu, SWT.SEPARATOR);
-		}
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		MenuItem gotoWorkspace = new MenuItem(menu, SWT.PUSH);
@@ -291,12 +295,12 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 		// Get the configured explorer commands for folder and file
 		if (file != null && file.exists()) {
 			String folderShellComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FOLDER_SHELL_COMMAND_KEY);
-			String filShellComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FILE_SHELL_COMMAND_KEY);
+			String fileShellComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FILE_SHELL_COMMAND_KEY);
 			String shellCommand;
 			if (file.isDirectory()) {
 				shellCommand = folderShellComand;
 			} else {
-				shellCommand = filShellComand;				
+				shellCommand = fileShellComand;				
 			}
 			if (shellCommand != null) {
 				Utilities.launch(shellCommand, file);
