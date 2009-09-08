@@ -1,7 +1,5 @@
 package pathtools;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 

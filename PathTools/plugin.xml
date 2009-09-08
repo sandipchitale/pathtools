@@ -30,7 +30,7 @@
                class="pathtools.ShellWindowPulldownAction"
                icon="icons/shell.gif"
                id="PathTools.Shell.submenu"
-               label="Shell"
+               label="Command Line Shell"
                menubarPath="File/pathtools/separator"
                style="pulldown">
          </action>
@@ -59,7 +59,7 @@
                style="push">
          </action>
          <action
-               class="pathtools.ShellAction"
+               class="pathtools.ShellWindowPulldownAction"
                icon="icons/shell.gif"
                id="PathTools.Shell.menu"
                label="Command Line Shell"
