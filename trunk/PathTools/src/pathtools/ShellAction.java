@@ -158,26 +158,26 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 				fileObject = fileObject.getParentFile();
 			}
 			int times = 2;
-			File gotoFile = fileObject;
-			for (int i = 0; gotoFile != null && i < times; i++) {
-				final File finalGotoFile = gotoFile;
-				MenuItem gotoParentAction = new MenuItem(menu, SWT.PUSH);
-				gotoParentAction.setText("Command Line Shell at " + gotoFile.getAbsolutePath());
-				gotoParentAction.addSelectionListener(new SelectionAdapter() {
+			File shellAtFile = fileObject;
+			for (int i = 0; shellAtFile != null && i < times; i++) {
+				final File finalGotoFile = shellAtFile;
+				MenuItem shellAtParentAction = new MenuItem(menu, SWT.PUSH);
+				shellAtParentAction.setText("Command Line Shell at " + shellAtFile.getAbsolutePath());
+				shellAtParentAction.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
 						shell(finalGotoFile);
 					}
 				});
-				gotoFile = gotoFile.getParentFile();
+				shellAtFile = shellAtFile.getParentFile();
 			}
 			new MenuItem(menu, SWT.SEPARATOR);
 		}
 
 		if (projectFileObject != null) {
 			final File finalGotoFile = projectFileObject;
-			MenuItem gotoParentAction = new MenuItem(menu, SWT.PUSH);
-			gotoParentAction.setText("Command Line Shell at Project Folder: " + finalGotoFile.getAbsolutePath());
-			gotoParentAction.addSelectionListener(new SelectionAdapter() {
+			MenuItem shellAtParentAction = new MenuItem(menu, SWT.PUSH);
+			shellAtParentAction.setText("Command Line Shell at Project Folder: " + finalGotoFile.getAbsolutePath());
+			shellAtParentAction.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					shell(finalGotoFile);
 				}
@@ -185,9 +185,9 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 			new MenuItem(menu, SWT.SEPARATOR);
 		}
 		
-		MenuItem gotoAction = new MenuItem(menu, SWT.PUSH);
-		gotoAction.setText("Command Line Shell at...");
-		gotoAction.addSelectionListener(new SelectionAdapter() {
+		MenuItem shellAtAction = new MenuItem(menu, SWT.PUSH);
+		shellAtAction.setText("Command Line Shell at...");
+		shellAtAction.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				String defaultValue = "";
 				Clipboard clipboard = new Clipboard(window.getShell().getDisplay());
@@ -219,9 +219,9 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 		new MenuItem(menu, SWT.SEPARATOR);
 
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-		MenuItem gotoWorkspace = new MenuItem(menu, SWT.PUSH);
-		gotoWorkspace.setText("Command Line Shell at Workspace Folder: " + workspaceLocation.toFile().getAbsolutePath());
-		gotoWorkspace.addSelectionListener(new SelectionAdapter() {
+		MenuItem shellAtWorkspace = new MenuItem(menu, SWT.PUSH);
+		shellAtWorkspace.setText("Command Line Shell at Workspace Folder: " + workspaceLocation.toFile().getAbsolutePath());
+		shellAtWorkspace.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				shell(workspaceLocation.toFile());
 			}
@@ -231,9 +231,9 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 		if (configurationLocation != null) {
 			final URL url = configurationLocation.getURL();
 			if (url != null && new File(url.getFile()).exists()) {
-				MenuItem gotoConfigurationFolder = new MenuItem(menu, SWT.PUSH);
-				gotoConfigurationFolder.setText("Command Line Shell at Configuration Folder: " + url.getFile());
-				gotoConfigurationFolder.addSelectionListener(new SelectionAdapter() {
+				MenuItem shellAtConfigurationFolder = new MenuItem(menu, SWT.PUSH);
+				shellAtConfigurationFolder.setText("Command Line Shell at Configuration Folder: " + url.getFile());
+				shellAtConfigurationFolder.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
 						shell(new File(url.getFile()));
 					}
@@ -245,9 +245,9 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 		if (userDataLocation != null) {
 			final URL url = userDataLocation.getURL();
 			if (url != null && (new File(url.getFile()).exists())) {
-				MenuItem gotoUserFolder = new MenuItem(menu, SWT.PUSH);
-				gotoUserFolder.setText("Command Line Shell at User Data Folder: " + url.getFile());
-				gotoUserFolder.addSelectionListener(new SelectionAdapter() {
+				MenuItem shellAtUserFolder = new MenuItem(menu, SWT.PUSH);
+				shellAtUserFolder.setText("Command Line Shell at User Data Folder: " + url.getFile());
+				shellAtUserFolder.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
 						shell(new File(url.getFile()));
 					}
@@ -258,9 +258,9 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 		if (installLocation != null) {
 			final URL url = installLocation.getURL();
 			if (url != null) {
-				MenuItem gotoInstallFolder = new MenuItem(menu, SWT.PUSH);
-				gotoInstallFolder.setText("Command Line Shell at Install Folder: " + url.getFile());
-				gotoInstallFolder.addSelectionListener(new SelectionAdapter() {
+				MenuItem shellAtInstallFolder = new MenuItem(menu, SWT.PUSH);
+				shellAtInstallFolder.setText("Command Line Shell at Install Folder: " + url.getFile());
+				shellAtInstallFolder.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
 						shell(new File(url.getFile()));
 					}
