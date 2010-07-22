@@ -46,8 +46,6 @@ public class CommandLauncher {
 						firstTime = false;
 					} else {
 						newMessageStream.println();
-						newMessageStream.println();
-						newMessageStream.println();
 					}
 					messageConsole.newMessageStream().println(command);
 					UIJob uiJob = new UIJob("") {
@@ -57,15 +55,15 @@ public class CommandLauncher {
 							if (activeWorkbenchWindow != null) {
 								IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
 								if (activePage != null) {
-									IConsoleView view;
-									try {
-										view = (IConsoleView) activePage.showView(IConsoleConstants.ID_CONSOLE_VIEW);
-										view.display(messageConsole);
+//									IConsoleView view;
+//									try {
+//										view = (IConsoleView) activePage.showView(IConsoleConstants.ID_CONSOLE_VIEW);
+//										view.display(messageConsole);
 										new Thread(new MessageConsoleWriter(messageConsole, process.getInputStream())).start();
 										new Thread(new MessageConsoleWriter(messageConsole, process.getErrorStream())).start();
-									} catch (PartInitException e) {
-										return Status.CANCEL_STATUS;
-									}
+//									} catch (PartInitException e) {
+//										return Status.CANCEL_STATUS;
+//									}
 								}
 							}
 							return Status.OK_STATUS;
