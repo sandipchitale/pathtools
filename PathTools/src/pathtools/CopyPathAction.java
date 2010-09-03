@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,9 +67,16 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 	}
 
 	public void run(IAction action) {
-		copyToClipboard(
-				Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.LAST_COPY_PATH_FORMAT),
-				files);
+		if (files.size() == 0) {
+			copyToClipboard(
+					Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.LAST_COPY_PATH_FORMAT),
+					Arrays.asList(ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile()));
+		} else {
+			copyToClipboard(
+					Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.LAST_COPY_PATH_FORMAT),
+					files);
+		}
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -164,7 +172,6 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 				}
 			}
 		}
-		action.setEnabled(files.size() > 0);
 	}
     	
 	private static String[] pathFormats = new String[] {
