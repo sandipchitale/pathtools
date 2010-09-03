@@ -55,74 +55,71 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 	}
 
 	public void run(IAction action) {
-		// Is this a physical file on the disk ?
-		if (fileObject != null) {
+		if (fileObject == null) {
+			shell(ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile());
+		} else {
+			// Is this a physical file on the disk ?
 			shell(fileObject);
 		}
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
 		fileObject = null;
-		action.setEnabled(false);
-		try {
-			IPath location = null;
-			IPath projectLocation = null;
-			if (selection instanceof IStructuredSelection) {
-				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-				// Is only one item selected?
-				if (structuredSelection.size() == 1) {
-					Object firstElement = structuredSelection.getFirstElement();
-					if (firstElement instanceof IResource) {
-						// Is this an IResource ?
-						IResource resource = (IResource) firstElement;
+		IPath location = null;
+		IPath projectLocation = null;
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			// Is only one item selected?
+			if (structuredSelection.size() == 1) {
+				Object firstElement = structuredSelection.getFirstElement();
+				if (firstElement instanceof IResource) {
+					// Is this an IResource ?
+					IResource resource = (IResource) firstElement;
+					location = resource.getLocation();
+					if (!(resource instanceof IProject)) {
+						IProject project = resource.getProject();
+						projectLocation = project.getLocation();
+					}
+				} else if (firstElement instanceof IAdaptable) {
+					IAdaptable adaptable = (IAdaptable) firstElement;
+					// Is this an IResource adaptable ?
+					IResource resource = (IResource) adaptable
+							.getAdapter(IResource.class);
+					if (resource != null) {
 						location = resource.getLocation();
 						if (!(resource instanceof IProject)) {
 							IProject project = resource.getProject();
 							projectLocation = project.getLocation();
 						}
-					} else if (firstElement instanceof IAdaptable) {
-						IAdaptable adaptable = (IAdaptable) firstElement;
-						// Is this an IResource adaptable ?
-						IResource resource = (IResource) adaptable
-								.getAdapter(IResource.class);
-						if (resource != null) {
-							location = resource.getLocation();
-							if (!(resource instanceof IProject)) {
-								IProject project = resource.getProject();
-								projectLocation = project.getLocation();
+					}
+				}
+			}
+		}
+		if (fileObject == null) {
+			if (window != null) {
+				IWorkbenchPage activePage = window.getActivePage();
+				if (activePage != null) {
+					IWorkbenchPart activeEditor = activePage.getActivePart();
+					if (activeEditor instanceof ITextEditor) {
+						ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
+						IEditorInput editorInput = abstractTextEditor.getEditorInput();
+						if (editorInput instanceof IFileEditorInput) {
+							IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+							IFile iFile = fileEditorInput.getFile();
+							if (iFile != null) {
+								location = iFile.getLocation();
 							}
 						}
 					}
 				}
 			}
-			if (fileObject == null) {
-				if (window != null) {
-					IWorkbenchPage activePage = window.getActivePage();
-					if (activePage != null) {
-						IWorkbenchPart activeEditor = activePage.getActivePart();
-						if (activeEditor instanceof ITextEditor) {
-							ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
-							IEditorInput editorInput = abstractTextEditor.getEditorInput();
-							if (editorInput instanceof IFileEditorInput) {
-								IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
-								IFile iFile = fileEditorInput.getFile();
-								if (iFile != null) {
-									location = iFile.getLocation();
-								}
-							}
-						}
-					}
-				}
-			}
-			if (location != null) {
-				fileObject = location.toFile();
-			}
-			
-			if (projectLocation != null) {
-				projectFileObject = projectLocation.toFile();
-			}
-		} finally {
-			action.setEnabled(fileObject != null);
+		}
+		if (location != null) {
+			fileObject = location.toFile();
+		}
+		
+		if (projectLocation != null) {
+			projectFileObject = projectLocation.toFile();
 		}
 	}
 	private Menu exploreMenuInFileMenu;
