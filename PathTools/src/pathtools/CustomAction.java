@@ -1,6 +1,7 @@
 package pathtools;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -132,36 +133,37 @@ public class CustomAction implements IObjectActionDelegate, IMenuCreator {
 	
 	private void fillMenu(Menu menu) {
 		if (fileObject != null) {
-			String[] commandsArray = null;
+			String[][] commandsArray = null;
 			if (fileObject.isDirectory()) {
 				commandsArray = Activator.getDefault().getFolderCustomActions();
 			} else {
 				commandsArray = Activator.getDefault().getFileCustomActions();
 			}
 			if (commandsArray.length > 0) {
-				for (String command : commandsArray) {
-					MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);					
-					commandMenuItem.setText(Utilities.formatCommand(command,
-							fileObject));
-					final String finalCommand = command;
-					commandMenuItem.addSelectionListener(new SelectionAdapter() {
-						public void widgetSelected(SelectionEvent e) {
-							Utilities.launch(finalCommand,
-									fileObject);
-						}
-					});
+				for (final String[] command : commandsArray) {
+					Pattern compiledPattern = Pattern.compile(asRegEx(command[1], false));
+					if (compiledPattern.matcher(fileObject.getName()).matches()) {
+						MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);					
+						commandMenuItem.setText(Utilities.formatCommand(command[0],
+								fileObject));
+						commandMenuItem.addSelectionListener(new SelectionAdapter() {
+							public void widgetSelected(SelectionEvent e) {
+								Utilities.launch(command[2],
+										fileObject);
+							}
+						});
+					}
 				}
 				new MenuItem(menu, SWT.SEPARATOR);
 			}
-			MenuItem preferecesMenuItem = new MenuItem(menu, SWT.PUSH);
-			preferecesMenuItem.setText("Edit Custom commands...");
-			preferecesMenuItem.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					showPathToolsPreferences();
-				}
-			});
-			
 		}
+		MenuItem preferecesMenuItem = new MenuItem(menu, SWT.PUSH);
+		preferecesMenuItem.setText("Edit Custom commands...");
+		preferecesMenuItem.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				showPathToolsPreferences();
+			}
+		});
 	}
 
 	private void showPathToolsPreferences() {
@@ -172,5 +174,32 @@ public class CustomAction implements IObjectActionDelegate, IMenuCreator {
 				displayedIds,
 				null);
 		pathToolsPreferenceDialog.open();
+	}
+	
+	private static final Pattern PATTERN_BACK_SLASH = Pattern.compile("\\\\"); //$NON-NLS-1$
+
+	private static final Pattern PATTERN_QUESTION = Pattern.compile("\\?"); //$NON-NLS-1$
+
+	private static final Pattern PATTERN_STAR = Pattern.compile("\\*"); //$NON-NLS-1$
+
+	private static final Pattern PATTERN_LBRACKET = Pattern.compile("\\("); //$NON-NLS-1$
+
+	private static final Pattern PATTERN_RBRACKET = Pattern.compile("\\)"); //$NON-NLS-1$
+
+	/*
+	 * Converts user string to regular expres '*' and '?' to regEx variables.
+	 * 
+	 */
+	private static String asRegEx(String pattern, boolean group) {
+		// Replace \ with \\, * with .* and ? with .
+		// Quote remaining characters
+		String result1 = PATTERN_BACK_SLASH.matcher(pattern).replaceAll("\\\\E\\\\\\\\\\\\Q"); //$NON-NLS-1$
+		String result2 = PATTERN_STAR.matcher(result1).replaceAll("\\\\E.*\\\\Q"); //$NON-NLS-1$
+		String result3 = PATTERN_QUESTION.matcher(result2).replaceAll("\\\\E.\\\\Q"); //$NON-NLS-1$
+		if (group) {
+			result3 = PATTERN_LBRACKET.matcher(result3).replaceAll("\\\\E(\\\\Q"); //$NON-NLS-1$
+			result3 = PATTERN_RBRACKET.matcher(result3).replaceAll("\\\\E)\\\\Q"); //$NON-NLS-1$
+		}
+		return "\\Q" + result3 + "\\E"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

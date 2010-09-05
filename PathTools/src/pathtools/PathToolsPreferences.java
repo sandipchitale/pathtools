@@ -39,6 +39,8 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 	static final String FOLDER_COMMANDS_KEY = "folderCommands";
 	static final String FILE_COMMANDS_KEY = "fileCommands";
 	
+	static final String TABLE_KEY = "table";
+	
 	static String defaultFolderCommands = "";
 	static String defaultFileCommands = "";
 
@@ -172,24 +174,45 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 		prefs.setDefault(LAST_COPY_PATH_FORMAT, defaultLLastCopyPathFormat);
 	}
 	
-	private static String SEPARATOR = "@@@@";
+	private static String LINE_SEPARATOR = "@@@@";
+	private static String FIELD_SEPARATOR = "####";
 	
-	static String createList(String[] items) {
+	static String createList(String[][] commands) {
 		StringBuilder stringBuilder = new StringBuilder();
-		for (String item : items) {
-			if (stringBuilder.length() > 0) {
-				stringBuilder.append(SEPARATOR);
+		for (int i = 0; i < commands.length; i++) {
+			if (i > 0) {
+				stringBuilder.append(LINE_SEPARATOR);
 			}
-			stringBuilder.append(item);
+			String[] command = commands[i];
+			for (int j = 0; j < command.length;j++) {
+				if (j > 0) {
+					stringBuilder.append(FIELD_SEPARATOR);
+				}
+				stringBuilder.append(command[j]);
+			}
 		}
 		return stringBuilder.toString();
 	}
 	
-	static String[] parseString(String stringList) {
-		if (stringList != null && stringList.length() > 0) {
-			return stringList.split(Pattern.quote(SEPARATOR));
+	static String[][] parseString(String commandsString) {
+		if (commandsString != null && commandsString.length() > 0) {
+			String[] commands = commandsString.split(Pattern.quote(LINE_SEPARATOR));
+			String[][] parsedCommands = new String[commands.length][];
+			for (int i = 0; i < commands.length; i++) {
+				String command = commands[i];
+				if (command.indexOf(FIELD_SEPARATOR) == -1) {
+					parsedCommands[i] = new String[] {command, "*.*", command};
+				} else {
+					String[] fields = command.split(Pattern.quote(FIELD_SEPARATOR));
+					parsedCommands[i] = new String[fields.length];
+					for (int j = 0; j < fields.length; j++) {
+						parsedCommands[i][j] = fields[j];
+					}
+				}
+			}
+			return parsedCommands;
 		}
-		return new String[0];
+		return new String[0][0];
 	}
 
 }

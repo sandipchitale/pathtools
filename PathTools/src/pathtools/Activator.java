@@ -56,11 +56,11 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 	
-	String[] getFolderCustomActions() {
+	String[][] getFolderCustomActions() {
 		return PathToolsPreferences.parseString(getPreferenceStore().getString(PathToolsPreferences.FOLDER_COMMANDS_KEY));
 	}
 	
-	String[] getFileCustomActions() {
+	String[][] getFileCustomActions() {
 		return PathToolsPreferences.parseString(getPreferenceStore().getString(PathToolsPreferences.FILE_COMMANDS_KEY));
 	}
 
