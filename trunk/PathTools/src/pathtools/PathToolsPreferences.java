@@ -201,7 +201,7 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 			for (int i = 0; i < commands.length; i++) {
 				String command = commands[i];
 				if (command.indexOf(FIELD_SEPARATOR) == -1) {
-					parsedCommands[i] = new String[] {command, "*.*", command};
+					parsedCommands[i] = new String[] {command, "*", command};
 				} else {
 					String[] fields = command.split(Pattern.quote(FIELD_SEPARATOR));
 					parsedCommands[i] = new String[fields.length];
