@@ -17,6 +17,9 @@ import org.eclipse.swt.events.MenuAdapter;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -156,7 +159,31 @@ public class CustomAction implements IObjectActionDelegate, IMenuCreator {
 				}
 				new MenuItem(menu, SWT.SEPARATOR);
 			}
+			
+			String fileObjectName = fileObject.getName();
+			int dot = fileObjectName.lastIndexOf(".");
+			if (dot != -1) {
+				String extension = fileObjectName.substring(dot);
+				if (extension.length() > 0) {
+					final Program program = Program.findProgram(extension);
+					if (program != null) {
+						MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);					
+						commandMenuItem.setText(program.getName() + " " + fileObject.getAbsolutePath());
+						ImageData imageData = program.getImageData();
+						if (imageData != null) {
+							commandMenuItem.setImage(new Image(commandMenuItem.getDisplay(), imageData));
+						}
+						commandMenuItem.addSelectionListener(new SelectionAdapter() {
+							public void widgetSelected(SelectionEvent e) {
+								program.execute(fileObject.getAbsolutePath());
+							}
+						});
+						new MenuItem(menu, SWT.SEPARATOR);
+					}
+				}
+			}
 		}
+		
 		MenuItem preferecesMenuItem = new MenuItem(menu, SWT.PUSH);
 		preferecesMenuItem.setText("Edit Custom commands...");
 		preferecesMenuItem.addSelectionListener(new SelectionAdapter() {
