@@ -32,14 +32,15 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * This launches the OS file explorer showing the selected folder or the folder
  * containing the selected file.
- * 
+ *
  * @author Sandip V. Chitale
- * 
+ *
  */
 public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 	private File fileObject;
@@ -117,6 +118,20 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 								location = iFile.getLocation();
 							}
 						}
+					} else if (activeEditor instanceof MultiPageEditorPart) {
+						MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) activeEditor;
+						Object multiPageEditorActivePage = multiPageEditorPart.getSelectedPage();
+						if (multiPageEditorActivePage instanceof ITextEditor) {
+							ITextEditor abstractTextEditor = (ITextEditor) multiPageEditorActivePage;
+							IEditorInput editorInput = abstractTextEditor.getEditorInput();
+							if (editorInput instanceof IFileEditorInput) {
+								IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+								IFile iFile = fileEditorInput.getFile();
+								if (iFile != null) {
+									location = iFile.getLocation();
+								}
+							}
+						}
 					}
 				}
 			}
@@ -141,11 +156,11 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 					menuItem.dispose();
 				}
 				fillMenu(exploreMenuInFileMenu);
-			}			
+			}
 		});
 		return exploreMenuInFileMenu;
 	}
-	
+
 	private Menu exploreMenu;
 	public Menu getMenu(Control parent) {
 		if (exploreMenu != null) {
@@ -154,7 +169,7 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 		exploreMenu = new Menu(parent);
 		fillMenu(exploreMenu);
 		return exploreMenu;
-		
+
 	}
 
 	private void fillMenu(Menu menu) {
@@ -272,7 +287,7 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 		MenuItem userHomeFolder = new MenuItem(menu, SWT.PUSH);
 		userHomeFolder.setText("Go to user.home: " + System.getProperty("user.home"));
 		userHomeFolder.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {				
+			public void widgetSelected(SelectionEvent e) {
 				explore(new File(System.getProperty("user.home")));
 			}
 		});
@@ -286,12 +301,12 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 		MenuItem javaIoTmpFolder = new MenuItem(menu, SWT.PUSH);
 		javaIoTmpFolder.setText("Go to java.io.tmpdir: " + System.getProperty("java.io.tmpdir"));
 		javaIoTmpFolder.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {				
+			public void widgetSelected(SelectionEvent e) {
 				explore(new File(System.getProperty("java.io.tmpdir")));
 			}
 		});
 	}
-	
+
 	private static void explore(File file) {
 		// Get the configured explorer commands for folder and file
 		if (file != null && file.exists()) {
@@ -301,10 +316,15 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 			if (file.isDirectory()) {
 				exploreCommand = folderExploreComand;
 			} else {
-				exploreCommand = fileExploreComand;				
+				exploreCommand = fileExploreComand;
 			}
 			if (exploreCommand != null) {
-				Utilities.launch(exploreCommand, file);
+				try {
+					Activator.getDefault().setFile(file);
+					Utilities.launch(exploreCommand);
+				} finally {
+					Activator.getDefault().setFile(null);
+				}
 			}
 		}
 	}

@@ -28,9 +28,9 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * This launches the external text editor for selected folder or file.
- * 
+ *
  * @author Sandip V. Chitale
- * 
+ *
  */
 public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 	private File fileObject;
@@ -81,7 +81,7 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 					}
 				}
 			}
-			
+
 		}
 		if (fileObject == null) {
 			if (window != null) {
@@ -106,7 +106,7 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 			fileObject = location.toFile();
 		}
 	}
-	
+
 	private Menu editMenuInFileMenu;
 	public Menu getMenu(Menu parent) {
 		editMenuInFileMenu = new Menu(parent);
@@ -118,11 +118,11 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 					menuItem.dispose();
 				}
 				fillMenu(editMenuInFileMenu);
-			}			
+			}
 		});
 		return editMenuInFileMenu;
 	}
-	
+
 	private Menu editMenu;
 	public Menu getMenu(Control parent) {
 		if (editMenu != null) {
@@ -132,7 +132,7 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 		fillMenu(editMenu);
 		return editMenu;
 	}
-	
+
 	private void fillMenu(Menu menu) {
 		if (fileObject != null) {
 			MenuItem runAction = new MenuItem(menu, SWT.PUSH);
@@ -169,10 +169,15 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 			if (file.isDirectory()) {
 				editCommand = folderEditComand;
 			} else {
-				editCommand = fileEditComand;				
+				editCommand = fileEditComand;
 			}
 			if (editCommand != null) {
-				Utilities.launch(editCommand, file);
+				try {
+					Activator.getDefault().setFile(file);
+					Utilities.launch(editCommand);
+				} finally {
+					Activator.getDefault().setFile(null);
+				}
 			}
 		}
 	}

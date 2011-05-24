@@ -318,4 +318,79 @@
             class="pathtools.PathToolsPreferences">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+      <variable
+            description="Fully qualified path of selection in OS specific format."
+            name="path"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Fully qualified path of selection with \ as the separator"
+            name="path-backslashes"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Fully qualified path of selection with / as the separator"
+            name="path-slashes"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Name of selection."
+            name="name"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Extension of selection."
+            name="extension"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Fully qualified path of selection&apos;s parent in OS specific format."
+            name="parent-path"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Fully qualified path of selection&apos;s parent with / as the separator"
+            name="parent-path-slashes"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Name of selection sans extension."
+            name="name-sans-extension"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Fully qualified path of selection&apos;s parent with \ as the separatorrator"
+            name="parent-path-backslashes"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Name of selection&apos;s parent"
+            name="parent-name"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Name of selection&apos;s parent sans extension."
+            name="parent-name-sans-extension"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+      <variable
+            description="Extension of selection&apos; parent."
+            name="parent-extension"
+            resolver="pathtools.PathToolsVariableResolver"
+            supportsArgument="false">
+      </variable>
+   </extension>
 </plugin>

@@ -1,59 +1,59 @@
 package pathtools;
 
-import java.io.File;
-import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.eclipse.core.internal.variables.StringVariableManager;
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * This implements some utility methods.
- * 
+ *
  * @author Sandip V. Chitale
- * 
+ *
  */
+@SuppressWarnings("restriction")
 public class Utilities {
-	
-	static void launch(String command, File fileObject) {
+
+	static void launch(String command) {
 		// Launch the explore command
-		CommandLauncher.launch(formatCommand(command, fileObject, true));
-	}
-	
-	static String formatCommand(String command, File fileObject) {
-		return formatCommand(command, fileObject, false);
-	}
-	static String formatCommand(String command, File fileObject, boolean escapeBackslash) {
-		String[] paths = new String[] {
-			fileObject.getAbsolutePath().replace('/', File.separatorChar).replace('\\', File.separatorChar),
-			fileObject.getParentFile().getAbsolutePath().replace('/', File.separatorChar).replace('\\', File.separatorChar),
-			fileObject.getAbsolutePath().replace('\\', '/'),
-			fileObject.getParentFile().getAbsolutePath().replace('\\', '/'),
-			fileObject.getAbsolutePath().replace('/', '\\'),
-			fileObject.getParentFile().getAbsolutePath().replace('/', '\\'),
-			fileObject.getName(),
-			fileObject.getParentFile().getName()
-		};
-		return MessageFormat.format(Utilities.convertParameters(command), (Object[]) (escapeBackslash? escapeBackslash(paths) : paths));
-	}
-	
-	private static String[] escapeBackslash(String[] paths) {
-		String[] escapedPaths = new String[paths.length];
-		for (int i = 0; i < paths.length; i++) {
-			escapedPaths[i] = paths[i].replaceAll(Pattern.quote("\\"), Matcher.quoteReplacement("\\\\"));
-		}
-		return escapedPaths;
+		CommandLauncher.launch(formatCommand(command, true));
 	}
 
+	static String formatCommand(String command) {
+		return formatCommand(command, false);
+	}
+
+	static String formatCommand(String command, boolean escapeBackslash) {
+		try {
+			// First substitute any variables ${...}
+			command = StringVariableManager.getDefault().performStringSubstitution(command);
+			// Now old style vaiable i.e. {...}
+			return StringVariableManager.getDefault().performStringSubstitution(Utilities.convertParameters(command));
+		} catch (CoreException e) {
+			return "";
+		}
+	}
+
+//	private static String[] escapeBackslash(String[] paths) {
+//		String[] escapedPaths = new String[paths.length];
+//		for (int i = 0; i < paths.length; i++) {
+//			escapedPaths[i] = paths[i].replaceAll(Pattern.quote("\\"), Matcher.quoteReplacement("\\\\"));
+//		}
+//		return escapedPaths;
+//	}
+
 	static String convertParameters(String command) {
-		return command.replaceAll(Pattern.quote(PathToolsPreferences.FILE_PATH), "{0}").replaceAll(
-				Pattern.quote(PathToolsPreferences.FILE_PARENT_PATH), "{1}").replaceAll(
-				Pattern.quote(PathToolsPreferences.FILE_PATH_SLASHES), "{2}").replaceAll(
-				Pattern.quote(PathToolsPreferences.FILE_PARENT_PATH_SLASHES), "{3}").replaceAll(
-				Pattern.quote(PathToolsPreferences.FILE_PATH_BACKSLASHES), "{4}").replaceAll(
-				Pattern.quote(PathToolsPreferences.FILE_PARENT_PATH_BACKSLASHES), "{5}").replaceAll(
-				Pattern.quote(PathToolsPreferences.FILE_NAME), "{6}").replaceAll(
-				Pattern.quote(PathToolsPreferences.FILE_PARENT_NAME), "{7}");
+		return command
+				.replaceAll(Pattern.quote(PathToolsPreferences.FILE_PATH), "\\$$0")
+				.replaceAll(Pattern.quote(PathToolsPreferences.FILE_PARENT_PATH), "\\$$0")
+				.replaceAll(Pattern.quote(PathToolsPreferences.FILE_PATH_SLASHES), "\\$$0")
+				.replaceAll(Pattern.quote(PathToolsPreferences.FILE_PARENT_PATH_SLASHES), "\\$$0")
+				.replaceAll(Pattern.quote(PathToolsPreferences.FILE_PATH_BACKSLASHES), "\\$$0")
+				.replaceAll(Pattern.quote(PathToolsPreferences.FILE_PARENT_PATH_BACKSLASHES), "\\$$0")
+				.replaceAll(Pattern.quote(PathToolsPreferences.FILE_NAME), "\\$$0")
+				.replaceAll(Pattern.quote(PathToolsPreferences.FILE_PARENT_NAME), "\\$$0");
 	}
 
 	/**
@@ -87,9 +87,9 @@ public class Utilities {
 	 * command names or arguments. This is because programs under Windows
 	 * frequently perform their own parsing and unescaping (since the shell
 	 * cannot be relied on to do this). On Unix, this problem should not occur.
-	 * 
+	 *
 	 * Copied from org.openide.util.Utilities.
-	 * 
+	 *
 	 * @param s
 	 *            a string to parse
 	 * @return an array of parameters

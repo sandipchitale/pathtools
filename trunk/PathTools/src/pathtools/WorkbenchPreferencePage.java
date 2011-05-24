@@ -7,11 +7,11 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
- * 
+ *
  * This implements the preferences page using the FieldEditor.
- * 
+ *
  * @author Sandip V. Chitale
- * 
+ *
  */
 public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
@@ -44,7 +44,8 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 				+ PathToolsPreferences.FILE_PATH_BACKSLASHES
 				+ "  - path of the selected object with \\ file separator.\n"
 				+ PathToolsPreferences.FILE_PARENT_PATH_BACKSLASHES
-				+ " - path of the parent of selected object with \\ file separator.\n";
+				+ " - path of the parent of selected object with \\ file separator.\n\n"
+				+ "You can also use any of the available substitution variables such as ${eclipse_home}.\n\n";
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 				PathToolsPreferences.FOLDER_SHELL_COMMAND_KEY, "Shell at Folder:",
 				getFieldEditorParent());
 		addField(folderShellCommad);
-		
+
 		// File shell command field
 		StringFieldEditor fileShellCommad = new StringFieldEditor(
 				PathToolsPreferences.FILE_SHELL_COMMAND_KEY, "Shell at File:",
@@ -100,10 +101,10 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 					new int[] {150, 100, 300},
 					parent);
 		}
-		
+
 		@Override
 		protected String createList(String[][] items) {
-			return PathToolsPreferences.createList(items); 
+			return PathToolsPreferences.createList(items);
 		}
 
 		@Override
@@ -115,7 +116,7 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 		protected String[] getNewInputObject() {
 			return new String[] {"", "*", ""};
 		}
-		
+
 	}
 
 }

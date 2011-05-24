@@ -20,12 +20,12 @@ import org.eclipse.ui.progress.UIJob;
 
 /**
  * A simple external process launcher.
- * 
+ *
  * @author Sandip V. Chitale
- * 
+ *
  */
 public class CommandLauncher {
-	
+
 	private static MessageConsole messageConsole;
 	private static boolean firstTime = true;
 
@@ -68,7 +68,7 @@ public class CommandLauncher {
 					};
 					uiJob.schedule();
 
-					
+
 					int status = process.waitFor();
 					if (status == 0) {
 						// Good
@@ -99,24 +99,24 @@ public class CommandLauncher {
 			}
 		}, "Launching - " + command).start();
 	}
-	
+
 	private static MessageConsole getMessageConsole() {
 		if (messageConsole == null) {
 			messageConsole = new MessageConsole("Path Tools Console", null);
-			ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[]{messageConsole});			
+			ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[]{messageConsole});
 		}
 		return messageConsole;
 	}
-	
-	private static class MessageConsoleWriter implements Runnable {		
+
+	private static class MessageConsoleWriter implements Runnable {
 		private final MessageConsole messageConsole;
 		private final InputStream from;
-		
+
 		private MessageConsoleWriter(MessageConsole messageConsole, InputStream from) {
 			this.messageConsole = messageConsole;
 			this.from = from;
 		}
-		
+
 		public void run() {
 			final MessageConsoleStream messageConsoleStream = messageConsole.newMessageStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(from));
@@ -136,7 +136,7 @@ public class CommandLauncher {
 				} catch (IOException e) {
 				}
 			}
-		}		
+		}
 	}
 
 }
