@@ -33,15 +33,15 @@ import org.eclipse.swt.widgets.Widget;
  * displays a table containing the rows of values, buttons for adding,
  * duplicating and removing rows and buttons to adjust the order of rows in the
  * table. The table also allows in-place editing of values.
- * 
+ *
  * <p>
  * Subclasses must implement the <code>parseString</code>,
  * <code>createList</code>, and <code>getNewInputObject</code> framework
  * methods.
  * </p>
- * 
+ *
  * @author Sandip V. Chitale
- * 
+ *
  * @since 1.0.54
  */
 public abstract class TableFieldEditor extends FieldEditor {
@@ -102,7 +102,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Creates a table field editor.
-	 * 
+	 *
 	 * @param name
 	 *            the name of the preference this field editor works on
 	 * @param labelText
@@ -113,7 +113,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	 *            the widths of columns
 	 * @param parent
 	 *            the parent of the field editor's control
-	 * 
+	 *
 	 */
 	protected TableFieldEditor(String name, String labelText,
 			String[] columnNames, int[] columnWidths, Composite parent) {
@@ -129,7 +129,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	 * <p>
 	 * Subclasses must implement this method.
 	 * </p>
-	 * 
+	 *
 	 * @param items
 	 *            the list of items
 	 * @return the combined string
@@ -143,7 +143,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	 * <p>
 	 * Subclasses must implement this method.
 	 * </p>
-	 * 
+	 *
 	 * @param string
 	 *            the string
 	 * @return an array of array of <code>string</code>
@@ -156,14 +156,14 @@ public abstract class TableFieldEditor extends FieldEditor {
 	 * <p>
 	 * Subclasses must implement this method.
 	 * </p>
-	 * 
+	 *
 	 * @return a new item
 	 */
 	protected abstract String[] getNewInputObject();
 
 	/**
 	 * Creates the Add, Remove, Up, and Down button in the given button box.
-	 * 
+	 *
 	 * @param box
 	 *            the box for the buttons
 	 */
@@ -177,7 +177,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Return the Add button.
-	 * 
+	 *
 	 * @return the button
 	 */
 	protected Button getAddButton() {
@@ -186,7 +186,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Return the Duplicate button.
-	 * 
+	 *
 	 * @return the button
 	 */
 	protected Button getDuplicateButton() {
@@ -195,7 +195,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Return the Remove button.
-	 * 
+	 *
 	 * @return the button
 	 */
 	protected Button getRemoveButton() {
@@ -204,7 +204,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Return the Up button.
-	 * 
+	 *
 	 * @return the button
 	 */
 	protected Button getUpButton() {
@@ -213,7 +213,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Return the Down button.
-	 * 
+	 *
 	 * @return the button
 	 */
 	protected Button getDownButton() {
@@ -222,7 +222,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Helper method to create a push button.
-	 * 
+	 *
 	 * @param parent
 	 *            the parent control
 	 * @param key
@@ -359,7 +359,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	/**
 	 * Returns this field editor's button box containing the Add, Remove, Up,
 	 * and Down button.
-	 * 
+	 *
 	 * @param parent
 	 *            the parent control
 	 * @return the button box
@@ -392,7 +392,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Returns this field editor's table control.
-	 * 
+	 *
 	 * @param parent
 	 *            the parent control
 	 * @return the table control
@@ -501,7 +501,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	/**
 	 * Returns this field editor's selection listener. The listener is created
 	 * if necessary.
-	 * 
+	 *
 	 * @return the selection listener
 	 */
 	private SelectionListener getSelectionListener() {
@@ -517,7 +517,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	 * This method is internal to the framework; subclassers should not call
 	 * this method.
 	 * </p>
-	 * 
+	 *
 	 * @return the shell
 	 */
 	protected Shell getShell() {
@@ -588,17 +588,17 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Invoked when the selection in the list has changed.
-	 * 
+	 *
 	 * <p>
 	 * The default implementation of this method utilizes the selection index
 	 * and the size of the list to toggle the enabled state of the up, down and
 	 * remove buttons.
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Subclasses may override.
 	 * </p>
-	 * 
+	 *
 	 */
 	protected void selectionChanged() {
 		int index = table.getSelectionIndex();
@@ -621,7 +621,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 	/**
 	 * Moves the currently selected item up or down.
-	 * 
+	 *
 	 * @param up
 	 *            <code>true</code> if the item should move up, and
 	 *            <code>false</code> if it should move down

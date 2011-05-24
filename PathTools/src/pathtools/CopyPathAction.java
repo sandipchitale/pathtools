@@ -36,31 +36,33 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * This copies the absolute paths of selected folders and files (one per line)
  * into the Clipboard.
- * 
+ *
  * @author Sandip V. Chitale
- * 
+ *
  */
+@SuppressWarnings("rawtypes")
 public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 	private List<File> files = new LinkedList<File>();
 	private List<IPath> resourcePaths = new LinkedList<IPath>();
 	private List<String> javaQualifiedNames = new LinkedList<String>();
-	
+
 	protected IWorkbenchWindow window;
 
 	public void dispose() {
 		if (copyPathsMenuInEditMenu != null) {
-			copyPathsMenuInEditMenu.dispose(); 
+			copyPathsMenuInEditMenu.dispose();
 		}
 		if (copyPathsMenu != null) {
-			copyPathsMenu.dispose(); 
+			copyPathsMenu.dispose();
 		}
 	}
-	
+
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.window = targetPart.getSite().getWorkbenchWindow();
 		action.setMenuCreator(this);
@@ -76,12 +78,11 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 					Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.LAST_COPY_PATH_FORMAT),
 					files);
 		}
-		
+
 	}
 
-	@SuppressWarnings("unchecked")
 	public void selectionChanged(IAction action, ISelection selection) {
-		action.setText("Copy " + 
+		action.setText("Copy " +
 				Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.LAST_COPY_PATH_FORMAT));
 		// Start with a clear list
 		files.clear();
@@ -168,12 +169,30 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 								}
 							}
 						}
+					} else if (activeEditor instanceof MultiPageEditorPart) {
+						MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) activeEditor;
+						Object multiPageEditorActivePage = multiPageEditorPart.getSelectedPage();
+						if (multiPageEditorActivePage instanceof ITextEditor) {
+							ITextEditor abstractTextEditor = (ITextEditor) multiPageEditorActivePage;
+							IEditorInput editorInput = abstractTextEditor.getEditorInput();
+							if (editorInput instanceof IFileEditorInput) {
+								IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+								IFile iFile = fileEditorInput.getFile();
+								if (iFile != null) {
+									File file = iFile.getLocation().toFile();
+									if (file != null) {
+										files.add(file);
+										resourcePaths.add(iFile.getFullPath());
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 		}
 	}
-    	
+
 	private static String[] pathFormats = new String[] {
 		PathToolsPreferences.FILE_PATH,
 		PathToolsPreferences.FILE_PARENT_PATH,
@@ -194,7 +213,7 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 		fillMenu(copyPathsMenuInEditMenu);
 		return copyPathsMenuInEditMenu;
 	}
-	
+
 	private Menu copyPathsMenu;
 	public Menu getMenu(Control parent) {
 		if (copyPathsMenu != null) {
@@ -204,11 +223,11 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 		fillMenu(copyPathsMenu);
 		return copyPathsMenu;
 	}
-	
+
 	private void fillMenu(Menu menu)
 	{
 		for (String pathFormat: pathFormats) {
-			MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);					
+			MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);
 			commandMenuItem.setText("Copy " + pathFormat);
 			final String finalPathFormat = pathFormat;
 			commandMenuItem.addSelectionListener(new SelectionAdapter() {
@@ -223,9 +242,9 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 		for (MenuItem menuItem : menu.getItems()) {
 			menuItem.setEnabled(enable);
 		}
-		
+
 		new MenuItem(menu, SWT.SEPARATOR);
-		
+
 		if (resourcePaths.size() > 0) {
 			MenuItem resourcePathsMenuItem = new MenuItem(menu, SWT.PUSH);
 			resourcePathsMenuItem.setText("Copy resource paths");
@@ -243,7 +262,7 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 				}
 			});
 		}
-		
+
 		if (javaQualifiedNames.size() > 0) {
 			MenuItem fqnMenuItem = new MenuItem(menu, SWT.PUSH);
 			fqnMenuItem.setText("Copy FQN (Java)");
@@ -261,9 +280,9 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 				}
 			});
 		}
-		
+
 		new MenuItem(menu, SWT.SEPARATOR);
-		
+
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		if (workspaceLocation != null) {
 			MenuItem copyWorkspacePath = new MenuItem(menu, SWT.PUSH);
@@ -274,7 +293,7 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 				}
 			});
 		}
-		
+
 		Location configurationLocation = Platform.getConfigurationLocation();
 		if (configurationLocation != null) {
 			final URL url = configurationLocation.getURL();
@@ -316,45 +335,51 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 				});
 			}
 		}
-		
+
 		new MenuItem(menu, SWT.SEPARATOR);
-		
+
 		MenuItem userHomeFolder = new MenuItem(menu, SWT.PUSH);
 		userHomeFolder.setText("Copy user.home: " + System.getProperty("user.home"));
 		userHomeFolder.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {				
+			public void widgetSelected(SelectionEvent e) {
 				copyToClipboard(System.getProperty("user.home"));
 			}
 		});
 		MenuItem userDirFolder = new MenuItem(menu, SWT.PUSH);
 		userDirFolder.setText("Copy user.dir: " + System.getProperty("user.dir"));
 		userDirFolder.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {				
+			public void widgetSelected(SelectionEvent e) {
 				copyToClipboard(System.getProperty("user.dir"));
 			}
 		});
 		MenuItem javaIoTmpFolder = new MenuItem(menu, SWT.PUSH);
 		javaIoTmpFolder.setText("Copy java.io.tmpdir: " + System.getProperty("java.io.tmpdir"));
 		javaIoTmpFolder.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {				
+			public void widgetSelected(SelectionEvent e) {
 				copyToClipboard(System.getProperty("java.io.tmpdir"));
 			}
-		});		
+		});
 	}
-	
+
 	private static void copyToClipboard(String pathFormat, List<File> files) {
 		// Are there any paths selected ?
-		if (files.size() > 0) {
+		int size = files.size();
+		if (size > 0) {
 			// Build a string with each path on separate line
 			StringBuilder stringBuilder = new StringBuilder();
 			for (File file : files) {
-				stringBuilder.append(Utilities.formatCommand(pathFormat, file)
-						+ (files.size() > 1 ? "\n" : ""));
+				try {
+					Activator.getDefault().setFile(file);
+					stringBuilder.append(Utilities.formatCommand(pathFormat)
+							+ (size > 1 ? "\n" : ""));
+				} finally {
+					Activator.getDefault().setFile(null);
+				}
 			}
 			copyToClipboard(stringBuilder.toString());
 		}
 	}
-	
+
 	private static void copyToClipboard(String string) {
 		// Get Clipboard
 		Clipboard clipboard = new Clipboard(PlatformUI.getWorkbench()

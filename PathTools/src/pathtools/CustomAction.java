@@ -146,15 +146,18 @@ public class CustomAction implements IObjectActionDelegate, IMenuCreator {
 				for (final String[] command : commandsArray) {
 					Pattern compiledPattern = Pattern.compile(asRegEx(command[1], false));
 					if (compiledPattern.matcher(fileObject.getName()).matches()) {
-						MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);					
-						commandMenuItem.setText(Utilities.formatCommand(command[0],
-								fileObject));
-						commandMenuItem.addSelectionListener(new SelectionAdapter() {
-							public void widgetSelected(SelectionEvent e) {
-								Utilities.launch(command[2],
-										fileObject);
-							}
-						});
+						MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);
+						try {
+							Activator.getDefault().setFile(fileObject);
+							commandMenuItem.setText(Utilities.formatCommand(command[0]));
+							commandMenuItem.addSelectionListener(new SelectionAdapter() {
+								public void widgetSelected(SelectionEvent e) {
+									Utilities.launch(command[2]);
+								}
+							});
+						} finally {
+							Activator.getDefault().setFile(null);
+						}
 					}
 				}
 				new MenuItem(menu, SWT.SEPARATOR);

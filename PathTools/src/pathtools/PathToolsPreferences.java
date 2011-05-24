@@ -12,21 +12,21 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * The preferences initializer for Path Tools
- * 
+ *
  * @author Sandip V. Chitale
- * 
+ *
  */
 public class PathToolsPreferences extends AbstractPreferenceInitializer {
-	
+
 	static final String FOLDER_EXPLORE_COMMAND_KEY = "folderExploreCommand";
 	static final String FILE_EXPLORE_COMMAND_KEY = "fileExploreCommand";
 
 	static String defaultFolderExploreCommand = "";
 	static String defaultFileExploreCommand = "";
-	
+
 	static final String FOLDER_SHELL_COMMAND_KEY = "folderShellCommand";
 	static final String FILE_SHELL_COMMAND_KEY = "fileShellCommand";
-	
+
 	static String defaultFolderShellCommand = "";
 	static String defaultFileShellCommand = "";
 
@@ -35,12 +35,12 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 
 	static String defaultFolderEditCommand = "";
 	static String defaultFileEditCommand = "";
-	
+
 	static final String FOLDER_COMMANDS_KEY = "folderCommands";
 	static final String FILE_COMMANDS_KEY = "fileCommands";
-	
+
 	static final String TABLE_KEY = "table";
-	
+
 	static String defaultFolderCommands = "";
 	static String defaultFileCommands = "";
 
@@ -52,10 +52,10 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 	static final String FILE_PARENT_PATH_SLASHES = "{parent-path-slashes}";
 	static final String FILE_PATH_BACKSLASHES = "{path-backslashes}";
 	static final String FILE_PARENT_PATH_BACKSLASHES = "{parent-path-backslashes}";
-	
+
 	static final String LAST_COPY_PATH_FORMAT = "lastCopyPathFormat";
 	static final String defaultLLastCopyPathFormat = FILE_PATH;
-	
+
 	static {
 		if (Platform.OS_MACOSX.equals(Platform.getOS())) {
 			defaultFolderExploreCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app \""
@@ -140,7 +140,7 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 	}
 
 	private Object terminalDotScpt;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -158,7 +158,7 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 						defaultFolderShellCommand = "/usr/bin/osascript \"" + terminalDotScpt + "\" \"" + PathToolsPreferences.FILE_PATH + "\"";
 						defaultFileShellCommand = "/usr/bin/osascript \"" + terminalDotScpt + "\" \"" + PathToolsPreferences.FILE_PARENT_PATH + "\"";
 					}
-				} 
+				}
 			}catch (IOException el) {
 			}
 		}
@@ -173,10 +173,10 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 		prefs.setDefault(FILE_COMMANDS_KEY, defaultFileCommands);
 		prefs.setDefault(LAST_COPY_PATH_FORMAT, defaultLLastCopyPathFormat);
 	}
-	
+
 	private static String LINE_SEPARATOR = "@@@@";
 	private static String FIELD_SEPARATOR = "####";
-	
+
 	static String createList(String[][] commands) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int i = 0; i < commands.length; i++) {
@@ -193,7 +193,7 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 		}
 		return stringBuilder.toString();
 	}
-	
+
 	static String[][] parseString(String commandsString) {
 		if (commandsString != null && commandsString.length() > 0) {
 			String[] commands = commandsString.split(Pattern.quote(LINE_SEPARATOR));

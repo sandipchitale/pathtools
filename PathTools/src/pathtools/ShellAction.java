@@ -32,6 +32,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 public class ShellAction implements IObjectActionDelegate, IMenuCreator {
@@ -108,6 +109,20 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 							IFile iFile = fileEditorInput.getFile();
 							if (iFile != null) {
 								location = iFile.getLocation();
+							}
+						}
+					} else if (activeEditor instanceof MultiPageEditorPart) {
+						MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) activeEditor;
+						Object multiPageEditorActivePage = multiPageEditorPart.getSelectedPage();
+						if (multiPageEditorActivePage instanceof ITextEditor) {
+							ITextEditor abstractTextEditor = (ITextEditor) multiPageEditorActivePage;
+							IEditorInput editorInput = abstractTextEditor.getEditorInput();
+							if (editorInput instanceof IFileEditorInput) {
+								IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+								IFile iFile = fileEditorInput.getFile();
+								if (iFile != null) {
+									location = iFile.getLocation();
+								}
 							}
 						}
 					}
@@ -300,7 +315,12 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 				shellCommand = fileShellComand;				
 			}
 			if (shellCommand != null) {
-				Utilities.launch(shellCommand, file);
+				try {
+					Activator.getDefault().setFile(file);
+					Utilities.launch(shellCommand);
+				} finally {
+					Activator.getDefault().setFile(null);
+				}
 			}
 		}
 	}
