@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -144,16 +145,58 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 			});
 			new MenuItem(menu, SWT.SEPARATOR);
 		}
-		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-		File workspaceFile = workspaceLocation.toFile();
-		if (workspaceFile.exists()) {
-			final File logFile = new File(workspaceFile, ".metadata/.log");
-			if (logFile.exists() && logFile.isFile()) {
-				MenuItem editWorkspaceLog = new MenuItem(menu, SWT.PUSH);
-				editWorkspaceLog.setText("Open in external editor " + logFile.getAbsolutePath());
-				editWorkspaceLog.addSelectionListener(new SelectionAdapter() {
+		final File logFile = Platform.getLogFileLocation().toFile();
+		if (logFile.exists() && logFile.isFile()) {
+			MenuItem editWorkspaceLog = new MenuItem(menu, SWT.PUSH);
+			editWorkspaceLog.setText("Open in external editor " + logFile.getAbsolutePath());
+			editWorkspaceLog.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					edit(logFile);
+				}
+			});
+		}
+		
+		// Support opening of .ini file.
+		String eclipseDotCommands = System.getProperty("eclipse.commands");
+		if (eclipseDotCommands != null) {
+			File iniFile = null;
+			String[] eclipseDotCommandsArray = eclipseDotCommands.split("\n");
+			for (int i = 0; i < eclipseDotCommandsArray.length; i++) {
+				if ("--launcher.ini".equals(eclipseDotCommandsArray[i])) {
+					if (i < (eclipseDotCommandsArray.length - 1)) {
+						String launcherIni = eclipseDotCommandsArray[++i];
+						iniFile = new File(launcherIni);
+						if (iniFile.exists()) {
+							break;
+						} else {
+							iniFile = null;
+						}
+					}
+				} else if ("-launcher".equals(eclipseDotCommandsArray[i])) {
+					if (i < (eclipseDotCommandsArray.length - 1)) {
+						String launcher = eclipseDotCommandsArray[++i];
+						File launcherFile = new File(launcher);
+						if (launcherFile.exists() && launcherFile.isFile()) {
+							String launcherFileName = launcherFile.getName();
+							int lastIndexOfDot = launcherFileName.lastIndexOf('.');
+							if (lastIndexOfDot == -1) {
+								iniFile = new File(launcherFile.getAbsolutePath()+".ini");
+							} else {
+								launcherFileName = launcherFileName.substring(0, lastIndexOfDot);
+								iniFile = new File(launcherFile.getParentFile(), launcherFileName+".ini");
+							}
+							break;
+						}
+					}
+				}
+			}
+			if (iniFile != null && iniFile.exists() && iniFile.isFile()) {
+				MenuItem editIniFile = new MenuItem(menu, SWT.PUSH);
+				editIniFile.setText("Open in external editor " + iniFile.getAbsolutePath());
+				final File finalIniFile = iniFile;
+				editIniFile.addSelectionListener(new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent e) {
-						edit(logFile);
+						edit(finalIniFile);
 					}
 				});
 			}
