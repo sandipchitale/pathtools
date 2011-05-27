@@ -8,6 +8,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -85,26 +87,34 @@ public class Activator extends AbstractUIPlugin {
 
 	public File[] getFiles() {
 		if (files == null) {
-			ISelectionService selectionService =
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
-			ISelection selection = selectionService.getSelection();
-			if (selection instanceof IStructuredSelection) {
-				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-				if (structuredSelection.size() == 1) {
-					Object firstElement = structuredSelection.getFirstElement();
-					if (firstElement instanceof IResource) {
-						IResource resource = (IResource) firstElement;
-						IPath location = resource.getLocation();
-						if (location != null) {
-							files = new File[] {new File(location.toOSString())};
-						}
-					} else if (firstElement instanceof IAdaptable) {
-						IAdaptable adaptable = (IAdaptable) firstElement;
-						IResource resource = (IResource) adaptable.getAdapter(IResource.class);
-						if (resource != null) {
-							IPath location = resource.getLocation();
-							if (location != null) {
-								files =  new File[] {new File(location.toOSString())};
+			IWorkbench workbench = PlatformUI.getWorkbench();
+			if (workbench != null) {
+				IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+				if (activeWorkbenchWindow != null) {
+					ISelectionService selectionService =
+						activeWorkbenchWindow.getSelectionService();
+					if (selectionService != null) {
+						ISelection selection = selectionService.getSelection();
+						if (selection instanceof IStructuredSelection) {
+							IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+							if (structuredSelection.size() == 1) {
+								Object firstElement = structuredSelection.getFirstElement();
+								if (firstElement instanceof IResource) {
+									IResource resource = (IResource) firstElement;
+									IPath location = resource.getLocation();
+									if (location != null) {
+										files = new File[] {new File(location.toOSString())};
+									}
+								} else if (firstElement instanceof IAdaptable) {
+									IAdaptable adaptable = (IAdaptable) firstElement;
+									IResource resource = (IResource) adaptable.getAdapter(IResource.class);
+									if (resource != null) {
+										IPath location = resource.getLocation();
+										if (location != null) {
+											files =  new File[] {new File(location.toOSString())};
+										}
+									}
+								}
 							}
 						}
 					}
