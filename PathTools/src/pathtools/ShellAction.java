@@ -316,10 +316,10 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 			}
 			if (shellCommand != null) {
 				try {
-					Activator.getDefault().setFile(file);
+					PathToolsVariableResolver.setFile(file);
 					Utilities.launch(shellCommand);
 				} finally {
-					Activator.getDefault().setFile(null);
+					PathToolsVariableResolver.setFile(null);
 				}
 			}
 		}

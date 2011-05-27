@@ -320,10 +320,10 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 			}
 			if (exploreCommand != null) {
 				try {
-					Activator.getDefault().setFile(file);
+					PathToolsVariableResolver.setFile(file);
 					Utilities.launch(exploreCommand);
 				} finally {
-					Activator.getDefault().setFile(null);
+					PathToolsVariableResolver.setFile(null);
 				}
 			}
 		}

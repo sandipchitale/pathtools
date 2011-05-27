@@ -1,17 +1,28 @@
 package pathtools;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -27,8 +38,6 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
-
-	private File[] files;
 
 	/**
 	 * The constructor
@@ -77,51 +86,84 @@ public class Activator extends AbstractUIPlugin {
 		return PathToolsPreferences.parseString(getPreferenceStore().getString(PathToolsPreferences.FILE_COMMANDS_KEY));
 	}
 
-	void setFile(File file) {
-		setFiles(file == null ? null : new File[] {file});
-	}
-
-	void setFiles(File[] files) {
-		this.files = files;
-	}
-
 	public File[] getFiles() {
-		if (files == null) {
-			IWorkbench workbench = PlatformUI.getWorkbench();
-			if (workbench != null) {
-				IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-				if (activeWorkbenchWindow != null) {
-					ISelectionService selectionService =
-						activeWorkbenchWindow.getSelectionService();
-					if (selectionService != null) {
-						ISelection selection = selectionService.getSelection();
-						if (selection instanceof IStructuredSelection) {
-							IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-							if (structuredSelection.size() == 1) {
-								Object firstElement = structuredSelection.getFirstElement();
-								if (firstElement instanceof IResource) {
-									IResource resource = (IResource) firstElement;
-									IPath location = resource.getLocation();
-									if (location != null) {
-										files = new File[] {new File(location.toOSString())};
+		final List<File> filesList = new LinkedList<File>();
+		final IWorkbench workbench = PlatformUI.getWorkbench();
+		if (workbench != null) {
+			Display display = workbench.getDisplay();
+			if (display != null) {
+				display.syncExec(new Runnable() {
+					public void run() {
+						IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+						if (activeWorkbenchWindow != null) {
+							IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+							if (activePage != null) {
+								IWorkbenchPart activeEditor = activePage.getActivePart();
+								if (activeEditor instanceof ITextEditor) {
+									ITextEditor abstractTextEditor = (ITextEditor) activeEditor;
+									IEditorInput editorInput = abstractTextEditor.getEditorInput();
+									if (editorInput instanceof IFileEditorInput) {
+										IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+										IFile iFile = fileEditorInput.getFile();
+										if (iFile != null) {
+											filesList.add(new File(iFile.getLocation().toOSString()));
+											return;
+										}
 									}
-								} else if (firstElement instanceof IAdaptable) {
-									IAdaptable adaptable = (IAdaptable) firstElement;
-									IResource resource = (IResource) adaptable.getAdapter(IResource.class);
-									if (resource != null) {
-										IPath location = resource.getLocation();
-										if (location != null) {
-											files =  new File[] {new File(location.toOSString())};
+								} else if (activeEditor instanceof MultiPageEditorPart) {
+									MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) activeEditor;
+									Object multiPageEditorActivePage = multiPageEditorPart.getSelectedPage();
+									if (multiPageEditorActivePage instanceof ITextEditor) {
+										ITextEditor abstractTextEditor = (ITextEditor) multiPageEditorActivePage;
+										IEditorInput editorInput = abstractTextEditor.getEditorInput();
+										if (editorInput instanceof IFileEditorInput) {
+											IFileEditorInput fileEditorInput = (IFileEditorInput) editorInput;
+											IFile iFile = fileEditorInput.getFile();
+											if (iFile != null) {
+												filesList.add(new File(iFile.getLocation().toOSString()));
+												return;
+											}
+										}
+									}
+								}
+							}
+							ISelectionService selectionService =
+								activeWorkbenchWindow.getSelectionService();
+							if (selectionService != null) {
+								ISelection selection = selectionService.getSelection();
+								if (selection instanceof IStructuredSelection) {
+									IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+									if (structuredSelection.size() > 0) {
+										@SuppressWarnings("rawtypes")
+										Iterator iterator = structuredSelection.iterator();
+										while (iterator.hasNext()) {
+											Object object = iterator.next();
+											if (object instanceof IResource) {
+												IResource resource = (IResource) object;
+												IPath location = resource.getLocation();
+												if (location != null) {
+													filesList.add(new File(location.toOSString()));
+												}
+											} else if (object instanceof IAdaptable) {
+												IAdaptable adaptable = (IAdaptable) object;
+												IResource resource = (IResource) adaptable.getAdapter(IResource.class);
+												if (resource != null) {
+													IPath location = resource.getLocation();
+													if (location != null) {
+														filesList.add(new File(location.toOSString()));
+													}
+												}
+											}
 										}
 									}
 								}
 							}
 						}
 					}
-				}
+				});
 			}
 		}
-		return files;
+		return filesList.toArray(new File[filesList.size()]);
 	}
 
 }

@@ -369,11 +369,11 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 			StringBuilder stringBuilder = new StringBuilder();
 			for (File file : files) {
 				try {
-					Activator.getDefault().setFile(file);
+					PathToolsVariableResolver.setFile(file);
 					stringBuilder.append(Utilities.formatCommand(pathFormat)
 							+ (size > 1 ? "\n" : ""));
 				} finally {
-					Activator.getDefault().setFile(null);
+					PathToolsVariableResolver.setFile(null);
 				}
 			}
 			copyToClipboard(stringBuilder.toString());

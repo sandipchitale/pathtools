@@ -216,10 +216,10 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 			}
 			if (editCommand != null) {
 				try {
-					Activator.getDefault().setFile(file);
+					PathToolsVariableResolver.setFile(file);
 					Utilities.launch(editCommand);
 				} finally {
-					Activator.getDefault().setFile(null);
+					PathToolsVariableResolver.setFile(null);
 				}
 			}
 		}
