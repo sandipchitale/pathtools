@@ -29,16 +29,20 @@ import org.eclipse.core.variables.IDynamicVariableResolver;
  *
  */
 public class PathToolsVariableResolver implements IDynamicVariableResolver {
+	
+	private static ThreadLocal<File> threadLocalFile = new ThreadLocal<File>(); 
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.variables.IDynamicVariableResolver#resolveValue(org.eclipse.core.variables.IDynamicVariable, java.lang.String)
 	 */
 	public String resolveValue(IDynamicVariable variable, String argument)
 			throws CoreException {
-		File file = null;
-		File[] files = Activator.getDefault().getFiles();
-		if (files != null && files.length > 0) {
-			file = files[0];
+		File file = threadLocalFile.get();
+		if (file == null) {
+			File[] files = Activator.getDefault().getFiles();
+			if (files != null && files.length > 0) {
+				file = files[0];
+			}
 		}
 
 		if (file != null) {
@@ -89,6 +93,14 @@ public class PathToolsVariableResolver implements IDynamicVariableResolver {
 			}
 		}
 		return nameAndExtensionArray;
+	}
+
+	public static void setFile(File file) {
+		PathToolsVariableResolver.threadLocalFile.set(file);
+	}
+
+	public static File getFile() {
+		return threadLocalFile.get();
 	}
 
 }

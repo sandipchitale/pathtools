@@ -148,7 +148,7 @@ public class CustomAction implements IObjectActionDelegate, IMenuCreator {
 					if (compiledPattern.matcher(fileObject.getName()).matches()) {
 						MenuItem commandMenuItem = new MenuItem(menu, SWT.PUSH);
 						try {
-							Activator.getDefault().setFile(fileObject);
+							PathToolsVariableResolver.setFile(fileObject);
 							commandMenuItem.setText(Utilities.formatCommand(command[0]));
 							commandMenuItem.addSelectionListener(new SelectionAdapter() {
 								public void widgetSelected(SelectionEvent e) {
@@ -156,7 +156,7 @@ public class CustomAction implements IObjectActionDelegate, IMenuCreator {
 								}
 							});
 						} finally {
-							Activator.getDefault().setFile(null);
+							PathToolsVariableResolver.setFile(null);
 						}
 					}
 				}
