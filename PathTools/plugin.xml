@@ -130,17 +130,17 @@
             adaptable="true"
             id="PathTools.objectContribution"
             objectClass="org.eclipse.core.resources.IResource">
-  <menu
-        id="pathtools"
-        label="Path Tools"
-        path="additions">
-     <groupMarker
-           name="additions">
-     </groupMarker>
-     <separator
-           name="separator">
-     </separator>
-  </menu>
+           <menu
+                 id="pathtools"
+                 label="Path Tools"
+                 path="additions">
+              <groupMarker
+                    name="additions">
+              </groupMarker>
+              <separator
+                    name="separator">
+              </separator>
+           </menu>
            <action
                class="pathtools.CustomAction"
                enablesFor="1"

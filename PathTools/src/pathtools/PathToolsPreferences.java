@@ -60,9 +60,9 @@ public class PathToolsPreferences extends AbstractPreferenceInitializer {
 		if (Platform.OS_MACOSX.equals(Platform.getOS())) {
 			defaultFolderExploreCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app \""
 					+ PathToolsPreferences.FILE_PATH + "\"";
-			defaultFileExploreCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app \""
-					+ PathToolsPreferences.FILE_PARENT_PATH + "\"";
-			defaultFolderEditCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app \""
+			defaultFileExploreCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app -R \""
+					+ PathToolsPreferences.FILE_PATH + "\"";
+			defaultFolderEditCommand = "/usr/bin/open -a /System/Library/CoreServices/Finder.app -R \""
 					+ PathToolsPreferences.FILE_PATH + "\"";
 			defaultFileEditCommand = "/usr/bin/open -a /Applications/TextEdit.app \""
 					+ PathToolsPreferences.FILE_PATH + "\"";
