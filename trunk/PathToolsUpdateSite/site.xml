@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/PathToolsFeature_1.0.60.jar" id="PathToolsFeature" version="1.0.60">
+   <description name="Path Tools update site" url="http://pathtools.googlecode.com/svn/trunk/PathToolsUpdateSite">
+      This is the update site for Path Tools Eclipse Plugin. Read the details here: http://code.google.com/p/pathtools/
+   </description>
+   <feature url="features/PathToolsFeature_1.0.61.jar" id="PathToolsFeature" version="1.0.61">
       <category name="Desktop"/>
    </feature>
    <category-def name="Desktop" label="Desktop Integration"/>
