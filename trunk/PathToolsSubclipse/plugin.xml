@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="pathtoolssubclipse.SVNPropertyTester"
+            id="PathToolsSubclipse.propertyTester"
+            namespace="PathToolsSubclipse.propertyTester"
+            properties="isSVNResource"
+            type="java.lang.Object">
+      </propertyTester>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="copysvnurl.of"
+            name="Copy SVN URL">
+         <defaultHandler
+               class="pathtoolssubclipse.CopySVNURLHandler">
+         </defaultHandler>
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <separator
+               name="PathToolsSubclipse.separator"
+               visible="true">
+         </separator>
+         <command
+               commandId="copysvnurl.of"
+               label="Copy SVN URL"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with 
+            variable="selection"> 
+         <iterate 
+               operator="or"> 
+            <and>
+               <or>
+                  <adapt
+                        type="org.eclipse.core.resources.IResource">
+                  </adapt>
+                  <instanceof
+                        value="org.eclipse.core.resources.IResource">
+                  </instanceof>
+               </or>
+               <test
+                     forcePluginActivation="true"
+                     property="PathToolsSubclipse.propertyTester.isSVNResource">
+               </test>
+            </and> 
+         </iterate> 
+      </with> 
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+</plugin>
