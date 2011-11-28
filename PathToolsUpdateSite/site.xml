@@ -6,5 +6,9 @@
    <feature url="features/PathToolsFeature_1.0.61.jar" id="PathToolsFeature" version="1.0.61">
       <category name="Desktop"/>
    </feature>
+   <feature url="features/PathToolsSubclipseFeature_1.0.61.jar" id="PathToolsSubclipseFeature" version="1.0.61">
+      <category name="Subclipse Integration"/>
+   </feature>
    <category-def name="Desktop" label="Desktop Integration"/>
+   <category-def name="Subclipse Integration" label="Subclipse Integration"/>
 </site>
