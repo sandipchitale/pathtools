@@ -3,12 +3,16 @@
    <description name="Path Tools update site" url="http://pathtools.googlecode.com/svn/trunk/PathToolsUpdateSite">
       This is the update site for Path Tools Eclipse Plugin. Read the details here: http://code.google.com/p/pathtools/
    </description>
-   <feature url="features/PathToolsFeature_1.0.61.jar" id="PathToolsFeature" version="1.0.61">
+   <feature url="features/PathToolsFeature_1.0.62.jar" id="PathToolsFeature" version="1.0.62">
       <category name="Desktop"/>
    </feature>
-   <feature url="features/PathToolsSubclipseFeature_1.0.61.jar" id="PathToolsSubclipseFeature" version="1.0.61">
-      <category name="Subclipse Integration"/>
+   <feature url="features/PathToolsSubclipseFeature_1.0.62.jar" id="PathToolsSubclipseFeature" version="1.0.62">
+      <category name="Subclipse Integration (Optional)"/>
+   </feature>
+   <feature url="features/PathToolsRSEFeature_1.0.62.jar" id="PathToolsRSEFeature" version="1.0.62">
+      <category name="RSE Integration (Optional)"/>
    </feature>
    <category-def name="Desktop" label="Desktop Integration"/>
-   <category-def name="Subclipse Integration" label="Subclipse Integration"/>
+   <category-def name="Subclipse Integration (Optional)" label="Subclipse Integration (Optional)"/>
+   <category-def name="RSE Integration (Optional)" label="RSE Integration (Optional)"/>
 </site>

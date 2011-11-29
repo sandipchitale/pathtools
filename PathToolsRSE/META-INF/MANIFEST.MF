@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Path Tools RSE
+Bundle-SymbolicName: PathToolsRSE;singleton:=true
+Bundle-Version: 1.0.62
+Bundle-Activator: pathtoolsrse.Activator
+Bundle-Vendor: Sandip V. Chitale
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.rse.subsystems.files.core,
+ PathTools;bundle-version="1.0.62"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy

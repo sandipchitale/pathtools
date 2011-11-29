@@ -307,7 +307,7 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 		});
 	}
 
-	private static void explore(File file) {
+	public static void explore(File file) {
 		// Get the configured explorer commands for folder and file
 		if (file != null && file.exists()) {
 			String folderExploreComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FOLDER_EXPLORE_COMMAND_KEY);

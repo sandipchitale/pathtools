@@ -22,6 +22,13 @@
       </command>
    </extension>
    <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="copysvnurl.of"
+            icon="icons/subversion.png">
+      </image>
+   </extension>
+   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"

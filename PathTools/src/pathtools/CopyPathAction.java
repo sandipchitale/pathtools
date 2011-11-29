@@ -380,7 +380,7 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 		}
 	}
 
-	private static void copyToClipboard(String string) {
+	public static void copyToClipboard(String string) {
 		// Get Clipboard
 		Clipboard clipboard = new Clipboard(PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getShell().getDisplay());

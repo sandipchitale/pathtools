@@ -12,17 +12,15 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.dnd.Clipboard;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.team.core.RepositoryProvider;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.progress.UIJob;
 import org.tigris.subversion.subclipse.core.ISVNLocalResource;
 import org.tigris.subversion.subclipse.core.SVNTeamProvider;
 import org.tigris.subversion.subclipse.core.resources.SVNWorkspaceRoot;
 import org.tigris.subversion.svnclientadapter.SVNUrl;
+
+import pathtools.CopyPathAction;
 
 public class CopySVNURLHandler extends AbstractHandler {
 
@@ -53,10 +51,13 @@ public class CopySVNURLHandler extends AbstractHandler {
 								RepositoryProvider provider = RepositoryProvider
 										.getProvider(project);
 								if (provider instanceof SVNTeamProvider) {
-									ISVNLocalResource SVNLocalResource = SVNWorkspaceRoot.getSVNResourceFor(nonFinalResource);
-									if (SVNLocalResource != null && SVNLocalResource.exists()) {
+									ISVNLocalResource SVNLocalResource = SVNWorkspaceRoot
+											.getSVNResourceFor(nonFinalResource);
+									if (SVNLocalResource != null
+											&& SVNLocalResource.exists()) {
 										SVNUrl url = SVNLocalResource.getUrl();
-										copyToClipboard(url.toString());
+										CopyPathAction.copyToClipboard(url
+												.toString());
 									}
 								}
 							}
@@ -72,12 +73,4 @@ public class CopySVNURLHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static void copyToClipboard(String string) {
-		// Get Clipboard
-		Clipboard clipboard = new Clipboard(PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getShell().getDisplay());
-		// Put the paths string into the Clipboard
-		clipboard.setContents(new Object[] { string },
-				new Transfer[] { TextTransfer.getInstance() });
-	}
 }
