@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="PathToolsRSEFeature"
+      label="Path Tools RSE Integration Feature - Optional (Requires RSE)"
+      version="1.0.62"
+      provider-name="Sandip V. Chitale">
+
+   <description url="Integration Feature - Optional (Requires Subclipse)">
+      This compliments the Path Tools features by adding the Copy Path
+action to the pop up menu of IRemoteFile nodes in Remote Explorer System views.
+   </description>
+
+   <copyright>
+      Copyright 2011, Sandip V. Chitale
+   </copyright>
+
+   <license url="http://www.opensource.org/licenses/bsd-license.php">
+      BSD
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.rse.subsystems.files.core"/>
+      <import plugin="PathTools" version="1.0.62" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="PathToolsRSE"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

@@ -2,7 +2,7 @@
 <feature
       id="PathToolsFeature"
       label="Path Tools Feature"
-      version="1.0.61"
+      version="1.0.62"
       provider-name="Sandip V. Chitale">
 
    <description url="http://code.google.com/p/pathtools/">
@@ -26,6 +26,10 @@ editor.
 defined in Path Tools preferences page. Clicking on the Custom
 actions buttons shows the Path Tools preferences page.
    </description>
+
+   <copyright>
+      Copyright 2011, Sandip V. Chitale
+   </copyright>
 
    <license url="http://www.opensource.org/licenses/bsd-license.php">
       BSD

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Path Tools Subclipse Integration Plug-in
 Bundle-SymbolicName: PathToolsSubclipse;singleton:=true
-Bundle-Version: 1.0.61
+Bundle-Version: 1.0.62
 Bundle-Activator: pathtoolssubclipse.Activator
 Bundle-Vendor: Sandip V. Chitale
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -13,4 +13,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions,
  org.eclipse.ui,
  org.eclipse.team.core,
- org.tigris.subversion.subclipse.core
+ org.tigris.subversion.subclipse.core,
+ PathTools;bundle-version="1.0.62"
