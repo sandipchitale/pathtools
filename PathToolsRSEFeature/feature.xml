@@ -2,7 +2,7 @@
 <feature
       id="PathToolsRSEFeature"
       label="Path Tools RSE Integration Feature - Optional (Requires RSE)"
-      version="1.0.62"
+      version="1.0.64"
       provider-name="Sandip V. Chitale">
 
    <description url="Integration Feature - Optional (Requires Subclipse)">

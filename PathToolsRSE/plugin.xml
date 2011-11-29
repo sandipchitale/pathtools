@@ -10,12 +10,34 @@
                class="pathtoolsrse.CopyPathHandler">
          </defaultHandler>
       </command>
+      <command
+            id="PathToolsRSE.exploreCommand"
+            name="Explore">
+         <defaultHandler
+               class="pathtoolsrse.ExploreHandler">
+         </defaultHandler>
+      </command>
+      <command
+            id="PathToolsRSE.shellCommand"
+            name="Command Line Shell">
+         <defaultHandler
+               class="pathtoolsrse.ShellHandler">
+         </defaultHandler>
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">
       <image
             commandId="PathToolsRSE.copyPathCommand"
-            icon="icons/copypaths.gif">
+            icon="platform:/plugin/PathTools/icons/copypaths.gif">
+      </image>
+      <image
+            commandId="PathToolsRSE.exploreCommand"
+            icon="platform:/plugin/PathTools/icons/explore.gif">
+      </image>
+      <image
+            commandId="PathToolsRSE.shellCommand"
+            icon="platform:/plugin/PathTools/icons/shell.gif">
       </image>
    </extension>
    <extension
@@ -42,6 +64,50 @@
             </instanceof> 
          </iterate> 
       </with> 
+            </visibleWhen>
+         </command>
+         <command
+               commandId="PathToolsRSE.exploreCommand"
+               label="Explore"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <and>
+                     <iterate
+                           operator="or">
+                        <instanceof
+                              value="org.eclipse.rse.internal.subsystems.files.local.model.LocalFile">
+                        </instanceof>
+                     </iterate>
+                     <count
+                           value="1">
+                     </count>
+                  </and>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="PathToolsRSE.shellCommand"
+               label="Command Line Shell"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <and>
+                     <iterate
+                           operator="or">
+                        <instanceof
+                              value="org.eclipse.rse.internal.subsystems.files.local.model.LocalFile">
+                        </instanceof>
+                     </iterate>
+                     <count
+                           value="1">
+                     </count>
+                  </and>
+               </with>
             </visibleWhen>
          </command>
       </menuContribution>
