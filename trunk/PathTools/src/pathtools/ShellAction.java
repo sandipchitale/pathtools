@@ -303,7 +303,7 @@ public class ShellAction implements IObjectActionDelegate, IMenuCreator {
 		});
 	}
 	
-	private static void shell(File file) {
+	public static void shell(File file) {
 		// Get the configured explorer commands for folder and file
 		if (file != null && file.exists()) {
 			String folderShellComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FOLDER_SHELL_COMMAND_KEY);
