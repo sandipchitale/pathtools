@@ -2,7 +2,7 @@
 <feature
       id="PathToolsFeature"
       label="Path Tools Feature"
-      version="1.0.63"
+      version="1.0.64"
       provider-name="Sandip V. Chitale">
 
    <description url="http://code.google.com/p/pathtools/">
@@ -39,6 +39,16 @@ actions buttons shows the Path Tools preferences page.
       <discovery label="PathTools Project home page" url="http://code.google.com/p/pathtools/"/>
       <discovery label="Sandip Chitale&apos;s Blog" url="http://sandipchitale.blogspot.com/"/>
    </url>
+
+   <includes
+         id="PathToolsRSEFeature"
+         version="0.0.0"
+         optional="true"/>
+
+   <includes
+         id="PathToolsSubclipseFeature"
+         version="0.0.0"
+         optional="true"/>
 
    <plugin
          id="PathTools"
