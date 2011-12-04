@@ -2,7 +2,7 @@
 <feature
       id="PathToolsSubclipseFeature"
       label="Path Tools Subclipse Integration Feature - Optional (Requires Subclipse)"
-      version="1.0.62"
+      version="1.0.64"
       provider-name="Sandip V. Chitale">
 
    <description url="http://code.google.com/p/pathtools/">
