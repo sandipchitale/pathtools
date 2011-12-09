@@ -16,9 +16,10 @@ import org.eclipse.team.core.RepositoryProvider;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.progress.UIJob;
 import org.tigris.subversion.subclipse.core.ISVNLocalResource;
+import org.tigris.subversion.subclipse.core.SVNException;
 import org.tigris.subversion.subclipse.core.SVNTeamProvider;
+import org.tigris.subversion.subclipse.core.resources.LocalResourceStatus;
 import org.tigris.subversion.subclipse.core.resources.SVNWorkspaceRoot;
-import org.tigris.subversion.svnclientadapter.SVNUrl;
 
 import pathtools.CopyPathAction;
 
@@ -36,8 +37,7 @@ public class CopySVNURLHandler extends AbstractHandler {
 					nonFinalResource = (IResource) firstElement;
 				} else if (firstElement instanceof IAdaptable) {
 					IAdaptable adaptable = (IAdaptable) firstElement;
-					nonFinalResource = (IResource) adaptable
-							.getAdapter(IResource.class);
+					nonFinalResource = (IResource) adaptable.getAdapter(IResource.class);
 				}
 
 				if (nonFinalResource != null) {
@@ -48,16 +48,20 @@ public class CopySVNURLHandler extends AbstractHandler {
 							IResource nonFinalResource = resource;
 							IProject project = nonFinalResource.getProject();
 							if (RepositoryProvider.isShared(project)) {
-								RepositoryProvider provider = RepositoryProvider
-										.getProvider(project);
+								RepositoryProvider provider = RepositoryProvider.getProvider(project);
 								if (provider instanceof SVNTeamProvider) {
-									ISVNLocalResource SVNLocalResource = SVNWorkspaceRoot
-											.getSVNResourceFor(nonFinalResource);
-									if (SVNLocalResource != null
-											&& SVNLocalResource.exists()) {
-										SVNUrl url = SVNLocalResource.getUrl();
-										CopyPathAction.copyToClipboard(url
-												.toString());
+									ISVNLocalResource svnResource = SVNWorkspaceRoot.getSVNResourceFor(resource);
+									if (svnResource == null) {
+										return Status.OK_STATUS;
+									}
+									LocalResourceStatus localResourceStatus;
+									try {
+										localResourceStatus = svnResource.getStatus();
+										if (localResourceStatus == null) {
+											return Status.OK_STATUS;
+										}
+										CopyPathAction.copyToClipboard(localResourceStatus.getUrlString());
+									} catch (SVNException e) {
 									}
 								}
 							}
