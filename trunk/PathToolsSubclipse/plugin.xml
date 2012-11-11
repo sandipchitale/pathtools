@@ -20,6 +20,13 @@
                class="pathtoolssubclipse.CopySVNURLHandler">
          </defaultHandler>
       </command>
+      <command
+            id="showsvnurl.of"
+            name="Show SVN URL">
+         <defaultHandler
+               class="pathtoolssubclipse.ShowSVNURLHandler">
+         </defaultHandler>
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">
@@ -63,6 +70,34 @@
             </and> 
          </iterate> 
       </with> 
+            </visibleWhen>
+         </command>
+         <command
+               commandId="showsvnurl.of"
+               label="Show SVN URL"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        operator="or">
+                     <and>
+                        <or>
+                           <adapt
+                                 type="org.eclipse.core.resources.IResource">
+                           </adapt>
+                           <instanceof
+                                 value="org.eclipse.core.resources.IResource">
+                           </instanceof>
+                        </or>
+                        <test
+                              forcePluginActivation="true"
+                              property="PathToolsSubclipse.propertyTester.isSVNResource">
+                        </test>
+                     </and>
+                  </iterate>
+               </with>
             </visibleWhen>
          </command>
       </menuContribution>

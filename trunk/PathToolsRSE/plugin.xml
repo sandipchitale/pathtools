@@ -24,6 +24,13 @@
                class="pathtoolsrse.ShellHandler">
          </defaultHandler>
       </command>
+      <command
+            id="PathToolsRSE.rsync.rse.generateCommand"
+            name="Generate rsync configuration...">
+         <defaultHandler
+               class="pathtoolsrse.rsync.RSERsyncHandler">
+         </defaultHandler>
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">
@@ -45,10 +52,30 @@
       <menuContribution
             allPopups="false"
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
-		 <separator
-               name="PathToolsRSE.separator"
-               visible="true">
-         </separator>
+         <menu
+               id="pathtoolsrse"
+               label="Path Tools">
+            <separator
+                  name="additions"
+                  visible="false">
+            </separator>
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        operator="or">
+                     <instanceof
+                           value="org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:pathtoolsrse?after=additions">
          <command
                commandId="PathToolsRSE.copyPathCommand"
                label="Copy Path"
@@ -91,6 +118,32 @@
          <command
                commandId="PathToolsRSE.shellCommand"
                label="Command Line Shell"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <and>
+                     <iterate
+                           operator="or">
+                        <instanceof
+                              value="org.eclipse.rse.internal.subsystems.files.local.model.LocalFile">
+                        </instanceof>
+                     </iterate>
+                     <count
+                           value="1">
+                     </count>
+                  </and>
+               </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="PathToolsRSE.separator"
+               visible="true">
+         </separator>
+         <command
+               commandId="PathToolsRSE.rsync.rse.generateCommand"
+               label="Generate rsync configuration..."
                style="push">
             <visibleWhen
                   checkEnabled="false">

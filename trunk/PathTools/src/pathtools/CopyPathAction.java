@@ -3,6 +3,7 @@ package pathtools;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -36,6 +37,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -167,6 +169,14 @@ public class CopyPathAction implements IObjectActionDelegate, IMenuCreator {
 									files.add(file);
 									resourcePaths.add(iFile.getFullPath());
 								}
+							}
+						} else if (editorInput instanceof FileStoreEditorInput) {
+							FileStoreEditorInput fileStoreEditorInput = (FileStoreEditorInput) editorInput;
+							URI uri = fileStoreEditorInput.getURI();
+							File file = new File(uri);
+							if (file.isFile()) {
+								files.add(file);
+								return;
 							}
 						}
 					} else if (activeEditor instanceof MultiPageEditorPart) {

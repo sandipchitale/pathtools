@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Path Tools Plug-in
 Bundle-SymbolicName: PathTools;singleton:=true
-Bundle-Version: 1.0.64
+Bundle-Version: 1.0.67
 Bundle-Activator: pathtools.Activator
 Bundle-Vendor: Sandip V. Chitale
 Require-Bundle: org.eclipse.ui,
@@ -15,4 +15,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.variables
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: pathtools;x-friends:="PathToolsRSE,PathToolsSubclipse"
+Export-Package: pathtools;x-friends:="PathToolsRSE,PathToolsSubclipse,PathToolsM2Eclipse"
