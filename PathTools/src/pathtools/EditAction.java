@@ -1,6 +1,7 @@
 package pathtools;
 
 import java.io.File;
+import java.net.URI;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -25,6 +26,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
@@ -97,6 +99,14 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 							IFile iFile = fileEditorInput.getFile();
 							if (iFile != null) {
 								location = iFile.getLocation();
+							}
+						} else if (editorInput instanceof FileStoreEditorInput) {
+							FileStoreEditorInput fileStoreEditorInput = (FileStoreEditorInput) editorInput;
+							URI uri = fileStoreEditorInput.getURI();
+							File file = new File(uri);
+							if (file.isFile()) {
+								fileObject = file;
+								return;
 							}
 						}
 					}
@@ -203,7 +213,7 @@ public class EditAction implements IWorkbenchWindowPulldownDelegate2 {
 		}
 	}
 
-	private static void edit(File file) {
+	public static void edit(File file) {
 		// Get the configured explorer commands for folder and file
 		if (file != null && file.exists()) {
 			String folderEditComand = Activator.getDefault().getPreferenceStore().getString(PathToolsPreferences.FOLDER_EDIT_COMMAND_KEY);

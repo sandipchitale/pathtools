@@ -1,6 +1,7 @@
 package pathtools;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 import org.eclipse.core.resources.IFile;
@@ -32,6 +33,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -116,6 +118,14 @@ public class ExploreAction implements IObjectActionDelegate, IMenuCreator {
 							IFile iFile = fileEditorInput.getFile();
 							if (iFile != null) {
 								location = iFile.getLocation();
+							}
+						} else if (editorInput instanceof FileStoreEditorInput) {
+							FileStoreEditorInput fileStoreEditorInput = (FileStoreEditorInput) editorInput;
+							URI uri = fileStoreEditorInput.getURI();
+							File file = new File(uri);
+							if (file.isFile()) {
+								fileObject = file;
+								return;
 							}
 						}
 					} else if (activeEditor instanceof MultiPageEditorPart) {
